@@ -299,19 +299,13 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
           {:ok, _person} ->
             {:noreply,
              socket
-             |> put_flash(
-               :info,
-               "Welcome #{full_name}! You have been checked in successfully. Enjoy your visit!"
-             )
+             |> put_flash(:info, "Welcome #{full_name}! You have been checked in successfully. Enjoy your visit!")
              |> push_navigate(to: ~p"/visitor/check-out")}
 
           {:error, _changeset} ->
             {:noreply,
              socket
-             |> put_flash(
-               :error,
-               "There was an error processing your check-in. Please try again."
-             )}
+             |> put_flash(:error, "There was an error processing your check-in. Please try again.")}
         end
 
       {:error, changeset} ->
