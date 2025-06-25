@@ -38,7 +38,7 @@ defmodule Trackguests3Web.ResidenceLive.Index do
               </tr>
             </thead>
             <tbody>
-              <%= if Enum.empty?(@streams.residences) do %>
+              <%= if @residences_empty? do %>
                 <tr>
                   <td colspan="5" class="text-center py-12 text-stone-500">
                     <div class="flex flex-col items-center">
@@ -96,9 +96,12 @@ defmodule Trackguests3Web.ResidenceLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
+     residences = Accomodation.list_residences()
+
      socket
      |> assign(:page_title, "Property Management")
-     |> stream(:residences, Accomodation.list_residences())}
+     |> assign(:residences_empty?, residences == [])
+     |> stream(:residences, residences)}
   end
 
   @impl true
