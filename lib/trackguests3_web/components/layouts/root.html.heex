@@ -14,7 +14,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-stone-50 font-['Inter'] text-stone-800">
+  <body class="bg-gray-50 font-['Inter'] text-gray-900 antialiased">
+    <ul class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end bg-white border-b border-gray-200 py-2">
+      <%= if @current_scope do %>
+        <li class="text-sm text-gray-600">
+          {assigns[:current_scope][:user][:email] || "User"}
+        </li>
+        <li>
+          <.link href={~p"/users/settings"} class="nav-link text-sm">Settings</.link>
+        </li>
+        <li>
+          <.link href={~p"/users/log-out"} method="delete" class="nav-link text-sm">Log out</.link>
+        </li>
+      <% else %>
+        <li>
+          <.link href={~p"/users/register"} class="nav-link text-sm">Register</.link>
+        </li>
+        <li>
+          <.link href={~p"/users/log-in"} class="nav-link text-sm">Log in</.link>
+        </li>
+      <% end %>
+    </ul>
     {@inner_content}
   </body>
 </html>
+
