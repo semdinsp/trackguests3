@@ -95,9 +95,9 @@ defmodule Trackguests3Web.ResidenceLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok,
-     residences = Accomodation.list_residences()
+    residences = Accomodation.list_residences()
 
+    {:ok,
      socket
      |> assign(:page_title, "Property Management")
      |> assign(:residences_empty?, residences == [])
