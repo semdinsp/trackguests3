@@ -1,8 +1,6 @@
 defmodule Trackguests3Web.Router do
   use Trackguests3Web, :router
 
-  import Trackguests3Web.UserAuth
-
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
