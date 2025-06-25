@@ -135,7 +135,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
             {:noreply,
              socket
              |> put_flash(:info, "Welcome! You have been checked in successfully.")
-             |> push_navigate(to: ~p"/visitor/status")}
+             |> push_navigate(to: ~p"/visitor/check-out")}
 
           {:error, _changeset} ->
             {:noreply,
