@@ -3,6 +3,8 @@ defmodule Trackguests3Web.Router do
 
   import Trackguests3Web.UserAuth
 
+  import Trackguests3Web.UserAuth
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
