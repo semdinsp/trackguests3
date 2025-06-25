@@ -13,18 +13,19 @@
 - Location: `_build/prod/rel/trackguests3`
 - Assets compiled and minified
 - All dependencies resolved
+- **PostgreSQL configured for production**
 - Ready for deployment
 
 ## 🔐 Environment Variables Required
 
 ```bash
 # Core application secrets
-export SECRET_KEY_BASE="oTlkyYA9fr64mfWQrY6JjDdkTNvcRa9kRcw3kpZdqMPihoA4bjgh2vkhtRLjB+tm"
+export SECRET_KEY_BASE="s+Ciu2RyP2GAyerTPfuDn7Tb5AdXC2aZkt8hbzv5ZlI8eCNh53ojEAIfWaDQ3bWO"
 
-# Database configuration
-export DATABASE_URL="ecto://user:pass@localhost/trackguests3_prod"
-# For PostgreSQL: "postgresql://user:pass@localhost/trackguests3_prod"
-# For SQLite (current): "file:trackguests3_prod.db"
+# PostgreSQL database configuration
+export DATABASE_URL="postgresql://username:password@localhost/trackguests3_prod"
+# Example with custom host/port:
+# export DATABASE_URL="postgresql://trackguests_user:secure_password@db.example.com:5432/trackguests3_prod"
 
 # Web server configuration
 export PHX_HOST="your-domain.com"           # Your production domain
@@ -36,16 +37,52 @@ export POOL_SIZE="10"                      # Database connection pool size
 export ECTO_IPV6="false"                   # Enable IPv6 if needed
 ```
 
+## 🐘 PostgreSQL Database Setup
+
+### **1. Install PostgreSQL**
+```bash
+# Ubuntu/Debian
+sudo apt update && sudo apt install postgresql postgresql-contrib
+
+# macOS with Homebrew
+brew install postgresql
+
+# Docker
+docker run --name trackguests-postgres -e POSTGRES_PASSWORD=secure_password -p 5432:5432 -d postgres:15
+```
+
+### **2. Create Database and User**
+```bash
+# Connect to PostgreSQL as superuser
+sudo -u postgres psql
+
+# Create database and user
+CREATE DATABASE trackguests3_prod;
+CREATE USER trackguests_user WITH PASSWORD 'secure_password';
+GRANT ALL PRIVILEGES ON DATABASE trackguests3_prod TO trackguests_user;
+ALTER USER trackguests_user CREATEDB;
+\q
+```
+
+### **3. Verify Connection**
+```bash
+# Test the connection
+psql -h localhost -U trackguests_user -d trackguests3_prod
+```
+
 ## 🚀 Deployment Commands
 
 ### 1. **Set Environment Variables**
 ```bash
-# Copy the environment variables above and set them in your shell
-# Or create a .env file and source it:
-source .env
+# Set all required environment variables
+export SECRET_KEY_BASE="s+Ciu2RyP2GAyerTPfuDn7Tb5AdXC2aZkt8hbzv5ZlI8eCNh53ojEAIfWaDQ3bWO"
+export DATABASE_URL="postgresql://trackguests_user:secure_password@localhost/trackguests3_prod"
+export PHX_HOST="your-domain.com"
+export PORT="4000"
+export PHX_SERVER="true"
 ```
 
-### 2. **Create Production Database & Run Migrations**
+### 2. **Run Database Migrations**
 ```bash
 # Run database migrations
 _build/prod/rel/trackguests3/bin/migrate
@@ -114,9 +151,9 @@ FROM hexpm/elixir:1.15-erlang-26-alpine
 ## 🔧 Performance Optimizations
 
 ### **Production Settings**
-- ✅ Assets minified and compressed (CSS: 220ms, JS: 29ms)
+- ✅ Assets minified and compressed (CSS: 203ms, JS: 26ms)
 - ✅ Static file caching enabled
-- ✅ Database connection pooling (configurable via POOL_SIZE)
+- ✅ PostgreSQL connection pooling (configurable via POOL_SIZE)
 - ✅ Live reload disabled for production
 
 ### **SSL/HTTPS Configuration**
@@ -150,6 +187,7 @@ tail -f /var/log/trackguests3.log
 - ✅ **Luxury hospitality design** with premium UX
 - ✅ **Mobile-responsive interface** for all devices
 - ✅ **Authentication system** for secure access
+- ✅ **PostgreSQL database** for production scalability
 - ✅ **Database migrations** for schema management
 
 ## 🚀 **Your luxury guest tracking application is ready for production!**
