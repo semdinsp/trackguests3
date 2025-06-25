@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title default="TrackGuests - Guest Management System" suffix=" · TrackGuests">
+    <.live_title default="TrackGuests - Luxury Guest Management" suffix=" · TrackGuests">
       {assigns[:page_title]}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
@@ -12,26 +12,26 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-gray-50 font-['Inter'] text-gray-900 antialiased">
-    <ul class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end bg-white border-b border-gray-200 py-2">
+  <body class="gradient-bg-luxury font-['Inter'] text-gray-900 antialiased">
+    <ul class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end glass-luxury border-b border-gray-200/50 py-2">
       <%= if @current_scope do %>
-        <li class="text-sm text-gray-600">
+        <li class="text-sm text-gray-600 font-medium">
           {assigns[:current_scope][:user][:email] || "User"}
         </li>
         <li>
-          <.link href={~p"/users/settings"} class="nav-link text-sm">Settings</.link>
+          <.link href={~p"/users/settings"} class="nav-link-luxury text-sm">Settings</.link>
         </li>
         <li>
-          <.link href={~p"/users/log-out"} method="delete" class="nav-link text-sm">Log out</.link>
+          <.link href={~p"/users/log-out"} method="delete" class="nav-link-luxury text-sm">Log out</.link>
         </li>
       <% else %>
         <li>
-          <.link href={~p"/users/register"} class="nav-link text-sm">Register</.link>
+          <.link href={~p"/users/register"} class="nav-link-luxury text-sm">Register</.link>
         </li>
         <li>
-          <.link href={~p"/users/log-in"} class="nav-link text-sm">Log in</.link>
+          <.link href={~p"/users/log-in"} class="nav-link-luxury text-sm">Log in</.link>
         </li>
       <% end %>
     </ul>
