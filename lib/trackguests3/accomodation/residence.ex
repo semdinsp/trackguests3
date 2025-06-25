@@ -5,10 +5,10 @@ defmodule Trackguests3.Accomodation.Residence do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "residences" do
-    field :title, :string
-    field :address, :string
-    field :floor_count, :integer
-    field :logo, :binary
+    field(:title, :string)
+    field(:address, :string)
+    field(:floor_count, :integer)
+    field(:logo, :binary)
 
     timestamps(type: :utc_datetime)
   end
@@ -17,6 +17,6 @@ defmodule Trackguests3.Accomodation.Residence do
   def changeset(residence, attrs) do
     residence
     |> cast(attrs, [:title, :address, :floor_count, :logo])
-    |> validate_required([:title, :address, :floor_count, :logo])
+    |> validate_required([:title, :address, :floor_count])
   end
 end
