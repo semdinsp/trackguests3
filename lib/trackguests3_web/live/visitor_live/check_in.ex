@@ -215,7 +215,6 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       |> Persons.change_person(person_params)
       |> Map.put(:action, :validate)
 
-    # Check if required fields are present and valid
     form_valid =
       changeset.valid? and
         present?(person_params["first_name"]) and
@@ -231,8 +230,8 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
   @impl true
   def handle_event("search_rooms", %{"person" => %{"room_search" => search_term}}, socket) do
     search_term = String.trim(search_term)
-    
-    filtered_rooms = 
+
+    filtered_rooms =
       if search_term == "" do
         []
       else
@@ -242,7 +241,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
           String.contains?(String.downcase(room_display), String.downcase(search_term)) or
           String.starts_with?(String.downcase(room.title), String.downcase(search_term))
         end)
-        |> Enum.take(10) # Limit to 10 results for performance
+        |> Enum.take(10)
       end
 
     {:noreply,
@@ -261,7 +260,6 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       floor: String.to_integer(room_floor)
     }
 
-    # Update the form with the selected room
     changeset =
       %Person{}
       |> Persons.change_person(%{
@@ -269,7 +267,6 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
         "room_id" => Integer.to_string(selected_room.id)
       })
 
-    # Re-validate form parameters
     current_params = socket.assigns.form.params || %{}
     updated_params = Map.merge(current_params, %{
       "room_search" => "#{selected_room.title} - Floor #{selected_room.floor}",
@@ -293,7 +290,6 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
 
   @impl true
   def handle_event("check_in", %{"person" => person_params}, socket) do
-    # Combine first and last name into full name
     full_name = "#{person_params["first_name"]} #{person_params["last_name"]}"
     person_params = Map.put(person_params, "name", full_name)
 
