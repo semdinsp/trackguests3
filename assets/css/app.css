@@ -8,7 +8,7 @@
   themes: false;
 }
 
-/* Modern Platinum Luxury Theme */
+/* Modern Platinum Luxury Theme - Light Mode */
 @plugin "../vendor/daisyui-theme" {
   name: "light";
   default: true;
@@ -40,132 +40,152 @@
   --color-neutral-content: oklch(95% 0 0); /* Platinum on charcoal */
 }
 
-/* Luxury Platinum Components */
+/* Modern Platinum Luxury Theme - Dark Mode */
+@plugin "../vendor/daisyui-theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+
+  /* Dark platinum color palette */
+  --color-base-100: oklch(12% 0.02 240); /* Rich dark platinum */
+  --color-base-200: oklch(16% 0.02 240); /* Soft dark platinum */
+  --color-base-300: oklch(20% 0.02 240); /* Light dark platinum */
+  --color-base-content: oklch(90% 0 0); /* Light platinum text */
+
+  /* Dark mode primary */
+  --color-primary: oklch(85% 0.03 240); /* Light platinum */
+  --color-primary-content: oklch(15% 0 0); /* Dark on light */
+
+  /* Dark mode secondary */
+  --color-secondary: oklch(70% 0.02 240); /* Elegant silver */
+  --color-secondary-content: oklch(15% 0 0); /* Dark on silver */
+
+  /* Dark mode status colors */
+  --color-error: oklch(70% 0.15 15); /* Bright red for dark */
+  --color-warning: oklch(80% 0.12 85); /* Bright amber */
+  --color-success: oklch(70% 0.12 150); /* Bright green */
+  --color-info: oklch(75% 0.1 240); /* Bright blue */
+
+  /* Dark neutral tones */
+  --color-neutral: oklch(85% 0.01 240); /* Light neutral */
+  --color-neutral-content: oklch(15% 0 0); /* Dark on light */
+}
+
+/* Improved Button Styles - Subtle Gray with Borders */
 .btn-luxury {
-  @apply bg-gradient-to-r from-gray-900 to-black text-white px-8 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 border-0 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 backdrop-blur-sm;
-  background-image: linear-gradient(
-    135deg,
-    #1a1a1a 0%,
-    #000000 50%,
-    #2a2a2a 100%
-  );
+  @apply bg-gray-100 border-2 border-gray-300 text-gray-800 px-6 py-3 rounded-xl font-semibold tracking-wide transition-all duration-300 shadow-sm hover:shadow-md hover:bg-gray-200 hover:border-gray-400 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:outline-none;
 }
 
 .btn-luxury:hover {
-  background-image: linear-gradient(
-    135deg,
-    #2a2a2a 0%,
-    #1a1a1a 50%,
-    #000000 100%
-  );
+  @apply scale-[1.02] transform;
 }
 
-.btn-platinum {
-  @apply bg-gradient-to-r from-gray-300 to-gray-400 text-gray-900 px-8 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border-0 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2;
-  background-image: linear-gradient(
-    135deg,
-    #e5e7eb 0%,
-    #d1d5db 50%,
-    #9ca3af 100%
-  );
+.btn-luxury:active {
+  @apply scale-[0.98] transform;
 }
 
-.btn-outline-luxury {
-  @apply border-2 border-gray-300 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 px-8 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 backdrop-blur-sm;
+.btn-primary {
+  @apply bg-gray-700 border-2 border-gray-600 text-white px-6 py-3 rounded-xl font-semibold tracking-wide transition-all duration-300 shadow-sm hover:shadow-md hover:bg-gray-600 hover:border-gray-500 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none;
 }
 
+.btn-primary:hover {
+  @apply scale-[1.02] transform;
+}
+
+.btn-outline {
+  @apply bg-transparent border-2 border-gray-400 text-gray-700 px-6 py-3 rounded-xl font-semibold tracking-wide transition-all duration-300 hover:bg-gray-100 hover:border-gray-500 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:outline-none;
+}
+
+/* Dark mode button adaptations */
+[data-theme="dark"] .btn-luxury {
+  @apply bg-gray-800 border-gray-600 text-gray-200 hover:bg-gray-700 hover:border-gray-500;
+}
+
+[data-theme="dark"] .btn-primary {
+  @apply bg-gray-200 border-gray-300 text-gray-900 hover:bg-gray-100 hover:border-gray-200;
+}
+
+[data-theme="dark"] .btn-outline {
+  @apply border-gray-500 text-gray-300 hover:bg-gray-800 hover:border-gray-400;
+}
+
+/* Theme Toggle Switch */
+.theme-toggle {
+  @apply relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 cursor-pointer;
+}
+
+.theme-toggle.dark {
+  @apply bg-gray-600;
+}
+
+.theme-toggle-handle {
+  @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform;
+}
+
+.theme-toggle.dark .theme-toggle-handle {
+  @apply translate-x-6;
+}
+
+.theme-toggle:not(.dark) .theme-toggle-handle {
+  @apply translate-x-1;
+}
+
+/* Card Components */
 .card-luxury {
-  @apply bg-white border border-gray-200 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 p-8 backdrop-blur-lg;
+  @apply bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 p-8 backdrop-blur-lg;
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.card-luxury:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 35px 60px -12px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+[data-theme="dark"] .card-luxury {
+  @apply bg-gray-900 border-gray-700;
+  background: linear-gradient(145deg, #111827 0%, #1f2937 100%);
 }
 
+/* Input Components */
 .input-luxury {
-  @apply bg-gray-50 border-2 border-gray-200 focus:border-gray-400 focus:ring-4 focus:ring-gray-200/30 rounded-xl px-6 py-4 text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
-  backdrop-filter: blur(10px);
+  @apply bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
 }
 
-.table-luxury {
-  @apply bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-lg;
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+[data-theme="dark"] .input-luxury {
+  @apply bg-gray-800 border-gray-600 text-gray-100 placeholder:text-gray-400 focus:border-gray-400;
 }
 
-.table-luxury th {
-  @apply bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 font-bold py-6 px-8 text-left border-b border-gray-300;
-  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-}
-
-.table-luxury td {
-  @apply py-6 px-8 border-b border-gray-100 text-gray-800 font-medium;
-}
-
-.table-luxury tr:hover {
-  @apply bg-gradient-to-r from-gray-50 to-gray-100;
-  background-image: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-}
-
-/* Luxury navigation */
+/* Navigation Components */
 .nav-link-luxury {
-  @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 tracking-wide;
+  @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 tracking-wide;
 }
 
-.nav-link-luxury:hover {
-  background-image: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+[data-theme="dark"] .nav-link-luxury {
+  @apply text-gray-300 hover:text-gray-100 hover:bg-gray-700;
 }
 
-.nav-link-active-luxury {
-  @apply text-gray-900 bg-gray-100 px-6 py-3 rounded-xl text-sm font-bold tracking-wide;
-  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-}
-
-/* Page structure */
+/* Page Structure */
 .page-header-luxury {
   @apply mb-12 pb-8 border-b border-gray-200;
 }
 
+[data-theme="dark"] .page-header-luxury {
+  @apply border-gray-700;
+}
+
 .page-title-luxury {
   @apply text-4xl font-bold text-gray-900 mb-3 tracking-tight;
-  background: linear-gradient(135deg, #111827 0%, #374151 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+}
+
+[data-theme="dark"] .page-title-luxury {
+  @apply text-gray-100;
 }
 
 .page-subtitle-luxury {
   @apply text-gray-600 text-xl font-medium tracking-wide;
 }
 
-/* Status indicators */
-.status-badge-luxury {
-  @apply px-4 py-2 rounded-full text-sm font-bold tracking-wide;
+[data-theme="dark"] .page-subtitle-luxury {
+  @apply text-gray-400;
 }
 
-.status-active-luxury {
-  @apply bg-gradient-to-r from-green-100 to-emerald-100 text-green-800;
-}
-
-.status-inactive-luxury {
-  @apply bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800;
-}
-
-.status-pending-luxury {
-  @apply bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800;
-}
-
-.status-error-luxury {
-  @apply bg-gradient-to-r from-red-100 to-rose-100 text-red-800;
-}
-
-/* Luxury gradients */
+/* Background Gradients */
 .gradient-bg-luxury {
   background: linear-gradient(
     135deg,
@@ -176,14 +196,37 @@
   );
 }
 
-.gradient-header-luxury {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
-  box-shadow:
-    0 10px 25px -5px rgba(30, 41, 59, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+[data-theme="dark"] .gradient-bg-luxury {
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 25%,
+    #334155 75%,
+    #475569 100%
+  );
 }
 
-/* Platinum shadows */
+.gradient-header-luxury {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+}
+
+[data-theme="dark"] .gradient-header-luxury {
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
+}
+
+/* Glass Morphism */
+.glass-luxury {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+[data-theme="dark"] .glass-luxury {
+  background-color: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Shadow Effects */
 .shadow-luxury {
   box-shadow:
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
@@ -196,18 +239,7 @@
     0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.shadow-3xl {
-  box-shadow:
-    0 35px 60px -12px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-/* Focus states */
-.focus-luxury {
-  @apply focus:outline-none focus:ring-4 focus:ring-gray-300/50 focus:ring-offset-2;
-}
-
-/* Metallic text effects */
+/* Text Effects */
 .text-platinum {
   background: linear-gradient(135deg, #6b7280 0%, #374151 50%, #111827 100%);
   -webkit-background-clip: text;
@@ -215,9 +247,9 @@
   background-clip: text;
 }
 
-/* Glass morphism effects */
-.glass-luxury {
-  backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.125);
+[data-theme="dark"] .text-platinum {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 50%, #9ca3af 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
