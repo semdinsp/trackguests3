@@ -27,23 +27,25 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-3">First Name *</label>
                   <input
-                    field={@form[:first_name]}
+                    name="person[first_name]"
+                    value={@form[:first_name].value}
                     type="text"
                     placeholder="Enter your first name"
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
                     required
-                  >
+                  />
                 </div>
 
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-3">Last Name *</label>
                   <input
-                    field={@form[:last_name]}
+                    name="person[last_name]"
+                    value={@form[:last_name].value}
                     type="text"
                     placeholder="Enter your last name"
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
                     required
-                  >
+                  />
                 </div>
               </div>
 
@@ -51,49 +53,54 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-3">Email Address</label>
                   <input
-                    field={@form[:email]}
+                    name="person[email]"
+                    value={@form[:email].value}
                     type="email"
                     placeholder="your.email@example.com"
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
-                  >
+                  />
                 </div>
 
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-3">Phone Number</label>
                   <input
-                    field={@form[:phone]}
+                    name="person[phone]"
+                    value={@form[:phone].value}
                     type="text"
                     placeholder="Your phone number"
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
-                  >
+                  />
                 </div>
               </div>
 
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Company/Organization</label>
                 <input
-                  field={@form[:company]}
+                  name="person[company]"
+                  value={@form[:company].value}
                   type="text"
                   placeholder="Your company or organization"
                   class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
-                >
+                />
               </div>
 
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Purpose of Visit</label>
                 <input
-                  field={@form[:purpose_of_visit]}
+                  name="person[purpose_of_visit]"
+                  value={@form[:purpose_of_visit].value}
                   type="text"
                   placeholder="What brings you here today?"
                   class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
-                >
+                />
               </div>
 
               <div class="relative">
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Room to Visit *</label>
                 <div class="relative">
                   <input
-                    field={@form[:room_search]}
+                    name="person[room_search]"
+                    value={@form[:room_search].value}
                     type="text"
                     placeholder="Type room number or name (e.g., 101, Conference A)"
                     phx-keyup="search_rooms"
@@ -101,7 +108,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
                     autocomplete="off"
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
                     required
-                  >
+                  />
                   <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                   </svg>
@@ -137,8 +144,8 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
 
                 <!-- Hidden field to store the selected room ID -->
                 <input
-                  type="hidden" name="person[room_id]" id="person_room_id"
-                >
+                  type="hidden" name="person[room_id]" id="person_room_id" value={@form[:room_id].value}
+                />
 
                 <%= if @selected_room do %>
                   <div class="mt-3 p-4 bg-green-50 border-2 border-green-200 rounded-xl">
