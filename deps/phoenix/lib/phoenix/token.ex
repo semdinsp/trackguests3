@@ -59,9 +59,8 @@ defmodule Phoenix.Token do
 
   One is via the meta tag:
 
-  ```heex
-  <meta name="channel_token" content={Phoenix.Token.sign(@conn, "user auth", @current_user.id)}>
-  ```
+      <%= tag :meta, name: "channel_token",
+                     content: Phoenix.Token.sign(@conn, "user auth", @current_user.id) %>
 
   Or an endpoint that returns it:
 

@@ -8,13 +8,13 @@ defmodule Phoenix.MixProject do
     end
   end
 
-  @version "1.8.0-rc.3"
+  @version "1.7.21"
   @scm_url "https://github.com/phoenixframework/phoenix"
 
   # If the elixir requirement is updated, we need to make the installer
   # use at least the minimum requirement used here. Although often the
   # installer is ahead of Phoenix itself.
-  @elixir_requirement "~> 1.15"
+  @elixir_requirement "~> 1.11"
 
   def project do
     [
@@ -23,6 +23,7 @@ defmodule Phoenix.MixProject do
       elixir: @elixir_requirement,
       deps: deps(),
       package: package(),
+      preferred_cli_env: [docs: :docs],
       consolidate_protocols: Mix.env() != :test,
       xref: [
         exclude: [
@@ -42,17 +43,7 @@ defmodule Phoenix.MixProject do
       aliases: aliases(),
       source_url: @scm_url,
       homepage_url: "https://www.phoenixframework.org",
-      description: "Peace of mind from prototype to production",
-      test_ignore_filters: [
-        &String.starts_with?(&1, "test/fixtures/"),
-        &String.starts_with?(&1, "test/support/")
-      ]
-    ]
-  end
-
-  def cli do
-    [
-      preferred_envs: [docs: :docs]
+      description: "Peace of mind from prototype to production"
     ]
   end
 
@@ -86,12 +77,13 @@ defmodule Phoenix.MixProject do
       {:phoenix_template, "~> 1.0"},
       {:websock_adapter, "~> 0.5.3"},
 
-      # TODO Drop phoenix_view as an optional dependency in Phoenix v2.0
+      # TODO drop phoenix_view as an optional dependency in Phoenix v2.0
       {:phoenix_view, "~> 2.0", optional: true},
+      # TODO drop castore when we require OTP 25+
+      {:castore, ">= 0.0.0"},
 
       # Optional deps
       {:plug_cowboy, "~> 2.7", optional: true},
-      {:bandit, "~> 1.0", optional: true},
       {:jason, "~> 1.0", optional: true},
 
       # Docs dependencies (some for cross references)
@@ -120,10 +112,8 @@ defmodule Phoenix.MixProject do
       maintainers: ["Chris McCord", "José Valim", "Gary Rennie", "Jason Stiebs"],
       licenses: ["MIT"],
       links: %{"GitHub" => @scm_url},
-      files: ~w(
-          assets/js lib priv CHANGELOG.md LICENSE.md mix.exs package.json README.md .formatter.exs
-          installer/templates/phx_web/components/core_components.ex
-        )
+      files:
+        ~w(assets/js lib priv CHANGELOG.md LICENSE.md mix.exs package.json README.md .formatter.exs)
     ]
   end
 
@@ -133,12 +123,12 @@ defmodule Phoenix.MixProject do
       main: "overview",
       logo: "logo.png",
       extra_section: "GUIDES",
-      assets: %{"guides/assets" => "assets"},
+      assets: "guides/assets",
       formatters: ["html", "epub"],
       groups_for_modules: groups_for_modules(),
       extras: extras(),
       groups_for_extras: groups_for_extras(),
-      groups_for_docs: [
+      groups_for_functions: [
         Reflection: &(&1[:type] == :reflection)
       ],
       skip_undefined_reference_warnings_on: ["CHANGELOG.md"]
@@ -159,20 +149,13 @@ defmodule Phoenix.MixProject do
       "guides/controllers.md",
       "guides/components.md",
       "guides/ecto.md",
+      "guides/contexts.md",
       "guides/json_and_apis.md",
-      "guides/live_view.md",
-      "guides/asset_management.md",
+      "guides/mix_tasks.md",
       "guides/telemetry.md",
-      "guides/authn_authz/authn_authz.md",
-      "guides/authn_authz/mix_phx_gen_auth.md",
-      "guides/authn_authz/scopes.md",
-      "guides/authn_authz/api_authentication.md",
-      "guides/data_modelling/contexts.md",
-      "guides/data_modelling/your_first_context.md",
-      "guides/data_modelling/in_context_relationships.md",
-      "guides/data_modelling/cross_context_boundaries.md",
-      "guides/data_modelling/more_examples.md",
-      "guides/data_modelling/faq.md",
+      "guides/asset_management.md",
+      "guides/authentication/mix_phx_gen_auth.md",
+      "guides/authentication/api_authentication.md",
       "guides/real_time/channels.md",
       "guides/real_time/presence.md",
       "guides/testing/testing.md",
@@ -181,12 +164,11 @@ defmodule Phoenix.MixProject do
       "guides/testing/testing_channels.md",
       "guides/deployment/deployment.md",
       "guides/deployment/releases.md",
-      "guides/deployment/fly.md",
       "guides/deployment/gigalixir.md",
+      "guides/deployment/fly.md",
       "guides/deployment/heroku.md",
       "guides/howto/custom_error_pages.md",
       "guides/howto/file_uploads.md",
-      "guides/howto/swapping_databases.md",
       "guides/howto/using_ssl.md",
       "guides/howto/writing_a_channels_client.md",
       "guides/cheatsheets/router.cheatmd",
@@ -197,9 +179,8 @@ defmodule Phoenix.MixProject do
   defp groups_for_extras do
     [
       Introduction: ~r/guides\/introduction\/.?/,
-      "Core Concepts": ~r/guides\/[^\/]+\.md/,
-      "Data Modelling": ~r/guides\/data_modelling\/.?/,
-      "Authn and Authz": ~r/guides\/authn_authz\/.?/,
+      Guides: ~r/guides\/[^\/]+\.md/,
+      Authentication: ~r/guides\/authentication\/.?/,
       "Real-time": ~r/guides\/real_time\/.?/,
       Testing: ~r/guides\/testing\/.?/,
       Deployment: ~r/guides\/deployment\/.?/,
@@ -253,16 +234,13 @@ defmodule Phoenix.MixProject do
       docs: ["docs", &generate_js_docs/1],
       "assets.build": ["esbuild module", "esbuild cdn", "esbuild cdn_min", "esbuild main"],
       "assets.watch": "esbuild module --watch",
-      "archive.build": &raise_on_archive_build/1,
-      # copy core_components before compiling / publishing
-      compile: [&copy_core_components/1, "compile"],
-      "hex.publish": [&copy_core_components/1, "hex.publish"]
+      "archive.build": &raise_on_archive_build/1
     ]
   end
 
   defp generate_js_docs(_) do
     Mix.Task.run("app.start")
-    System.cmd("npm", ["run", "docs"])
+    System.cmd("npm", ["run", "docs"], cd: "assets")
   end
 
   defp raise_on_archive_build(_) do
@@ -270,14 +248,5 @@ defmodule Phoenix.MixProject do
     You are trying to install "phoenix" as an archive, which is not supported. \
     You probably meant to install "phx_new" instead
     """)
-  end
-
-  defp copy_core_components(_) do
-    source =
-      Path.join(__DIR__, "installer/templates/phx_web/components/core_components.ex")
-
-    destination_dir = Path.join([__DIR__, "priv", "templates", "phx.gen.live"])
-    destination = Path.join(destination_dir, "core_components.ex")
-    File.cp!(source, destination)
   end
 end

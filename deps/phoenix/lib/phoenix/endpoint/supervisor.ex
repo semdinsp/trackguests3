@@ -13,6 +13,7 @@ defmodule Phoenix.Endpoint.Supervisor do
     with {:ok, pid} = ok <- Supervisor.start_link(__MODULE__, {otp_app, mod, opts}, name: mod) do
       # We don't use the defaults in the checks below
       conf = Keyword.merge(Application.get_env(otp_app, mod, []), opts)
+      warmup(mod)
       log_access_url(mod, conf)
       browser_open(mod, conf)
 
@@ -27,32 +28,14 @@ defmodule Phoenix.Endpoint.Supervisor do
   @doc false
   def init({otp_app, mod, opts}) do
     default_conf = Phoenix.Config.merge(defaults(otp_app, mod), opts)
-    env_conf = Phoenix.Config.from_env(otp_app, mod, default_conf)
+    env_conf = config(otp_app, mod, default_conf)
 
     secret_conf =
       cond do
         Code.ensure_loaded?(mod) and function_exported?(mod, :init, 2) ->
           IO.warn(
-            """
-            your #{inspect(mod)} defines a init/2 callback, which is now deprecated. \
-            This callback is invoked when your endpoint is initialized as part of your supervision tree. \
-            Instead, you should either:
-
-            1. Move all dynamic configuration to config/runtime.exs (preferred). For example:
-
-                # config/runtime.exs
-                import Config
-
-                if config_env() == :prod do
-                  config #{inspect(otp_app)}, #{inspect(mod)},
-                    http: [:inet6, port: System.fetch_env!("PORT")]
-                end
-
-            2. Pass the configuration you returned from the `init/2` callback \
-            as additional options when starting the endpoint in your supervision tree. \
-            For example: {#{inspect(mod)}, some_extra_options: true}
-            """,
-            []
+            "#{inspect(mod)}.init/2 is deprecated, use config/runtime.exs instead " <>
+              "or pass additional options when starting the endpoint in your supervision tree"
           )
 
           {:ok, init_conf} = mod.init(:supervisor, env_conf)
@@ -100,11 +83,10 @@ defmodule Phoenix.Endpoint.Supervisor do
 
     children =
       config_children(mod, secret_conf, default_conf) ++
-        warmup_children(mod) ++
         pubsub_children(mod, conf) ++
-        socket_children(mod, conf, :child_spec) ++
+        socket_children(mod, :child_spec) ++
         server_children(mod, conf, server?) ++
-        socket_children(mod, conf, :drainer_spec) ++
+        socket_children(mod, :drainer_spec) ++
         watcher_children(mod, conf, server?)
 
     Supervisor.init(children, strategy: :one_for_one)
@@ -136,9 +118,8 @@ defmodule Phoenix.Endpoint.Supervisor do
     end
   end
 
-  defp socket_children(endpoint, conf, fun) do
+  defp socket_children(endpoint, fun) do
     for {_, socket, opts} <- Enum.uniq_by(endpoint.__sockets__(), &elem(&1, 1)),
-        _ = check_origin_or_csrf_checked!(conf, opts),
         spec = apply_or_ignore(socket, fun, [[endpoint: endpoint] ++ opts]),
         spec != :ignore do
       spec
@@ -154,29 +135,9 @@ defmodule Phoenix.Endpoint.Supervisor do
     end
   end
 
-  defp check_origin_or_csrf_checked!(endpoint_conf, socket_opts) do
-    check_origin = endpoint_conf[:check_origin]
-
-    for {transport, transport_opts} <- socket_opts, is_list(transport_opts) do
-      check_origin = Keyword.get(transport_opts, :check_origin, check_origin)
-
-      check_csrf = transport_opts[:check_csrf]
-
-      if check_origin == false and check_csrf == false do
-        raise ArgumentError,
-              "one of :check_origin and :check_csrf must be set to non-false value for " <>
-                "transport #{inspect(transport)}"
-      end
-    end
-  end
-
   defp config_children(mod, conf, default_conf) do
     args = {mod, conf, default_conf, name: Module.concat(mod, "Config")}
     [{Phoenix.Config, args}]
-  end
-
-  defp warmup_children(mod) do
-    [%{id: :warmup, start: {__MODULE__, :warmup, [mod]}}]
   end
 
   defp server_children(mod, config, server?) do
@@ -200,13 +161,22 @@ defmodule Phoenix.Endpoint.Supervisor do
   end
 
   defp watcher_children(_mod, conf, server?) do
-    watchers = conf[:watchers] || []
-
     if server? || conf[:force_watchers] do
-      Enum.map(watchers, &{Phoenix.Endpoint.Watcher, &1})
+      Enum.map(conf[:watchers], &{Phoenix.Endpoint.Watcher, &1})
     else
       []
     end
+  end
+
+  @doc """
+  The endpoint configuration used at compile time.
+  """
+  def config(otp_app, endpoint) do
+    config(otp_app, endpoint, defaults(otp_app, endpoint))
+  end
+
+  defp config(otp_app, endpoint, defaults) do
+    Phoenix.Config.from_env(otp_app, endpoint, defaults)
   end
 
   @doc """
@@ -358,11 +328,6 @@ defmodule Phoenix.Endpoint.Supervisor do
     rescue
       e -> Logger.error("Could not warm up static assets: #{Exception.message(e)}")
     end
-
-    # To prevent a race condition where the socket listener is already started
-    # but the config not warmed up, we run warmup/1 as a child in the supervision
-    # tree. As we don't actually want to start a process, we return :ignore here.
-    :ignore
   end
 
   defp warmup_persistent(endpoint) do

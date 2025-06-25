@@ -40,15 +40,6 @@ defmodule Mix.Tasks.Phx.Digest do
 
   It is possible to digest the stylesheet asset references without the query
   string "?vsn=d" with the option `--no-vsn`.
-
-  ## Options
-
-    * `-o, --output` - indicates the path to your compiled
-      assets directory. Defaults to `priv/static`
-
-    * `--no-vsn` - do not add version query string to assets
-
-    * `--no-compile` - do not run mix compile
   """
 
   @default_opts [vsn: true]
@@ -58,7 +49,7 @@ defmodule Mix.Tasks.Phx.Digest do
   def run(all_args) do
     # Ensure all compressors are compiled.
     if "--no-compile" not in all_args do
-      Mix.Task.run("compile", all_args)
+      Mix.Task.run("compile")
     end
 
     Mix.Task.reenable("phx.digest")

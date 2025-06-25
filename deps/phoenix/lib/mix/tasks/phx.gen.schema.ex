@@ -86,13 +86,6 @@ defmodule Mix.Tasks.Phx.Gen.Schema do
   Generated migration can use `binary_id` for schema's primary key
   and its references with option `--binary-id`.
 
-  ## primary_key
-
-  By default, the primary key in the table is called `id`. This option
-  allows to change the name of the primary key column. For example:
-
-      $ mix phx.gen.schema Blog.post posts --primary-key post_id
-
   ## repo
 
   Generated migration can use `repo` to set the migration repository
@@ -153,8 +146,7 @@ defmodule Mix.Tasks.Phx.Gen.Schema do
   alias Mix.Phoenix.Schema
 
   @switches [migration: :boolean, binary_id: :boolean, table: :string, web: :string,
-    context_app: :string, prefix: :string, repo: :string, migration_dir: :string,
-    primary_key: :string, scope: :string, no_scope: :boolean]
+    context_app: :string, prefix: :string, repo: :string, migration_dir: :string]
 
   @doc false
   def run(args) do
@@ -167,14 +159,8 @@ defmodule Mix.Tasks.Phx.Gen.Schema do
 
     prompt_for_conflicts(schema)
 
-    binding = [
-      schema: schema,
-      primary_key: schema.opts[:primary_key] || :id,
-      scope: schema.scope
-    ]
-
     schema
-    |> copy_new_files(paths, binding)
+    |> copy_new_files(paths, schema: schema)
     |> print_shell_instructions()
   end
 

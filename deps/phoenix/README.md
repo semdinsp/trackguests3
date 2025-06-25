@@ -1,8 +1,4 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./priv/static/phoenix-orange.png" />
-  <source media="(prefers-color-scheme: light)" srcset="./priv/static/phoenix.png" />
-  <img src="./priv/static/phoenix.png" alt="Phoenix logo" />
-</picture>
+![phoenix logo](https://raw.githubusercontent.com/phoenixframework/phoenix/main/priv/static/phoenix.png)
 
 > Peace of mind from prototype to production.
 
@@ -13,6 +9,8 @@
 See the official site at <https://www.phoenixframework.org/>.
 
 Install the latest version of Phoenix by following the instructions at <https://hexdocs.pm/phoenix/installation.html#phoenix>.
+
+Phoenix requires Elixir v1.11+ & Erlang v22.1+.
 
 ## Documentation
 
@@ -46,23 +44,21 @@ defp deps do
 
 To create projects outside of the `installer/` directory, add the latest archive to your machine by following the instructions in [installer/README.md](https://github.com/phoenixframework/phoenix/blob/main/installer/README.md)
 
-### Building from source
-
-To build the documentation:
+To build the documentation from source:
 
 ```bash
 npm install --prefix assets
 MIX_ENV=docs mix docs
 ```
 
-To build Phoenix:
+To build Phoenix from source:
 
 ```bash
 mix deps.get
 mix compile
 ```
 
-To build the Phoenix installer:
+To build the Phoenix installer from source:
 
 ```bash
 mix deps.get
@@ -70,7 +66,7 @@ mix compile
 mix archive.build
 ```
 
-To build Phoenix.js:
+### Building phoenix.js
 
 ```bash
 cd assets
