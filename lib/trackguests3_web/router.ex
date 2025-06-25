@@ -8,7 +8,6 @@ defmodule Trackguests3Web.Router do
     plug(:put_root_layout, html: {Trackguests3Web.Layouts, :root})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(:fetch_current_scope_for_user)
   end
 
   pipeline :api do
@@ -51,7 +50,6 @@ defmodule Trackguests3Web.Router do
     pipe_through([:browser, :require_authenticated_user])
 
     live_session :require_authenticated_user,
-      on_mount: [{Trackguests3Web.UserAuth, :require_authenticated}] do
       live("/", ResidenceLive.Index, :index)
       live("/residences", ResidenceLive.Index, :index)
       live("/residences/new", ResidenceLive.Form, :new)
@@ -77,7 +75,6 @@ defmodule Trackguests3Web.Router do
     pipe_through([:browser])
 
     live_session :current_user,
-      on_mount: [{Trackguests3Web.UserAuth, :mount_current_scope}] do
       live("/users/register", UserLive.Registration, :new)
       live("/users/log-in", UserLive.Login, :new)
       live("/users/log-in/:token", UserLive.Confirmation, :new)
