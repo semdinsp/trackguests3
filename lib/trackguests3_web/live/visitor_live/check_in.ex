@@ -25,16 +25,29 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
             <div class="space-y-8">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-semibold text-gray-700 mb-3">Full Name *</label>
+                  <label class="block text-sm font-semibold text-gray-700 mb-3">First Name *</label>
                   <.input
-                    field={@form[:name]}
+                    field={@form[:first_name]}
                     type="text"
-                    placeholder="Enter your full name"
+                    placeholder="Enter your first name"
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
                     required
                   />
                 </div>
 
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-3">Last Name *</label>
+                  <.input
+                    field={@form[:last_name]}
+                    type="text"
+                    placeholder="Enter your last name"
+                    class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-3">Email Address</label>
                   <.input
@@ -44,9 +57,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
                   />
                 </div>
-              </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-semibold text-gray-700 mb-3">Phone Number</label>
                   <.input
@@ -56,16 +67,16 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
                     class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label class="block text-sm font-semibold text-gray-700 mb-3">Company/Organization</label>
-                  <.input
-                    field={@form[:company]}
-                    type="text"
-                    placeholder="Your company or organization"
-                    class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
-                  />
-                </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Company/Organization</label>
+                <.input
+                  field={@form[:company]}
+                  type="text"
+                  placeholder="Your company or organization"
+                  class="input-luxury w-full text-gray-900 placeholder:text-gray-500 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
+                />
               </div>
 
               <div>
@@ -80,29 +91,31 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
 
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Room to Visit *</label>
-                <select name="room_id" class="input-luxury w-full text-gray-900 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300" required>
-                  <option value="">Select a room...</option>
-                  <%= for room <- @rooms do %>
-                    <option value={room.id} class="text-gray-900">
-                      <%= room.title %> - Floor <%= room.floor %>
-                    </option>
-                  <% end %>
-                </select>
+                <.input
+                  field={@form[:room_id]}
+                  type="select"
+                  options={[{"Select a room...", ""} | Enum.map(@rooms, &{&1.title <> " - Floor #{&1.floor}", &1.id})]}
+                  class="input-luxury w-full text-gray-900 bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 font-medium transition-all duration-300"
+                  required
+                />
               </div>
 
-              <div class="flex space-x-4 pt-6">
+              <div class="flex flex-col sm:flex-row gap-6 pt-8">
                 <button
                   type="submit"
-                  class="btn-luxury flex-1 inline-flex items-center justify-center text-lg px-8 py-4"
-                  disabled={!@form.source.valid?}
+                  class="btn-luxury w-full sm:flex-1 inline-flex items-center justify-center text-xl font-bold px-12 py-6 text-white shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+                  disabled={!@form_valid}
                 >
-                  <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-8 h-8 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                   Complete Check-In
                 </button>
-                <a href="/" class="btn-platinum flex-1 text-center inline-flex items-center justify-center">
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a 
+                  href="/" 
+                  class="btn-platinum w-full sm:flex-1 text-center inline-flex items-center justify-center text-xl font-bold px-12 py-6 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                   </svg>
                   Return to Home
@@ -131,7 +144,8 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
      socket
      |> assign(:page_title, "Visitor Check-In")
      |> assign(:rooms, rooms)
-     |> assign(:form, to_form(changeset))}
+     |> assign(:form, to_form(changeset))
+     |> assign(:form_valid, false)}
   end
 
   @impl true
@@ -141,20 +155,34 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       |> Persons.change_person(person_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, form: to_form(changeset))}
+    # Check if required fields are present and valid
+    form_valid =
+      changeset.valid? and
+        present?(person_params["first_name"]) and
+        present?(person_params["last_name"]) and
+        present?(person_params["room_id"])
+
+    {:noreply,
+     socket
+     |> assign(form: to_form(changeset))
+     |> assign(:form_valid, form_valid)}
   end
 
   @impl true
-  def handle_event("check_in", %{"person" => person_params, "room_id" => room_id}, socket) do
+  def handle_event("check_in", %{"person" => person_params}, socket) do
+    # Combine first and last name into full name
+    full_name = "#{person_params["first_name"]} #{person_params["last_name"]}"
+    person_params = Map.put(person_params, "name", full_name)
+
     case Persons.create_person(person_params) do
       {:ok, person} ->
-        case Persons.check_in_person(person, room_id) do
+        case Persons.check_in_person(person, person_params["room_id"]) do
           {:ok, _person} ->
             {:noreply,
              socket
              |> put_flash(
                :info,
-               "Welcome! You have been checked in successfully. Enjoy your visit!"
+               "Welcome #{full_name}! You have been checked in successfully. Enjoy your visit!"
              )
              |> push_navigate(to: ~p"/visitor/check-out")}
 
@@ -171,4 +199,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end
+
+  defp present?(value) when is_binary(value), do: String.trim(value) != ""
+  defp present?(_), do: false
 end
