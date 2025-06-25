@@ -1,0 +1,4 @@
+_build/tailwind-linux-x64
+# Large binary files
+_build/esbuild-*
+_build/tailwind-*
