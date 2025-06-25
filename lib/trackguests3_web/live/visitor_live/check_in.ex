@@ -310,7 +310,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
                :info,
                "Welcome #{full_name}! You have been checked in successfully. Enjoy your visit!"
              )
-             |> push_navigate(to: ~p("/visitor/check-out"))}
+             |> push_navigate(to: ~p"/visitor/check-out")}
 
           {:error, _changeset} ->
             {:noreply,
