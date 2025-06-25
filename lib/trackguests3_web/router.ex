@@ -49,7 +49,7 @@ defmodule Trackguests3Web.Router do
   scope "/", Trackguests3Web do
     pipe_through([:browser, :require_authenticated_user])
 
-    live_session :require_authenticated_user,
+    live_session :require_authenticated_user do
       live("/", ResidenceLive.Index, :index)
       live("/residences", ResidenceLive.Index, :index)
       live("/residences/new", ResidenceLive.Form, :new)
@@ -74,7 +74,7 @@ defmodule Trackguests3Web.Router do
   scope "/", Trackguests3Web do
     pipe_through([:browser])
 
-    live_session :current_user,
+    live_session :current_user do
       live("/users/register", UserLive.Registration, :new)
       live("/users/log-in", UserLive.Login, :new)
       live("/users/log-in/:token", UserLive.Confirmation, :new)
