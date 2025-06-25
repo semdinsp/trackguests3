@@ -2,28 +2,46 @@
 
 ## Understanding the Application
 - [x] Clone the repository successfully
-- [ ] Set up dependencies and database
-- [ ] Explore the existing schema and data models
-- [ ] Review the LiveView implementations
-- [ ] Start the server to see current state
+- [x] Set up dependencies and database (switched to SQLite)
+- [x] Explore the existing schema and data models
+- [x] Review the LiveView implementations
+- [x] Start the server to see current state
 - [ ] Analyze what's working and what needs improvement
 
 ## Current Understanding
-From the README's installation notes, this appears to be a multi-tenant guest tracking system with:
+This is a multi-tenant guest tracking system with:
 
-### Data Models
-- **Residences**: Buildings with title, address, floor_count, logo
+### Data Models (Working)
+- **Residences**: Buildings with title, address, floor_count, logo (binary_id primary keys)
 - **Rooms**: Individual rooms within residences (title, floor, needs_fob, memo, accepts_guests)
-- **Persons**: People associated with rooms (name, sex, memo, resident/visitor/staff flags, contact info)
+- **Persons**: People associated with rooms (planned but not yet implemented)
 
-### Generated Components
-- Uses binary_id primary keys
-- Has LiveView interfaces for CRUD operations
-- Planned to have user authentication (phx.gen.auth mentioned)
-- Uses PostgreSQL as database
+### Current State
+- ✅ Database migrations working (residences, rooms tables created)
+- ✅ LiveView interfaces for residences and rooms (basic CRUD)
+- ✅ Phoenix server running on http://localhost:4000
+- ✅ Basic table views showing empty lists
+- ❌ Still using default Phoenix layout/styling
+- ❌ Missing persons/guests functionality
+- ❌ No authentication system yet
+- ❌ No real guest tracking features
+
+### What's Working
+- `/residences` - Lists residences with "New Residence" button
+- `/rooms` - Lists rooms with "New Rooms" button  
+- Both have empty tables ready for data
+
+### What Needs Work
+- [ ] Complete the persons/guests data model and LiveViews
+- [ ] Implement actual guest check-in/check-out workflow
+- [ ] Add user authentication (mentioned in README but not implemented)
+- [ ] Custom styling and layout design
+- [ ] Navigation between residences -> rooms -> guests
+- [ ] Real-world guest tracking features
 
 ## Next Steps
-- [ ] Get the app running locally
-- [ ] Explore the current UI and functionality
-- [ ] Identify areas for improvement or completion
+- [ ] Explore the existing LiveView code to understand the architecture
+- [ ] Test creating residences and rooms to see full workflow
+- [ ] Identify missing pieces for a complete guest tracking system
 - [ ] Plan enhancements based on what you need
+
