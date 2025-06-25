@@ -238,8 +238,9 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
         socket.assigns.rooms
         |> Enum.filter(fn room ->
           room_display = "#{room.title} Floor #{room.floor}"
+
           String.contains?(String.downcase(room_display), String.downcase(search_term)) or
-          String.starts_with?(String.downcase(room.title), String.downcase(search_term))
+            String.starts_with?(String.downcase(room.title), String.downcase(search_term))
         end)
         |> Enum.take(10)
       end
@@ -249,11 +250,15 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
      |> assign(:room_search, search_term)
      |> assign(:filtered_rooms, filtered_rooms)
      |> assign(:show_room_dropdown, search_term != "")
-     |> assign(:selected_room, if search_term == "", do: nil, else: socket.assigns.selected_room)}
+     |> assign(:selected_room, if(search_term == "", do: nil, else: socket.assigns.selected_room))}
   end
 
   @impl true
-  def handle_event("select_room", %{"room-id" => room_id, "room-title" => room_title, "room-floor" => room_floor}, socket) do
+  def handle_event(
+        "select_room",
+        %{"room-id" => room_id, "room-title" => room_title, "room-floor" => room_floor},
+        socket
+      ) do
     selected_room = %{
       id: String.to_integer(room_id),
       title: room_title,
@@ -268,10 +273,12 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       })
 
     current_params = socket.assigns.form.params || %{}
-    updated_params = Map.merge(current_params, %{
-      "room_search" => "#{selected_room.title} - Floor #{selected_room.floor}",
-      "room_id" => Integer.to_string(selected_room.id)
-    })
+
+    updated_params =
+      Map.merge(current_params, %{
+        "room_search" => "#{selected_room.title} - Floor #{selected_room.floor}",
+        "room_id" => Integer.to_string(selected_room.id)
+      })
 
     form_valid =
       changeset.valid? and
@@ -299,13 +306,19 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
           {:ok, _person} ->
             {:noreply,
              socket
-             |> put_flash(:info, "Welcome #{full_name}! You have been checked in successfully. Enjoy your visit!")
+             |> put_flash(
+               :info,
+               "Welcome #{full_name}! You have been checked in successfully. Enjoy your visit!"
+             )
              |> push_navigate(to: ~p("/visitor/check-out"))}
 
           {:error, _changeset} ->
             {:noreply,
              socket
-             |> put_flash(:error, "There was an error processing your check-in. Please try again.")}
+             |> put_flash(
+               :error,
+               "There was an error processing your check-in. Please try again."
+             )}
         end
 
       {:error, changeset} ->
