@@ -19,20 +19,7 @@ defmodule Trackguests3Web.Router do
 
   scope "/", Trackguests3Web do
     pipe_through(:browser)
-    # NEED ADMIN LEVEL HERE
-    live("/residences", ResidenceLive.Index, :index)
-    live("/residences/new", ResidenceLive.Form, :new)
-    live("/residences/:id", ResidenceLive.Show, :show)
-    live("/residences/:id/edit", ResidenceLive.Form, :edit)
 
-    live("/rooms", RoomsLive.Index, :index)
-    live("/rooms/new", RoomsLive.Form, :new)
-    live("/rooms/:id", RoomsLive.Show, :show)
-    live("/rooms/:id/edit", RoomsLive.Form, :edit)
-
-    # END ADMIN
-
-    get("/", PageController, :home)
 
     # Visitor routes (public)
     live("/visitor/check-in", VisitorLive.CheckIn, :index)
@@ -67,6 +54,16 @@ defmodule Trackguests3Web.Router do
     pipe_through([:browser, :require_authenticated_user])
 
     live_session :require_authenticated_user,
+      live("/", ResidenceLive.Index, :index)
+      live("/residences", ResidenceLive.Index, :index)
+      live("/residences/new", ResidenceLive.Form, :new)
+      live("/residences/:id", ResidenceLive.Show, :show)
+      live("/residences/:id/edit", ResidenceLive.Form, :edit)
+
+      live("/rooms", RoomsLive.Index, :index)
+      live("/rooms/new", RoomsLive.Form, :new)
+      live("/rooms/:id", RoomsLive.Show, :show)
+      live("/rooms/:id/edit", RoomsLive.Form, :edit)
       on_mount: [{Trackguests3Web.UserAuth, :require_authenticated}] do
       live("/users/settings", UserLive.Settings, :edit)
       live("/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email)
