@@ -8,141 +8,216 @@
   themes: false;
 }
 
-/* Contemporary Business Theme */
+/* Modern Platinum Luxury Theme */
 @plugin "../vendor/daisyui-theme" {
   name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
 
-  /* Professional color palette */
-  --color-base-100: oklch(99% 0.002 240); /* Pure white */
-  --color-base-200: oklch(97% 0.005 240); /* Light gray */
-  --color-base-300: oklch(94% 0.01 240); /* Soft gray */
-  --color-base-content: oklch(20% 0.015 240); /* Deep charcoal */
+  /* Platinum luxury color palette */
+  --color-base-100: oklch(98% 0 0); /* Pure platinum white */
+  --color-base-200: oklch(96% 0 0); /* Soft platinum */
+  --color-base-300: oklch(92% 0 0); /* Light platinum gray */
+  --color-base-content: oklch(15% 0 0); /* Deep charcoal black */
 
-  /* Professional blue primary */
-  --color-primary: oklch(55% 0.18 230); /* Professional blue */
-  --color-primary-content: oklch(98% 0.002 230); /* White on blue */
+  /* Platinum metallic primary */
+  --color-primary: oklch(40% 0.03 240); /* Deep platinum black */
+  --color-primary-content: oklch(98% 0 0); /* Platinum white on black */
 
-  /* Sophisticated teal secondary */
-  --color-secondary: oklch(60% 0.15 180); /* Professional teal */
-  --color-secondary-content: oklch(98% 0.002 180); /* White on teal */
+  /* Silver metallic secondary */
+  --color-secondary: oklch(70% 0.02 240); /* Elegant silver */
+  --color-secondary-content: oklch(15% 0 0); /* Black on silver */
 
-  /* Modern status colors */
-  --color-error: oklch(60% 0.18 15); /* Professional red */
-  --color-warning: oklch(75% 0.15 85); /* Sophisticated amber */
-  --color-success: oklch(65% 0.16 150); /* Professional green */
-  --color-info: oklch(65% 0.15 220); /* Clear blue */
+  /* Luxury status colors */
+  --color-error: oklch(55% 0.15 15); /* Sophisticated red */
+  --color-warning: oklch(70% 0.12 85); /* Elegant amber */
+  --color-success: oklch(60% 0.12 150); /* Refined green */
+  --color-info: oklch(65% 0.1 240); /* Platinum blue */
 
-  /* Neutral business tones */
-  --color-neutral: oklch(30% 0.01 240); /* Business gray */
-  --color-neutral-content: oklch(95% 0.005 240); /* Light on neutral */
+  /* Neutral luxury tones */
+  --color-neutral: oklch(25% 0.01 240); /* Rich charcoal */
+  --color-neutral-content: oklch(95% 0 0); /* Platinum on charcoal */
 }
 
-/* Contemporary Business Components */
-.btn-primary {
-  @apply bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md border-0 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+/* Luxury Platinum Components */
+.btn-luxury {
+  @apply bg-gradient-to-r from-gray-900 to-black text-white px-8 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 border-0 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 backdrop-blur-sm;
+  background-image: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #000000 50%,
+    #2a2a2a 100%
+  );
 }
 
-.btn-secondary {
-  @apply bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md border-0 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2;
+.btn-luxury:hover {
+  background-image: linear-gradient(
+    135deg,
+    #2a2a2a 0%,
+    #1a1a1a 50%,
+    #000000 100%
+  );
 }
 
-.btn-outline {
-  @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+.btn-platinum {
+  @apply bg-gradient-to-r from-gray-300 to-gray-400 text-gray-900 px-8 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border-0 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2;
+  background-image: linear-gradient(
+    135deg,
+    #e5e7eb 0%,
+    #d1d5db 50%,
+    #9ca3af 100%
+  );
 }
 
-.card-modern {
-  @apply bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 p-6 backdrop-blur-sm;
+.btn-outline-luxury {
+  @apply border-2 border-gray-300 text-gray-900 hover:bg-gray-900 hover:text-white hover:border-gray-900 px-8 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 backdrop-blur-sm;
 }
 
-.input-modern {
-  @apply bg-white border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-blue-200/50 rounded-lg px-4 py-3 text-gray-800 placeholder:text-gray-500 transition-all duration-200;
+.card-luxury {
+  @apply bg-white border border-gray-200 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 p-8 backdrop-blur-lg;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.table-modern {
-  @apply bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm backdrop-blur-sm;
+.card-luxury:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 35px 60px -12px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.table-modern th {
-  @apply bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 font-semibold py-4 px-6 text-left border-b border-gray-200;
+.input-luxury {
+  @apply bg-gray-50 border-2 border-gray-200 focus:border-gray-400 focus:ring-4 focus:ring-gray-200/30 rounded-xl px-6 py-4 text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
+  backdrop-filter: blur(10px);
 }
 
-.table-modern td {
-  @apply py-4 px-6 border-b border-gray-100 text-gray-800;
+.table-luxury {
+  @apply bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-lg;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
 }
 
-.table-modern tr:hover {
-  @apply bg-gradient-to-r from-blue-50 to-teal-50;
+.table-luxury th {
+  @apply bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 font-bold py-6 px-8 text-left border-b border-gray-300;
+  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
 }
 
-/* Professional navigation */
-.nav-link {
-  @apply text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200;
+.table-luxury td {
+  @apply py-6 px-8 border-b border-gray-100 text-gray-800 font-medium;
 }
 
-.nav-link-active {
-  @apply text-blue-600 bg-blue-50 px-4 py-2 rounded-lg text-sm font-semibold;
+.table-luxury tr:hover {
+  @apply bg-gradient-to-r from-gray-50 to-gray-100;
+  background-image: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+/* Luxury navigation */
+.nav-link-luxury {
+  @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 tracking-wide;
+}
+
+.nav-link-luxury:hover {
+  background-image: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.nav-link-active-luxury {
+  @apply text-gray-900 bg-gray-100 px-6 py-3 rounded-xl text-sm font-bold tracking-wide;
+  background-image: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
 }
 
 /* Page structure */
-.page-header {
-  @apply mb-8 pb-6 border-b border-gray-200;
+.page-header-luxury {
+  @apply mb-12 pb-8 border-b border-gray-200;
 }
 
-.page-title {
-  @apply text-3xl font-bold text-gray-900 mb-2 tracking-tight;
+.page-title-luxury {
+  @apply text-4xl font-bold text-gray-900 mb-3 tracking-tight;
+  background: linear-gradient(135deg, #111827 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.page-subtitle {
-  @apply text-gray-600 text-lg font-medium;
+.page-subtitle-luxury {
+  @apply text-gray-600 text-xl font-medium tracking-wide;
 }
 
 /* Status indicators */
-.status-badge {
-  @apply px-3 py-1 rounded-full text-sm font-medium;
+.status-badge-luxury {
+  @apply px-4 py-2 rounded-full text-sm font-bold tracking-wide;
 }
 
-.status-active {
-  @apply bg-green-100 text-green-800;
+.status-active-luxury {
+  @apply bg-gradient-to-r from-green-100 to-emerald-100 text-green-800;
 }
 
-.status-inactive {
-  @apply bg-gray-100 text-gray-800;
+.status-inactive-luxury {
+  @apply bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800;
 }
 
-.status-pending {
-  @apply bg-yellow-100 text-yellow-800;
+.status-pending-luxury {
+  @apply bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800;
 }
 
-.status-error {
-  @apply bg-red-100 text-red-800;
+.status-error-luxury {
+  @apply bg-gradient-to-r from-red-100 to-rose-100 text-red-800;
 }
 
-/* Modern gradients */
-.gradient-bg {
-  @apply bg-gradient-to-br from-blue-50 via-white to-teal-50;
+/* Luxury gradients */
+.gradient-bg-luxury {
+  background: linear-gradient(
+    135deg,
+    #f8fafc 0%,
+    #f1f5f9 25%,
+    #e2e8f0 75%,
+    #cbd5e1 100%
+  );
 }
 
-.gradient-header {
-  @apply bg-gradient-to-r from-blue-600 to-teal-600;
-}
-
-/* Professional shadows */
-.shadow-modern {
+.gradient-header-luxury {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
   box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    0 10px 25px -5px rgba(30, 41, 59, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
-.shadow-modern-lg {
+/* Platinum shadows */
+.shadow-luxury {
   box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-luxury-lg {
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.shadow-3xl {
+  box-shadow:
+    0 35px 60px -12px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 /* Focus states */
-.focus-modern {
-  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+.focus-luxury {
+  @apply focus:outline-none focus:ring-4 focus:ring-gray-300/50 focus:ring-offset-2;
+}
+
+/* Metallic text effects */
+.text-platinum {
+  background: linear-gradient(135deg, #6b7280 0%, #374151 50%, #111827 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effects */
+.glass-luxury {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.125);
 }
