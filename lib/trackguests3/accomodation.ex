@@ -234,10 +234,12 @@ defmodule Trackguests3.Accomodation do
   For now returns 0 since persons/guests aren't fully implemented yet.
   """
   def count_current_guests do
-    # TODO: Implement when persons check-in functionality is ready
-    # from(p in Trackguests3.Persons.Person, where: p.status == "checked_in")
-    # |> Repo.aggregate(:count, :id)
-    0
+    alias Trackguests3.Persons
+
+    from(p in Persons.Person, where: p.status == "checked_in")
+    |> Repo.aggregate(:count, :id)
+
+    # Fallback to 0 if no persons table exists
   end
 
   @doc """
