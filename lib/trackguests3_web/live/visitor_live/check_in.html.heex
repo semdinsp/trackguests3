@@ -1,0 +1,171 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div class="space-y-8">
+    <!-- Header Section -->
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-platinum mb-4">Guest Check-In</h1>
+      <%= if @residence do %>
+        <p class="text-xl text-gray-600">
+          Welcome to <span class="font-semibold text-platinum">{@residence.title}</span>
+        </p>
+        <p class="text-sm text-gray-500 mt-2">{@residence.address}</p>
+      <% else %>
+        <p class="text-xl text-gray-600">
+          Please select a property and complete guest information
+        </p>
+      <% end %>
+    </div>
+
+    <!-- Check-in Form -->
+    <div class="max-w-2xl mx-auto">
+      <div class="card-luxury">
+        <.form for={@form} id="check-in-form" phx-change="validate" phx-submit="check_in" class="space-y-6">
+          <!-- Property Selection (if no residence context) -->
+          <%= if !@residence do %>
+            <div>
+              <label class="block text-sm font-medium text-platinum mb-3">Select Property</label>
+              <select phx-change="select_residence" 
+                      name="residence_id" 
+                      class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
+                <option value="">Choose a property...</option>
+                <%= for {name, id} <- get_residence_options() do %>
+                  <option value={id}>{name}</option>
+                <% end %>
+              </select>
+            </div>
+          <% end %>
+
+          <!-- Guest Information -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
+              Guest Information
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <.input 
+                field={@form[:name]} 
+                type="text" 
+                label="Full Name" 
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                placeholder="Enter guest's full name"
+                required
+              />
+              
+              <.input 
+                field={@form[:email]} 
+                type="email" 
+                label="Email Address" 
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                placeholder="guest@example.com"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <.input 
+                field={@form[:phone]} 
+                type="tel" 
+                label="Phone Number" 
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                placeholder="+1 (555) 123-4567"
+              />
+              
+              <.input 
+                field={@form[:company]} 
+                type="text" 
+                label="Company/Organization" 
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                placeholder="Company name (optional)"
+              />
+            </div>
+          </div>
+
+          <!-- Visit Details -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
+              Visit Details
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <.input 
+                field={@form[:visitor_type]} 
+                type="select" 
+                label="Visitor Type" 
+                options={[{"Visitor", "visitor"}, {"Staff", "staff"}, {"Resident", "resident"}]}
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+              />
+              
+              <div>
+                <label class="block text-sm font-medium text-platinum mb-3">Room Assignment</label>
+                <.input 
+                  field={@form[:room_id]} 
+                  type="select" 
+                  options={@room_options}
+                  prompt="Select available room"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                  required
+                />
+              </div>
+            </div>
+
+            <.input 
+              field={@form[:purpose_of_visit]} 
+              type="text" 
+              label="Purpose of Visit" 
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+              placeholder="Business meeting, personal visit, etc."
+            />
+
+            <.input 
+              field={@form[:memo]} 
+              type="textarea" 
+              label="Special Notes" 
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none"
+              placeholder="Any special requirements or notes..."
+              rows="3"
+            />
+          </div>
+
+          <!-- Submit Actions -->
+          <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+            <a href={if @residence, do: "/residences/#{@residence.id}", else: "/"} 
+               class="btn-secondary-luxury">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+              Cancel
+            </a>
+            
+            <button type="submit" 
+                    phx-disable-with="Checking In..." 
+                    class="btn-luxury">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              Complete Check-In
+            </button>
+          </div>
+        </.form>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="max-w-2xl mx-auto">
+      <div class="card-luxury bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100">
+        <div class="flex items-start space-x-4">
+          <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-1">Need Assistance?</h4>
+            <p class="text-sm text-gray-600">
+              If you need help with the check-in process or have questions about your stay, 
+              please contact the front desk or property management.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layouts.app>
+
