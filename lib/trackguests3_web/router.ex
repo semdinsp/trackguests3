@@ -23,7 +23,7 @@ defmodule Trackguests3Web.Router do
     pipe_through(:browser)
 
     # Main routes
-    live("/", ResidenceLive.Index, :index)
+    live("/", DashboardLive, :index)
     live("/residences", ResidenceLive.Index, :index)
     live("/residences/new", ResidenceLive.Form, :new)
     live("/residences/:id", ResidenceLive.Show, :show)
