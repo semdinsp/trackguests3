@@ -27,6 +27,10 @@ defmodule Trackguests3Web.Router do
     live("/residences/:id/edit", ResidenceLive.Form, :edit)
 
     live("/rooms", RoomsLive.Index, :index)
+
+    # Residence-specific room routes
+    live("/residences/:residence_id/rooms", RoomsLive.Index, :residence_rooms)
+    live("/residences/:residence_id/rooms/new", RoomsLive.Form, :new)
     live("/rooms/new", RoomsLive.Form, :new)
     live("/rooms/:id", RoomsLive.Show, :show)
     live("/rooms/:id/edit", RoomsLive.Form, :edit)
