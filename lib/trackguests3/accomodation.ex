@@ -191,10 +191,127 @@ defmodule Trackguests3.Accomodation do
   ## Examples
 
       iex> change_rooms(rooms)
-      %Ecto.Changeset{data: %Rooms{}}
+      %Ecto.Changeset{{}}
 
   """
   def change_rooms(%Rooms{} = rooms, attrs \\ %{}) do
     Rooms.changeset(rooms, attrs)
+  end
+
+  # Dashboard Statistics Functions
+
+  @doc """
+  Gets comprehensive dashboard statistics.
+
+  Returns a map with key metrics for the dashboard.
+  """
+  def get_dashboard_stats do
+    %{
+      total_residences: count_residences(),
+      total_rooms: count_rooms(),
+      current_guests: count_current_guests(),
+      occupancy_rate: calculate_occupancy_rate(),
+      recent_activity: get_recent_activity()
+    }
+  end
+
+  @doc """
+  Returns the total count of residences.
+  """
+  def count_residences do
+    Repo.aggregate(Residence, :count, :id)
+  end
+
+  @doc """
+  Returns the total count of rooms across all residences.
+  """
+  def count_rooms do
+    Repo.aggregate(Rooms, :count, :id)
+  end
+
+  @doc """
+  Returns the count of currently checked-in guests.
+  For now returns 0 since persons/guests aren't fully implemented yet.
+  """
+  def count_current_guests do
+    # TODO: Implement when persons check-in functionality is ready
+    # from(p in Trackguests3.Persons.Person, where: p.status == "checked_in")
+    # |> Repo.aggregate(:count, :id)
+    0
+  end
+
+  @doc """
+  Calculates the current occupancy rate as a percentage.
+  Returns 0.0 if no rooms exist.
+  """
+  def calculate_occupancy_rate do
+    total_rooms = count_rooms()
+    current_guests = count_current_guests()
+
+    if total_rooms > 0 do
+      (current_guests / total_rooms * 100)
+      |> Float.round(1)
+    else
+      0.0
+    end
+  end
+
+  @doc """
+  Gets recent activity for the dashboard.
+  Returns a list of recent actions like new residences, rooms created, etc.
+  """
+  def get_recent_activity do
+    recent_residences =
+      from(r in Residence,
+        order_by: [desc: r.inserted_at],
+        limit: 3,
+        select: %{
+          type: "residence_created",
+          title: r.title,
+          inserted_at: r.inserted_at,
+          id: r.id
+        }
+      )
+      |> Repo.all()
+
+    recent_rooms =
+      from(rm in Rooms,
+        join: res in Residence,
+        on: rm.residence_id == res.id,
+        order_by: [desc: rm.inserted_at],
+        limit: 3,
+        select: %{
+          type: "room_created",
+          title: fragment("? || ' - ' || ?", res.title, rm.title),
+          inserted_at: rm.inserted_at,
+          id: rm.id
+        }
+      )
+      |> Repo.all()
+
+    (recent_residences ++ recent_rooms)
+    |> Enum.sort_by(& &1.inserted_at, {:desc, DateTime})
+    |> Enum.take(5)
+  end
+
+  @doc """
+  Gets residences with room counts for dashboard display.
+  """
+  def list_residences_with_stats do
+    from(r in Residence,
+      left_join: rm in Rooms,
+      on: rm.residence_id == r.id,
+      group_by: r.id,
+      select: %{
+        id: r.id,
+        title: r.title,
+        address: r.address,
+        floor_count: r.floor_count,
+        room_count: count(rm.id),
+        inserted_at: r.inserted_at
+      },
+      order_by: [desc: r.inserted_at]
+    )
+    |> Repo.all()
   end
 end
