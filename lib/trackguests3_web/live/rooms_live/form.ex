@@ -215,9 +215,7 @@ defmodule Trackguests3Web.RoomsLive.Form do
   defp return_path("index", _rooms), do: ~p"/rooms"
   defp return_path("show", rooms), do: ~p"/rooms/#{rooms}"
 
-  defp return_path("residence", _rooms)
-    ~p"/residences/#{socket.assigns.residence.id}"
-  end
+  defp return_path("residence", _rooms), do: ~p"/residences/#{Socket.assigns().residence.id}"
 
   defp return_path("residence", rooms), do: ~p"/residences/#{rooms.residence_id}"
   defp return_path(_, rooms), do: ~p"/rooms/#{rooms}"
