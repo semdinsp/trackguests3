@@ -20,8 +20,7 @@ defmodule Trackguests3Web.Router do
   scope "/", Trackguests3Web do
     pipe_through(:browser)
 
-    # Main routes
-    live("/", DashboardLive, :index)
+    # Main routes that work with or without auth
     live("/residences", ResidenceLive.Index, :index)
     live("/residences/new", ResidenceLive.Form, :new)
     live("/residences/:id", ResidenceLive.Show, :show)
@@ -68,6 +67,7 @@ defmodule Trackguests3Web.Router do
 
     live_session :current_user,
       on_mount: [{Trackguests3Web.UserAuth, :mount_current_scope}] do
+      live("/", DashboardLive, :index)
       live("/users/register", UserLive.Registration, :new)
       live("/users/log-in", UserLive.Login, :new)
       live("/users/log-in/:token", UserLive.Confirmation, :new)
