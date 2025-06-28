@@ -216,8 +216,7 @@ defmodule Trackguests3Web.RoomsLive.Form do
   defp return_path("show", rooms), do: ~p"/rooms/#{rooms}"
 
   defp return_path("residence", _rooms)
-       when is_map_key(assigns, :residence) and not is_nil(assigns.residence) do
-    ~p"/residences/#{assigns.residence.id}"
+    ~p"/residences/#{socket.assigns.residence.id}"
   end
 
   defp return_path("residence", rooms), do: ~p"/residences/#{rooms.residence_id}"
