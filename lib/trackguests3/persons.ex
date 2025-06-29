@@ -30,6 +30,18 @@ defmodule Trackguests3.Persons do
   end
 
   @doc """
+  Returns the list of currently checked-in visitors for a specific residence.
+  """
+  def list_current_visitors_for_residence(residence_id) do
+    from(p in Person,
+      join: r in assoc(p, :room),
+      where: p.status == "checked_in" and r.residence_id == ^residence_id,
+      preload: [:room]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
   Returns the list of persons for a specific room.
   """
   def list_persons_by_room(room_id) do
@@ -94,6 +106,16 @@ defmodule Trackguests3.Persons do
       status: "checked_out"
     })
     |> Repo.update()
+  end
+
+  @doc """
+  Checks out a visitor by ID.
+  """
+  def check_out_visitor(visitor_id) do
+    case get_person!(visitor_id) do
+      person ->
+        check_out_person(person)
+    end
   end
 
   @doc """
