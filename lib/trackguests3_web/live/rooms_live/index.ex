@@ -190,7 +190,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
           residence =
             if room.residence_id, do: Accomodation.get_residence!(room.residence_id), else: nil
 
-          %{room | residence: residence}
+          Map.put(room, :residence, residence)
         end)
       end
 
