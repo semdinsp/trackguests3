@@ -1,0 +1,34 @@
+==========================
+http://localhost:4000/rooms/new
+==========================
+
+- User
+- [Settings](/users/settings)
+- [Log out](/users/log-out)
+
+[
+
+TG
+
+TrackGuests](/)
+
+[Guest Check-In](/visitor/check-in)
+
+New Room
+========
+
+Use this form to manage room records in your database.
+
+Property Select a property Luxury Manor Estate
+
+Room Name/Number 
+
+Floor 
+
+Requires Key Fob Access
+
+Accepts Guests
+
+Notes & Amenities
+
+Cancel Save Room
