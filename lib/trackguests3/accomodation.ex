@@ -118,6 +118,21 @@ defmodule Trackguests3.Accomodation do
   end
 
   @doc """
+  Returns the list of rooms with preloaded residence data.
+
+  ## Examples
+
+      iex> list_rooms_with_residences()
+      [%Rooms{residence: %Residence{}}, ...]
+
+  """
+  def list_rooms_with_residences do
+    Rooms
+    |> Repo.all()
+    |> Repo.preload(:residence)
+  end
+
+  @doc """
   Gets a single rooms.
 
   Raises `Ecto.NoResultsError` if the Rooms does not exist.
