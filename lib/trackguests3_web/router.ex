@@ -21,10 +21,10 @@ defmodule Trackguests3Web.Router do
     pipe_through(:browser)
 
     # Main routes that work with or without auth
-    live("/residences", ResidenceLive.Index, :index)
-    live("/residences/new", ResidenceLive.Form, :new)
-    live("/residences/:id", ResidenceLive.Show, :show)
-    live("/residences/:id/edit", ResidenceLive.Form, :edit)
+    live("/residences", ResidencesLive.Index, :index)
+    live("/residences/new", ResidencesLive.Form, :new)
+    live("/residences/:id", ResidencesLive.Show, :show)
+    live("/residences/:id/edit", ResidencesLive.Form, :edit)
 
     live("/rooms", RoomsLive.Index, :index)
 
