@@ -1363,9 +1363,6 @@
       }
     }
   }
-  .mt-0\.5 {
-    margin-top: calc(var(--spacing) * 0.5);
-  }
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
@@ -1861,19 +1858,10 @@
   .self-start {
     align-self: flex-start;
   }
-<<<<<<< HEAD
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  .overflow-auto {
-    overflow: auto;
-  }
-=======
->>>>>>> b9c52c8 (update for latest version)
-  .overflow-hidden {
-    overflow: hidden;
   }
   .overflow-x-auto {
     overflow-x: auto;
@@ -2091,6 +2079,9 @@
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
   }
+  .py-4 {
+    padding-block: calc(var(--spacing) * 4);
+  }
   .py-5 {
     padding-block: calc(var(--spacing) * 5);
   }
@@ -2105,9 +2096,6 @@
   }
   .py-20 {
     padding-block: calc(var(--spacing) * 20);
-  }
-  .pt-4 {
-    padding-top: calc(var(--spacing) * 4);
   }
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
@@ -2386,7 +2374,6 @@
       }
     }
   }
-<<<<<<< HEAD
   .hover\:bg-gray-50\/50 {
     &:hover {
       @media (hover: hover) {
@@ -2401,8 +2388,6 @@
       }
     }
   }
-=======
->>>>>>> b9c52c8 (update for latest version)
   .hover\:bg-gray-200 {
     &:hover {
       @media (hover: hover) {
