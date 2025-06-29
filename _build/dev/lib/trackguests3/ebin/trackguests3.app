@@ -22,6 +22,7 @@
           'Elixir.Trackguests3Web.ResidenceLive.Form',
           'Elixir.Trackguests3Web.ResidenceLive.Index',
           'Elixir.Trackguests3Web.ResidenceLive.Show',
+          'Elixir.Trackguests3Web.ResidencesLive.Show',
           'Elixir.Trackguests3Web.RoomsLive.Form',
           'Elixir.Trackguests3Web.RoomsLive.Index',
           'Elixir.Trackguests3Web.RoomsLive.Show',
