@@ -104,7 +104,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
                         <h3 class="font-semibold text-platinum text-lg">{room.title}</h3>
                         <%= if !@residence do %>
                           <p class="text-sm text-gray-600 mt-1">
-                            Property: {room.residence && room.residence.title || "Unknown"}
+                            Property: {room.residence && room.residence.title || "Not assigned"}
                           </p>
                         <% end %>
                       </div>
@@ -181,17 +181,11 @@ defmodule Trackguests3Web.RoomsLive.Index do
 
     rooms =
       if residence do
-        Accomodation.list_rooms()
+        Accomodation.list_rooms_with_residences()
         |> Enum.filter(&(&1.residence_id == residence.id))
       else
-        # For general room listing, preload residence info
-        Accomodation.list_rooms()
-        |> Enum.map(fn room ->
-          residence =
-            if room.residence_id, do: Accomodation.get_residence!(room.residence_id), else: nil
-
-          Map.put(room, :residence, residence)
-        end)
+        # For general room listing, use the new function that preloads residence data
+        Accomodation.list_rooms_with_residences()
       end
 
     {:ok,
