@@ -20,6 +20,6 @@
                              plug,postgrex]},
               {description,"Integration between Phoenix & Ecto"},
               {registered,[]},
-              {vsn,"4.6.4"},
+              {vsn,"4.6.5"},
               {mod,{'Elixir.Phoenix.Ecto',[]}},
               {env,[{exclude_ecto_exceptions_from_plug,[]}]}]}.

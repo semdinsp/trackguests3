@@ -133,6 +133,20 @@ defmodule Trackguests3.Accomodation do
   end
 
   @doc """
+  Returns the list of rooms for a specific residence.
+
+  ## Examples
+
+      iex> list_rooms_for_residence(residence_id)
+      [%Rooms{}, ...]
+
+  """
+  def list_rooms_for_residence(residence_id) do
+    from(r in Rooms, where: r.residence_id == ^residence_id)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single rooms.
 
   Raises `Ecto.NoResultsError` if the Rooms does not exist.
@@ -147,6 +161,27 @@ defmodule Trackguests3.Accomodation do
 
   """
   def get_rooms!(id), do: Repo.get!(Rooms, id)
+
+  @doc """
+  Gets a single room safely.
+
+  Returns {:ok, room} if found, {:error, :not_found} otherwise.
+
+  ## Examples
+
+      iex> get_room(123)
+      {:ok, %Rooms{}}
+
+      iex> get_room(456)
+      {:error, :not_found}
+
+  """
+  def get_room(id) do
+    case Repo.get(Rooms, id) do
+      nil -> {:error, :not_found}
+      room -> {:ok, room}
+    end
+  end
 
   @doc """
   Creates a rooms.

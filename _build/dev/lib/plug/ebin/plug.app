@@ -47,6 +47,6 @@
                              telemetry]},
               {description,"Compose web applications with functions"},
               {registered,[]},
-              {vsn,"1.18.0"},
+              {vsn,"1.18.1"},
               {mod,{'Elixir.Plug.Application',[]}},
               {env,[{validate_header_keys_during_test,true}]}]}.

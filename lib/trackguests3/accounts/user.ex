@@ -9,6 +9,12 @@ defmodule Trackguests3.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
+    field :theme, :string, default: "light"
+    field :locale, :string, default: "en"
+    field :locales_to_show_guests, {:array, :string}, default: ["en"]
+    field :admin, :boolean, default: false
+
+    belongs_to :property, Trackguests3.Accomodation.Residence
 
     timestamps(type: :utc_datetime)
   end
@@ -113,6 +119,49 @@ defmodule Trackguests3.Accounts.User do
   def confirm_changeset(user) do
     now = DateTime.utc_now(:second)
     change(user, confirmed_at: now)
+  end
+
+  @doc """
+  A user changeset for changing the theme.
+  """
+  def theme_changeset(user, attrs \\ %{}) do
+    themes = ["light", "cupcake", "cyberpunk", "greyscale", "retro", "synthwave", "valentine", "emerald", "corporate", "luxury", "dracula", "night"]
+    
+    user
+    |> cast(attrs, [:theme])
+    |> validate_inclusion(:theme, themes, message: "is not a valid theme")
+  end
+
+  @doc """
+  A user changeset for changing the locale.
+  """
+  def locale_changeset(user, attrs \\ %{}) do
+    locales = ["en", "es", "fr", "de", "it", "pt", "ja", "ko", "zh", "ru", "ar"]
+    
+    user
+    |> cast(attrs, [:locale])
+    |> validate_inclusion(:locale, locales, message: "is not a valid locale")
+  end
+
+  @doc """
+  A user changeset for changing the locales to show guests.
+  """
+  def guest_locales_changeset(user, attrs \\ %{}) do
+    available_locales = ["en", "es", "fr", "de", "it", "pt", "ja", "ko", "zh", "ru", "ar"]
+    
+    user
+    |> cast(attrs, [:locales_to_show_guests])
+    |> validate_length(:locales_to_show_guests, min: 1, message: "must select at least one locale")
+    |> validate_subset(:locales_to_show_guests, available_locales, message: "contains invalid locale")
+  end
+
+  @doc """
+  A user changeset for changing the property relationship.
+  """
+  def property_changeset(user, attrs \\ %{}) do
+    user
+    |> cast(attrs, [:property_id])
+    |> foreign_key_constraint(:property_id)
   end
 
   @doc """

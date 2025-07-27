@@ -91,7 +91,8 @@ defmodule Trackguests3.Persons do
     |> Person.check_in_changeset(%{
       room_id: room_id,
       check_in_time: DateTime.utc_now(),
-      status: "checked_in"
+      status: "checked_in",
+      fob: person.fob
     })
     |> Repo.update()
   end

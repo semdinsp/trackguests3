@@ -10,6 +10,9 @@ defmodule Trackguests3.Accomodation.Residence do
     field(:floor_count, :integer)
     field(:logo, :binary)
 
+    has_many :rooms, Trackguests3.Accomodation.Rooms
+    has_many :users, Trackguests3.Accounts.User, foreign_key: :property_id
+
     timestamps(type: :utc_datetime)
   end
 

@@ -1,0 +1,244 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div class="space-y-8">
+    <!-- Header Section -->
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-platinum mb-4">Guest History</h1>
+      <p class="text-xl text-gray-600">
+        View and export guest check-in/check-out records for any date range
+      </p>
+    </div>
+
+    <!-- Date Range Selection -->
+    <div class="max-w-4xl mx-auto">
+      <div class="card-luxury">
+        <h2 class="text-xl font-semibold text-platinum mb-6">Select Date Range</h2>
+        
+        <form id="history-form" phx-submit="update_date_range" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div>
+              <label class="block text-sm font-medium text-platinum mb-2">Start Date</label>
+              <input 
+                type="date" 
+                name="start_date" 
+                value={format_date(@start_date)}
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                required
+              />
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-platinum mb-2">End Date</label>
+              <input 
+                type="date" 
+                name="end_date" 
+                value={format_date(@end_date)}
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                required
+              />
+            </div>
+            
+            <div class="flex space-x-2">
+              <button 
+                type="submit" 
+                class="btn-luxury flex-1"
+                phx-disable-with="Loading..."
+              >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                Update Range
+              </button>
+              
+              <button 
+                type="button" 
+                phx-click="download_csv"
+                class={[
+                  "inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md transition-all duration-200",
+                  if(length(@history_data) == 0, 
+                    do: "border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed opacity-50", 
+                    else: "border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500")
+                ]}
+                disabled={length(@history_data) == 0}
+                title={if(length(@history_data) == 0, do: "No data available to export", else: "Export guest history to CSV file")}
+              >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Export CSV
+                <%= if length(@history_data) == 0 do %>
+                  <span class="ml-2 text-xs">(No data)</span>
+                <% end %>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Date Range Summary -->
+        <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900">
+                  Showing records from <span class="font-bold"><%= format_date(@start_date) %></span> 
+                  to <span class="font-bold"><%= format_date(@end_date) %></span>
+                </p>
+                <p class="text-xs text-gray-600">
+                  <%= days_in_range(@start_date, @end_date) %> days, 
+                  <%= length(@history_data) %> records found
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <%= if @loading do %>
+      <div class="flex justify-center items-center py-12">
+        <div class="text-center">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+          <p class="mt-2 text-sm text-gray-600">Loading history data...</p>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- History Data Table -->
+    <%= if !@loading && length(@history_data) > 0 do %>
+      <div class="max-w-7xl mx-auto">
+        <div class="card-luxury overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guest</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visit Details</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Times</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <%= for record <- @history_data do %>
+                  <tr class="hover:bg-gray-50">
+                    <!-- Guest Information -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <div class="text-sm font-medium text-gray-900"><%= record.name %></div>
+                        <%= if record.company do %>
+                          <div class="text-sm text-gray-500"><%= record.company %></div>
+                        <% end %>
+                        <div class="text-xs text-gray-400">
+                          <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            <%= record.visitor_type || "visitor" %>
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Contact Information -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        <%= if record.email do %>
+                          <div><%= record.email %></div>
+                        <% end %>
+                        <%= if record.phone do %>
+                          <div class="text-gray-500"><%= record.phone %></div>
+                        <% end %>
+                      </div>
+                    </td>
+
+                    <!-- Location Information -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <div class="text-sm font-medium text-gray-900"><%= record.residence_title %></div>
+                        <div class="text-sm text-gray-500">
+                          <%= record.room_title %>
+                          <%= if record.room_floor do %>
+                            (Floor <%= record.room_floor %>)
+                          <% end %>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Visit Details -->
+                    <td class="px-6 py-4">
+                      <div class="text-sm text-gray-900">
+                        <%= if record.purpose_of_visit do %>
+                          <div><%= record.purpose_of_visit %></div>
+                        <% end %>
+                        <%= if record.fob do %>
+                          <div class="text-gray-500">Fob: <%= record.fob %></div>
+                        <% end %>
+                        <%= if record.memo do %>
+                          <div class="text-xs text-gray-400 mt-1"><%= record.memo %></div>
+                        <% end %>
+                      </div>
+                    </td>
+
+                    <!-- Time Information -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm">
+                        <div class="text-gray-900">
+                          <span class="font-medium">In:</span> <%= format_datetime(record.check_in_time) %>
+                        </div>
+                        <div class="text-gray-500">
+                          <span class="font-medium">Out:</span> <%= format_datetime(record.check_out_time) %>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Status -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class={[
+                        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                        case record.status do
+                          "checked_in" -> "bg-green-100 text-green-800"
+                          "checked_out" -> "bg-gray-100 text-gray-800"
+                          _ -> "bg-yellow-100 text-yellow-800"
+                        end
+                      ]}>
+                        <%= record.status || "unknown" %>
+                      </span>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Empty State -->
+    <%= if !@loading && length(@history_data) == 0 do %>
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No records found</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          No guest history found for the selected date range.<br>
+          Try selecting a different date range or check if guests have been checked in during this period.
+        </p>
+      </div>
+    <% end %>
+  </div>
+
+  <script>
+    window.addEventListener("phx:download_csv", (e) => {
+      const link = document.createElement("a");
+      link.href = e.detail.url;
+      link.download = "";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  </script>
+</Layouts.app>

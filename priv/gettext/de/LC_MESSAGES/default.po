@@ -1,0 +1,242 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:32
+#, elixir-autogen, elixir-format
+msgid "Access comprehensive guest history reports with customizable date ranges. View detailed check-in and check-out records, and export data for analysis."
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:14
+#, elixir-autogen, elixir-format
+msgid "Account Settings"
+msgstr "Kontoeinstellungen"
+
+#: lib/trackguests3_web/components/core_components.ex:339
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Aktionen"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:207
+#, elixir-autogen, elixir-format
+msgid "Active"
+msgstr "Aktiv"
+
+#: lib/trackguests3_web/components/layouts.ex:175
+#: lib/trackguests3_web/components/layouts.ex:187
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:48
+#, elixir-autogen, elixir-format
+msgid "Browse by date range • Export to CSV"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:131
+#, elixir-autogen, elixir-format
+msgid "Change Email"
+msgstr "E-Mail ändern"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:127
+#, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr "Ändern..."
+
+#: lib/trackguests3_web/live/user_live/settings.ex:218
+#, elixir-autogen, elixir-format
+msgid "Choose a property to manage..."
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:60
+#, elixir-autogen, elixir-format
+msgid "Choose your preferred language"
+msgstr "Wählen Sie Ihre bevorzugte Sprache"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:142
+#, elixir-autogen, elixir-format
+msgid "Choose your preferred theme"
+msgstr "Wählen Sie Ihr bevorzugtes Theme"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:235
+#, elixir-autogen, elixir-format
+msgid "Clear Selection"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:287
+#, elixir-autogen, elixir-format
+msgid "Confirm New Password"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:202
+#, elixir-autogen, elixir-format
+msgid "Current Property"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:109
+#: lib/trackguests3_web/live/user_live/settings.ex:122
+#, elixir-autogen, elixir-format
+msgid "Email Address"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:540
+#, elixir-autogen, elixir-format
+msgid "Failed to clear property selection"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:22
+#, elixir-autogen, elixir-format
+msgid "Guest History"
+msgstr "Gästehistorie"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:59
+#, elixir-autogen, elixir-format
+msgid "Language Preferences"
+msgstr "Spracheinstellungen"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:484
+#, elixir-autogen, elixir-format
+msgid "Language updated successfully!"
+msgstr "Sprache erfolgreich aktualisiert!"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:15
+#, elixir-autogen, elixir-format
+msgid "Manage your account preferences and security settings"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:279
+#, elixir-autogen, elixir-format
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:241
+#, elixir-autogen, elixir-format
+msgid "Note:"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:251
+#, elixir-autogen, elixir-format
+msgid "Password & Security"
+msgstr "Passwort & Sicherheit"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:188
+#, elixir-autogen, elixir-format
+msgid "Property Management"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:532
+#, elixir-autogen, elixir-format
+msgid "Property selection cleared successfully!"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:513
+#, elixir-autogen, elixir-format
+msgid "Property selection updated successfully!"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:99
+#, elixir-autogen, elixir-format
+msgid "Save Language"
+msgstr "Sprache speichern"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:227
+#, elixir-autogen, elixir-format
+msgid "Save Property Selection"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:178
+#, elixir-autogen, elixir-format
+msgid "Save Theme"
+msgstr "Theme speichern"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:95
+#: lib/trackguests3_web/live/user_live/settings.ex:174
+#: lib/trackguests3_web/live/user_live/settings.ex:223
+#: lib/trackguests3_web/live/user_live/settings.ex:291
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr "Speichern..."
+
+#: lib/trackguests3_web/live/user_live/settings.ex:70
+#, elixir-autogen, elixir-format
+msgid "Select Language"
+msgstr "Sprache wählen"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:216
+#, elixir-autogen, elixir-format
+msgid "Select Property"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:152
+#, elixir-autogen, elixir-format
+msgid "Select Theme"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:189
+#, elixir-autogen, elixir-format
+msgid "Select your managed property for check-ins"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:241
+#, elixir-autogen, elixir-format
+msgid "Selecting a property will make it your default for guest check-ins and property management features."
+msgstr ""
+
+#: lib/trackguests3_web/components/layouts.ex:182
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:141
+#, elixir-autogen, elixir-format
+msgid "Theme Preferences"
+msgstr "Theme-Einstellungen"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:458
+#, elixir-autogen, elixir-format
+msgid "Theme updated successfully!"
+msgstr "Theme erfolgreich aktualisiert!"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:295
+#, elixir-autogen, elixir-format
+msgid "Update Password"
+msgstr "Passwort aktualisieren"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:110
+#, elixir-autogen, elixir-format
+msgid "Update your email address"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:252
+#, elixir-autogen, elixir-format
+msgid "Update your password to keep your account secure"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:40
+#, elixir-autogen, elixir-format
+msgid "View Guest History"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:23
+#, elixir-autogen, elixir-format
+msgid "View and export guest check-in/check-out records"
+msgstr ""
+
+#: lib/trackguests3_web/components/layouts.ex:170
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/trackguests3_web/components/core_components.ex:74
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""

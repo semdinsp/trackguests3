@@ -112,7 +112,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
                 </thead>
                 <tbody>
                   <%= for room <- @rooms do %>
-                    <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                    <tr id={"rooms_collection-#{room.id}"} class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
                       <td class="py-4 px-4">
                         <div class="font-medium text-platinum">{room.title}</div>
                       </td>

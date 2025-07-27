@@ -13,7 +13,7 @@ defmodule Trackguests3Web.UserLive.SettingsTest do
         |> live(~p"/users/settings")
 
       assert html =~ "Change Email"
-      assert html =~ "Save Password"
+      assert html =~ "Update Password"
     end
 
     test "redirects if user is not logged in", %{conn: conn} do
@@ -136,7 +136,7 @@ defmodule Trackguests3Web.UserLive.SettingsTest do
           }
         })
 
-      assert result =~ "Save Password"
+      assert result =~ "Update Password"
       assert result =~ "should be at least 12 character(s)"
       assert result =~ "does not match password"
     end
@@ -154,7 +154,7 @@ defmodule Trackguests3Web.UserLive.SettingsTest do
         })
         |> render_submit()
 
-      assert result =~ "Save Password"
+      assert result =~ "Update Password"
       assert result =~ "should be at least 12 character(s)"
       assert result =~ "does not match password"
     end
@@ -207,6 +207,50 @@ defmodule Trackguests3Web.UserLive.SettingsTest do
       assert path == ~p"/users/log-in"
       assert %{"error" => message} = flash
       assert message == "You must log in to access this page."
+    end
+  end
+
+  describe "locale preferences" do
+    setup %{conn: conn} do
+      user = user_fixture()
+      %{conn: log_in_user(conn, user), user: user}
+    end
+
+    test "renders locale selection form", %{conn: conn} do
+      {:ok, _lv, html} = live(conn, ~p"/users/settings")
+      
+      assert html =~ "Language Preferences"
+      assert html =~ "Choose your preferred language"
+      assert html =~ "English"
+      assert html =~ "Español"
+      assert html =~ "Français"
+    end
+
+    test "updates user locale", %{conn: conn, user: user} do
+      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+
+      result = 
+        lv
+        |> form("#locale_form", user: %{locale: "es"})
+        |> render_submit()
+
+      assert result =~ "Language updated successfully!"
+      
+      # Verify the locale was updated in database
+      updated_user = Accounts.get_user!(user.id)
+      assert updated_user.locale == "es"
+    end
+
+    test "shows all available locales", %{conn: conn} do
+      {:ok, _lv, html} = live(conn, ~p"/users/settings")
+
+      # Verify all locale options are displayed
+      assert html =~ "🇺🇸"  # English flag
+      assert html =~ "🇪🇸"  # Spanish flag
+      assert html =~ "🇫🇷"  # French flag
+      assert html =~ "🇩🇪"  # German flag
+      assert html =~ "日本語"  # Japanese native name
+      assert html =~ "한국어"  # Korean native name
     end
   end
 end

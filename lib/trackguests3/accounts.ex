@@ -60,6 +60,51 @@ defmodule Trackguests3.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Returns whether the user is an admin.
+  """
+  def admin?(%User{admin: admin}), do: admin
+  def admin?(_), do: false
+
+  @doc """
+  Gets all admin users.
+  """
+  def list_admin_users do
+    Repo.all(from(u in User, where: u.admin == true))
+  end
+
+  @doc """
+  Returns the list of users.
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing user admin status.
+  """
+  def change_user_admin(user, attrs \\ %{}) do
+    user
+    |> Ecto.Changeset.cast(attrs, [:admin])
+  end
+
+  @doc """
+  Updates a user's admin status.
+  Trackguests3.Accounts.update_user_admin(u,%{admin: true})
+  """
+  def update_user_admin(user, attrs) do
+    user
+    |> change_user_admin(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a user.
+  """
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
+  end
+
   ## User registration
 
   @doc """
@@ -174,6 +219,137 @@ defmodule Trackguests3.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user theme.
+
+  ## Examples
+
+      iex> change_user_theme(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_theme(user, attrs \\ %{}) do
+    User.theme_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user theme.
+
+  ## Examples
+
+      iex> update_user_theme(user, %{theme: "dark"})
+      {:ok, %User{}}
+
+      iex> update_user_theme(user, %{theme: "invalid"})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_theme(user, attrs) do
+    user
+    |> User.theme_changeset(attrs)
+    |> Repo.update()
+  end
+
+  ## Locale management
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user locale.
+
+  ## Examples
+
+      iex> change_user_locale(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_locale(user, attrs \\ %{}) do
+    User.locale_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user locale.
+
+  ## Examples
+
+      iex> update_user_locale(user, %{locale: "es"})
+      {:ok, %User{}}
+
+      iex> update_user_locale(user, %{locale: "invalid"})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_locale(user, attrs) do
+    user
+    |> User.locale_changeset(attrs)
+    |> Repo.update()
+  end
+
+  ## Guest locales management
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user guest locales.
+
+  ## Examples
+
+      iex> change_user_guest_locales(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_guest_locales(user, attrs \\ %{}) do
+    User.guest_locales_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user guest locales.
+
+  ## Examples
+
+      iex> update_user_guest_locales(user, %{locales_to_show_guests: ["en", "es"]})
+      {:ok, %User{}}
+
+      iex> update_user_guest_locales(user, %{locales_to_show_guests: []})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_guest_locales(user, attrs) do
+    user
+    |> User.guest_locales_changeset(attrs)
+    |> Repo.update()
+  end
+
+  ## Property management
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user property.
+  """
+  def change_user_property(user, attrs \\ %{}) do
+    User.property_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user's property.
+  """
+  def update_user_property(user, attrs) do
+    user
+    |> User.property_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Gets a user with their property preloaded.
+  """
+  def get_user_with_property!(id) do
+    Repo.get!(User, id)
+    |> Repo.preload(:property)
+  end
+
+  @doc """
+  Checks if user owns a property (residence).
+  """
+  def owns_property?(%User{property_id: property_id}, residence_id) when not is_nil(property_id) do
+    property_id == residence_id
+  end
+  def owns_property?(_, _), do: false
 
   ## Session
 

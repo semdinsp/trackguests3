@@ -26,5 +26,5 @@
               {applications,[kernel,stdlib,elixir,logger,telemetry]},
               {description,"Database connection behaviour for database transactions and connection pooling\n"},
               {registered,[]},
-              {vsn,"2.7.0"},
+              {vsn,"2.8.0"},
               {mod,{'Elixir.DBConnection.App',[]}}]}.

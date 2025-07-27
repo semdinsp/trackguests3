@@ -6,6 +6,11 @@ defmodule DBConnection.ConnectionPool do
 
   You're not supposed to call any functions on this pool directly, but only pass this
   as the value of the `:pool` option in functions such as `DBConnection.start_link/2`.
+
+  `disconnect_all/3`, which by default will result in connections being
+  reestablished, can be called periodically to recycle checked-in connections
+  after a maximum lifetime is reached. `Ecto SQL` users may find it at
+  https://hexdocs.pm/ecto_sql/Ecto.Adapters.SQL.html#disconnect_all/3
   """
 
   use GenServer
@@ -14,18 +19,13 @@ defmodule DBConnection.ConnectionPool do
   @behaviour DBConnection.Pool
 
   @queue_target 50
-  @queue_interval 1000
+  @queue_interval 2000
   @idle_interval 1000
   @time_unit 1000
 
   @doc false
   def start_link({mod, opts}) do
     GenServer.start_link(__MODULE__, {mod, opts}, start_opts(opts))
-  end
-
-  @doc false
-  def child_spec(opts) do
-    super(opts)
   end
 
   @doc false
@@ -52,7 +52,7 @@ defmodule DBConnection.ConnectionPool do
   def init({mod, opts}) do
     DBConnection.register_as_pool(mod)
 
-    queue = :ets.new(__MODULE__.Queue, [:protected, :ordered_set])
+    queue = :ets.new(__MODULE__.Queue, [:protected, :ordered_set, decentralized_counters: true])
     ts = {System.monotonic_time(), 0}
     {:ok, _} = DBConnection.ConnectionPool.Pool.start_supervised(queue, mod, opts)
     target = Keyword.get(opts, :queue_target, @queue_target)

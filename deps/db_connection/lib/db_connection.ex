@@ -171,7 +171,7 @@ defmodule DBConnection do
   to allow the checkout or `{:disconnect, exception, state}` to disconnect.
 
   This callback is called immediately after the connection is established
-  and the state is never effetively checked in again. That's because
+  and the state is never effectively checked in again. That's because
   DBConnection keeps the connection state in an ETS table that is moved
   between the different clients checking out connections. There is no
   `checkin` callback. The state is only handed back to the connection
@@ -433,7 +433,7 @@ defmodule DBConnection do
   started, there are two relevant options to control the queue:
 
     * `:queue_target` in milliseconds, defaults to 50ms
-    * `:queue_interval` in milliseconds, defaults to 1000ms
+    * `:queue_interval` in milliseconds, defaults to 2000ms
 
   Our goal is to wait at most `:queue_target` for a connection.
   If all connections checked out during a `:queue_interval` takes
@@ -524,12 +524,6 @@ defmodule DBConnection do
   This feature is available since v2.6.0. Before this version `:connection_listeners` only
   accepted a list of listener processes.
 
-  ## Telemetry listener
-
-  DBConnection provides a connection listener that emits telemetry events upon
-  connection and disconnection, see the `DBConnection.TelemetryListener` module
-  for more info.
-
   ## Connection Configuration Callback
 
   The `:configure` function will be called before each individual connection to the
@@ -555,6 +549,8 @@ defmodule DBConnection do
 
   A `[:db_connection, :connection_error]` event is published whenever a
   connection checkout receives a `%DBConnection.ConnectionError{}`.
+  This event is emitted from the process that attempts to checkout the
+  connection.
 
   Measurements:
 
@@ -566,8 +562,9 @@ defmodule DBConnection do
 
     * `:opts` - All options given to the pool operation
 
-  See `DBConnection.TelemetryListener` for enabling `[:db_connection, :connected]`
-  and `[:db_connection, :disconnected]` events.
+  You may also consume `[:db_connection, :connected]` and `[:db_connection, :disconnected]`
+  events by spawning a `DBConnection.TelemetryListener` process that subscribes to the pool
+  and emits them in a robust manner.
   """
   @spec start_link(module, [start_option()] | Keyword.t()) :: GenServer.on_start()
   def start_link(conn_mod, opts) do
@@ -1280,13 +1277,13 @@ defmodule DBConnection do
   end
 
   @doc """
-  Returns connection module used by the given connection pool.
+  Returns the connection module used by the given connection pool.
 
   When given a process that is not a connection pool, returns an `:error`.
   """
   @spec connection_module(conn) :: {:ok, module} | :error
   def connection_module(conn) do
-    with pid when pid != nil <- pool_pid(conn),
+    with pid when is_pid(pid) <- pool_pid(conn),
          {:dictionary, dictionary} <- Process.info(pid, :dictionary),
          {@connection_module_key, module} <- List.keyfind(dictionary, @connection_module_key, 0),
          do: {:ok, module},

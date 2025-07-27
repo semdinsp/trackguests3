@@ -1,6 +1,7 @@
 {application,finch,
              [{modules,['Elixir.Finch','Elixir.Finch.Error',
                         'Elixir.Finch.HTTP1.Conn','Elixir.Finch.HTTP1.Pool',
+                        'Elixir.Finch.HTTP1.Pool.State',
                         'Elixir.Finch.HTTP1.PoolMetrics',
                         'Elixir.Finch.HTTP2.Pool',
                         'Elixir.Finch.HTTP2.PoolMetrics',
@@ -13,4 +14,4 @@
                              nimble_options,telemetry,mime]},
               {description,"An HTTP client focused on performance."},
               {registered,[]},
-              {vsn,"0.19.0"}]}.
+              {vsn,"0.20.0"}]}.

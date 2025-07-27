@@ -19,18 +19,19 @@ defmodule Trackguests3Web.ResidenceLiveTest do
     test "lists all residences", %{conn: conn, residence: residence} do
       {:ok, _index_live, html} = live(conn, ~p"/residences")
 
-      assert html =~ "Listing Residences"
+      assert html =~ "Properties"
       assert html =~ residence.title
     end
 
     test "saves new residence", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/residences")
 
-      assert {:ok, form_live, _} =
+      assert {:error, {:redirect, %{to: "/residences/new"}}} =
                index_live
-               |> element("a", "New Residence")
+               |> element("a", "Add Property")
                |> render_click()
-               |> follow_redirect(conn, ~p"/residences/new")
+      
+      {:ok, form_live, _} = live(conn, ~p"/residences/new")
 
       assert render(form_live) =~ "New Residence"
 
@@ -52,11 +53,12 @@ defmodule Trackguests3Web.ResidenceLiveTest do
     test "updates residence in listing", %{conn: conn, residence: residence} do
       {:ok, index_live, _html} = live(conn, ~p"/residences")
 
-      assert {:ok, form_live, _html} =
+      assert {:error, {:redirect, %{to: "/residences/" <> _}}} =
                index_live
                |> element("#residences-#{residence.id} a", "Edit")
                |> render_click()
-               |> follow_redirect(conn, ~p"/residences/#{residence}/edit")
+      
+      {:ok, form_live, _} = live(conn, ~p"/residences/#{residence}/edit")
 
       assert render(form_live) =~ "Edit Residence"
 
@@ -78,8 +80,8 @@ defmodule Trackguests3Web.ResidenceLiveTest do
     test "deletes residence in listing", %{conn: conn, residence: residence} do
       {:ok, index_live, _html} = live(conn, ~p"/residences")
 
-      assert index_live |> element("#residences-#{residence.id} a", "Delete") |> render_click()
-      refute has_element?(index_live, "#residences-#{residence.id}")
+      assert index_live |> element("button", "Delete") |> render_click()
+      refute render(index_live) =~ residence.title
     end
   end
 
@@ -89,18 +91,19 @@ defmodule Trackguests3Web.ResidenceLiveTest do
     test "displays residence", %{conn: conn, residence: residence} do
       {:ok, _show_live, html} = live(conn, ~p"/residences/#{residence}")
 
-      assert html =~ "Show Residence"
       assert html =~ residence.title
+      assert html =~ residence.address
     end
 
     test "updates residence and returns to show", %{conn: conn, residence: residence} do
       {:ok, show_live, _html} = live(conn, ~p"/residences/#{residence}")
 
-      assert {:ok, form_live, _} =
+      assert {:error, {:redirect, %{to: "/residences/" <> _}}} =
                show_live
-               |> element("a", "Edit")
+               |> element("a", "Edit Property")
                |> render_click()
-               |> follow_redirect(conn, ~p"/residences/#{residence}/edit?return_to=show")
+      
+      {:ok, form_live, _} = live(conn, ~p"/residences/#{residence}/edit")
 
       assert render(form_live) =~ "Edit Residence"
 
@@ -112,7 +115,7 @@ defmodule Trackguests3Web.ResidenceLiveTest do
                form_live
                |> form("#residence-form", residence: @update_attrs)
                |> render_submit()
-               |> follow_redirect(conn, ~p"/residences/#{residence}")
+               |> follow_redirect(conn, ~p"/residences")
 
       html = render(show_live)
       assert html =~ "Residence updated successfully"

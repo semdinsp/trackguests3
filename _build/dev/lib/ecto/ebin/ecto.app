@@ -88,5 +88,5 @@
                              decimal,jason]},
               {description,"A toolkit for data mapping and language integrated query for Elixir"},
               {registered,[]},
-              {vsn,"3.13.1"},
+              {vsn,"3.13.2"},
               {mod,{'Elixir.Ecto.Application',[]}}]}.

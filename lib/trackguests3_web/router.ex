@@ -35,6 +35,19 @@ defmodule Trackguests3Web.Router do
     live("/rooms/:id", RoomsLive.Show, :show)
     live("/rooms/:id/edit", RoomsLive.Form, :edit)
 
+    # Property management routes
+    live("/property", PropertyLive.Dashboard, :index)
+    live("/property/new", PropertyLive.Form, :new)
+    live("/property/edit", PropertyLive.Form, :edit)
+    live("/property/select", PropertyLive.Select, :index)
+    live("/property/rooms", PropertyLive.Rooms, :index)
+    live("/property/rooms/new", PropertyLive.Rooms, :new)
+    live("/property/rooms/:id/edit", PropertyLive.Rooms, :edit)
+
+    # History routes
+    live("/history", HistoryLive.Index, :index)
+    get("/history/export.csv", HistoryController, :export_csv)
+
     # Visitor routes (public)
     live("/visitor/check-in", VisitorLive.CheckIn, :index)
     live("/visitor/check-out", VisitorLive.CheckOut, :index)
@@ -61,9 +74,36 @@ defmodule Trackguests3Web.Router do
       on_mount: [{Trackguests3Web.UserAuth, :require_authenticated}] do
       live("/users/settings", UserLive.Settings, :edit)
       live("/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email)
+      
     end
 
     post("/users/update-password", UserSessionController, :update_password)
+  end
+
+  ## Admin routes
+
+  scope "/admin", Trackguests3Web do
+    pipe_through([:browser, :require_authenticated_user, :require_admin_user])
+
+    live_session :require_admin,
+      on_mount: [{Trackguests3Web.UserAuth, :require_admin}] do
+      live("/", AdminLive.Dashboard, :index)
+      
+      # Users management
+      live("/users", AdminLive.Users, :index)
+      live("/users/:id/edit", AdminLive.Users, :edit)
+      
+      # Residences management
+      live("/residences", AdminLive.Residences, :index)
+      live("/residences/new", AdminLive.Residences, :new)
+      live("/residences/:id/edit", AdminLive.Residences, :edit)
+      
+      # Rooms management
+      live("/rooms", AdminLive.Rooms, :index)
+      
+      # Persons management
+      live("/persons", AdminLive.Persons, :index)
+    end
   end
 
   scope "/", Trackguests3Web do

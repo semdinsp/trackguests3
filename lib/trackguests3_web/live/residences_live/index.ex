@@ -47,7 +47,7 @@ defmodule Trackguests3Web.ResidencesLive.Index do
           <% else %>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <%= for residence <- @residences do %>
-                <div class="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-200">
+                <div id={"residences-#{residence.id}"} class="bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-200">
                   <div class="flex items-start justify-between mb-4">
                     <div class="flex-1">
                       <h3 class="text-lg font-semibold text-platinum mb-1">{residence.title}</h3>

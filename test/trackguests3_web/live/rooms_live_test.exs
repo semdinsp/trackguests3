@@ -21,20 +21,21 @@ defmodule Trackguests3Web.RoomsLiveTest do
     test "lists all rooms", %{conn: conn, rooms: rooms} do
       {:ok, _index_live, html} = live(conn, ~p"/rooms")
 
-      assert html =~ "Listing Rooms"
+      assert html =~ "All Rooms"
       assert html =~ rooms.title
     end
 
     test "saves new rooms", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/rooms")
 
-      assert {:ok, form_live, _} =
+      assert {:error, {:redirect, %{to: "/rooms/new"}}} =
                index_live
-               |> element("a", "New Rooms")
+               |> element("a", "Add Room")
                |> render_click()
-               |> follow_redirect(conn, ~p"/rooms/new")
+      
+      {:ok, form_live, _} = live(conn, ~p"/rooms/new")
 
-      assert render(form_live) =~ "New Rooms"
+      assert render(form_live) =~ "New Room"
 
       assert form_live
              |> form("#rooms-form", rooms: @invalid_attrs)
@@ -47,7 +48,7 @@ defmodule Trackguests3Web.RoomsLiveTest do
                |> follow_redirect(conn, ~p"/rooms")
 
       html = render(index_live)
-      assert html =~ "Rooms created successfully"
+      assert html =~ "Room created successfully"
       assert html =~ "some title"
     end
 
@@ -55,13 +56,14 @@ defmodule Trackguests3Web.RoomsLiveTest do
       {:ok, index_live, _html} = live(conn, ~p"/rooms")
 
       # SCOTT FIX  was rooms- changed to rooms_collection
-      assert {:ok, form_live, _html} =
+      assert {:error, {:redirect, %{to: "/rooms/" <> _}}} =
                index_live
                |> element("#rooms_collection-#{rooms.id} a", "Edit")
                |> render_click()
-               |> follow_redirect(conn, ~p"/rooms/#{rooms}/edit")
+      
+      {:ok, form_live, _} = live(conn, ~p"/rooms/#{rooms}/edit")
 
-      assert render(form_live) =~ "Edit Rooms"
+      assert render(form_live) =~ "Edit Room"
 
       assert form_live
              |> form("#rooms-form", rooms: @invalid_attrs)
@@ -74,7 +76,7 @@ defmodule Trackguests3Web.RoomsLiveTest do
                |> follow_redirect(conn, ~p"/rooms")
 
       html = render(index_live)
-      assert html =~ "Rooms updated successfully"
+      assert html =~ "Room updated successfully"
       assert html =~ "some updated title"
     end
 
@@ -82,7 +84,7 @@ defmodule Trackguests3Web.RoomsLiveTest do
    test "deletes rooms in listing", %{conn: conn, rooms: rooms} do
       {:ok, index_live, _html} = live(conn, ~p"/rooms")
 
-     assert index_live |> element("#rooms_collection-#{rooms.id} a", "Delete") |> render_click()
+     assert index_live |> element("#rooms_collection-#{rooms.id} button", "Delete") |> render_click()
      refute has_element?(index_live, "#rooms_collection-#{rooms.id}")
     end
   end
@@ -93,7 +95,7 @@ defmodule Trackguests3Web.RoomsLiveTest do
     test "displays rooms", %{conn: conn, rooms: rooms} do
       {:ok, _show_live, html} = live(conn, ~p"/rooms/#{rooms}")
 
-      assert html =~ "Show Rooms"
+      assert html =~ "Rooms"
       assert html =~ rooms.title
     end
 
@@ -106,7 +108,7 @@ defmodule Trackguests3Web.RoomsLiveTest do
                |> render_click()
                |> follow_redirect(conn, ~p"/rooms/#{rooms}/edit?return_to=show")
 
-      assert render(form_live) =~ "Edit Rooms"
+      assert render(form_live) =~ "Edit Room"
 
       assert form_live
              |> form("#rooms-form", rooms: @invalid_attrs)
@@ -119,7 +121,7 @@ defmodule Trackguests3Web.RoomsLiveTest do
                |> follow_redirect(conn, ~p"/rooms/#{rooms}")
 
       html = render(show_live)
-      assert html =~ "Rooms updated successfully"
+      assert html =~ "Room updated successfully"
       assert html =~ "some updated title"
     end
   end

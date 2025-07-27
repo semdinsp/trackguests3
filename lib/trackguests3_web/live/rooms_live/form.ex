@@ -144,7 +144,7 @@ defmodule Trackguests3Web.RoomsLive.Form do
     |> assign(:form, to_form(Accomodation.change_rooms(rooms)))
   end
 
-  defp apply_action(socket, :new, params) do
+  defp apply_action(socket, :new, _params) do
     rooms = %Rooms{}
 
     # If we have a residence context, pre-populate the residence_id
@@ -214,8 +214,6 @@ defmodule Trackguests3Web.RoomsLive.Form do
 
   defp return_path("index", _rooms), do: ~p"/rooms"
   defp return_path("show", rooms), do: ~p"/rooms/#{rooms}"
-
-  defp return_path("residence", _rooms), do: ~p"/residences/#{Socket.assigns().residence.id}"
 
   defp return_path("residence", rooms), do: ~p"/residences/#{rooms.residence_id}"
   defp return_path(_, rooms), do: ~p"/rooms/#{rooms}"

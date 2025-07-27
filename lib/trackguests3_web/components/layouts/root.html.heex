@@ -31,8 +31,13 @@
 
       <%= if @current_scope do %>
         <li class="text-sm text-gray-600 font-medium">
-          {assigns[:current_scope][:user][:email] || "User"}
+          <%= (is_struct(@current_scope) && Map.get(@current_scope, :user) && Map.get(Map.get(@current_scope, :user, %{}), :email)) || "User" %>
         </li>
+        <%= if @current_scope && Map.get(@current_scope, :user) && Map.get(Map.get(@current_scope, :user, %{}), :admin) do %>
+          <li>
+            <.link href={~p"/admin"} class="nav-link-luxury text-sm">Admin</.link>
+          </li>
+        <% end %>
         <li>
           <.link href={~p"/users/settings"} class="nav-link-luxury text-sm">Settings</.link>
         </li>

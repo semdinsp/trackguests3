@@ -1,5 +1,13 @@
 # Changelog for v3.x
 
+## v3.13.2 (2025-06-24)
+
+### Bug fixes
+
+  * [Ecto.Query] Fix regression which made queries with multiple joins expensive to compile
+  * [Ecto.Repo] Fix detection of missing primary key on associations with only nil entries
+  * [Ecto.Query] Fix macro expansion in `over` clause's `order_by`
+
 ## v3.13.1 (2025-06-19)
 
 ### Bug fixes
@@ -29,11 +37,13 @@ Requires Elixir v1.14+.
 ### Bug fixes
 
   * [Ecto.Query] Allow select merging maps with all nil values
+  * [Ecto.Query] `map/2` in queries now always returns a map on joins, even on left joins, for consistency with `from` sources
   * [Ecto.Schema] Fix an issue where Ecto could warn an association did not exist, when it did
 
 ### Soft deprecations (no warnings emitted)
 
   * [Ecto.Repo] `Ecto.Repo.transaction/2` is soft-deprecated in favor of `Ecto.Repo.transact/1`
+  * [Ecto.Query.API] `literal/1` is deprecated in favor of `identifier/1`
 
 ## v3.12.6 (2025-06-11)
 

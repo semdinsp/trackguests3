@@ -31,6 +31,6 @@
                              db_connection,postgrex,myxql,tds]},
               {description,"SQL-based adapters for Ecto and database migrations"},
               {registered,[]},
-              {vsn,"3.13.1"},
+              {vsn,"3.13.2"},
               {env,[{postgres_map_type,<<"jsonb">>}]},
               {mod,{'Elixir.Ecto.Adapters.SQL.Application',[]}}]}.
