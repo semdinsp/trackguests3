@@ -7,27 +7,32 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
   alias Trackguests3.Accounts
 
   @impl true
-  def mount(params, _session, socket) do
+  def mount(params, session, socket) do
     residence_id = params["residence_id"]
     
     # Get user's property if they're authenticated (this is optional for public check-in)
-    user_residence = try do
+    {user_residence, available_locales} = try do
       case socket.assigns[:current_scope] do
-        nil -> nil
+        nil -> 
+          # No authenticated user, use default locales
+          {nil, ["en", "es", "fr"]}
         scope when is_map(scope) ->
           case Map.get(scope, :user) do
-            nil -> nil
+            nil -> 
+              {nil, ["en", "es", "fr"]}
             user when is_map(user) ->
               user_id = Map.get(user, :id) || user.id
               user = Accounts.get_user_with_property!(user_id)
-              user.property
+              locales = user.locales_to_show_guests || ["en"]
+              {user.property, locales}
             user ->
               user = Accounts.get_user_with_property!(user.id)
-              user.property
+              locales = user.locales_to_show_guests || ["en"]
+              {user.property, locales}
           end
       end
     rescue
-      _ -> nil
+      _ -> {nil, ["en", "es", "fr"]}
     end
     
     # Use URL residence_id, user's property, or nil in that order of priority
@@ -36,6 +41,12 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       user_residence -> user_residence
       true -> nil
     end
+
+    # Get current locale from session or default to first available
+    current_locale = session["locale"] || List.first(available_locales) || "en"
+    
+    # Set the gettext locale
+    Gettext.put_locale(Trackguests3Web.Gettext, current_locale)
 
     {:ok,
      socket
@@ -49,6 +60,9 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
      |> assign(:selected_room_id, nil)
      |> assign(:selected_room_display, "")
      |> assign(:current_scope, socket.assigns[:current_scope])
+     |> assign(:current_locale, current_locale)
+     |> assign(:available_locales, available_locales)
+     |> assign(:language_dropdown_open, false)
      |> assign(:page_title, "Guest Check-In")}
   end
 
@@ -130,6 +144,25 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
      |> assign(:selected_room_id, room_id)
      |> assign(:selected_room_display, room_display)
      |> assign(:room_search_results, [])}
+  end
+
+  def handle_event("toggle_language_dropdown", _params, socket) do
+    {:noreply, assign(socket, :language_dropdown_open, !socket.assigns.language_dropdown_open)}
+  end
+
+  def handle_event("close_language_dropdown", _params, socket) do
+    {:noreply, assign(socket, :language_dropdown_open, false)}
+  end
+
+  def handle_event("change_language", %{"locale" => locale}, socket) do
+    # Set the gettext locale
+    Gettext.put_locale(Trackguests3Web.Gettext, locale)
+    
+    {:noreply,
+     socket
+     |> assign(:current_locale, locale)
+     |> assign(:language_dropdown_open, false)
+     |> put_flash(:info, gettext("Language changed successfully!"))}
   end
 
   defp get_room_options(nil) do

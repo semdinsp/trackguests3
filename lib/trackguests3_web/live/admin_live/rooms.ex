@@ -5,7 +5,7 @@ defmodule Trackguests3Web.AdminLive.Rooms do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :rooms, Accomodation.list_rooms())}
+    {:ok, stream(socket, :rooms, Accomodation.list_rooms_with_residences())}
   end
 
   @impl true

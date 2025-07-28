@@ -138,6 +138,89 @@ defmodule Trackguests3Web.HistoryLiveTest do
       refute has_element?(index_live, "button[disabled]", "Export CSV")
     end
 
+    test "displays KPI metrics on history page", %{conn: conn, user: user, person: _person} do
+      conn = log_in_user(conn, user)
+      {:ok, _index_live, html} = live(conn, ~p"/history")
+
+      # Check that KPI cards are present
+      assert html =~ "Currently Checked In"
+      assert html =~ "Total Rooms"
+      assert html =~ "Properties"
+      assert html =~ "Occupancy Rate"
+      assert html =~ "Unique Visitors"
+      assert html =~ "Total Visits"
+
+      # Check that numeric values are displayed (could be 0 or more)
+      assert html =~ ~r/\d+/ # Should contain at least one number
+    end
+
+    test "currently checked in guest count is accurate", %{conn: conn, user: user, room: room} do
+      # Create additional test persons with different statuses
+      {:ok, checked_in_person1} = Trackguests3.Persons.create_person(%{
+        name: "John Checked In",
+        email: "john.checkedin@example.com",
+        phone: "555-0001",
+        company: "Test Corp",
+        visitor_type: "visitor",
+        purpose_of_visit: "Meeting",
+        room_id: room.id,
+        status: "checked_in",
+        fob: "FOB001",
+        memo: "Test person",
+        check_in_time: DateTime.utc_now()
+      })
+
+      {:ok, checked_in_person2} = Trackguests3.Persons.create_person(%{
+        name: "Jane Checked In",
+        email: "jane.checkedin@example.com",
+        phone: "555-0002",
+        company: "Test Corp",
+        visitor_type: "staff",
+        purpose_of_visit: "Work",
+        room_id: room.id,
+        status: "checked_in",
+        fob: "FOB002",
+        memo: "Test person",
+        check_in_time: DateTime.utc_now()
+      })
+
+      {:ok, _checked_out_person} = Trackguests3.Persons.create_person(%{
+        name: "Bob Checked Out",
+        email: "bob.checkedout@example.com",
+        phone: "555-0003",
+        company: "Test Corp",
+        visitor_type: "visitor",
+        purpose_of_visit: "Visit",
+        room_id: room.id,
+        status: "checked_out",
+        fob: "FOB003",
+        memo: "Test person",
+        check_in_time: DateTime.add(DateTime.utc_now(), -3600, :second),
+        check_out_time: DateTime.utc_now()
+      })
+
+      conn = log_in_user(conn, user)
+      {:ok, _index_live, html} = live(conn, ~p"/history")
+
+      # Count expected checked-in guests
+      # Should be 3: the original person from setup + 2 new checked-in persons
+      # (Note: person from setup has status "checked_in" by default)
+      expected_count = 3
+
+      # Check that the displayed count matches expected
+      # Look for the checked-in count in the KPI card
+      assert html =~ ~r/Currently Checked In.*?#{expected_count}/s
+
+      # Verify the persons exist in database with correct status
+      all_persons = Trackguests3.Persons.list_persons()
+      checked_in_count = Enum.count(all_persons, &(&1.status == "checked_in"))
+      assert checked_in_count == expected_count
+
+      # Clean up test data
+      Trackguests3.Persons.delete_person(checked_in_person1)
+      Trackguests3.Persons.delete_person(checked_in_person2)
+    end
+
     test "disables CSV export button when no records exist", %{conn: conn, user: user} do
       conn = log_in_user(conn, user)
       {:ok, index_live, _html} = live(conn, ~p"/history")
@@ -247,7 +330,10 @@ defmodule Trackguests3Web.HistoryLiveTest do
       
       {:ok, person} = Trackguests3.Persons.create_person(person_attrs)
 
-      conn = log_in_user(conn, user)
+      # Make user admin to access all data
+      {:ok, admin_user} = Trackguests3.Accounts.update_user_admin(user, %{admin: true})
+      
+      conn = log_in_user(conn, admin_user)
       conn = get(conn, ~p"/history/export.csv")
       
       csv_content = response(conn, 200)
@@ -279,7 +365,10 @@ defmodule Trackguests3Web.HistoryLiveTest do
       
       {:ok, recent_person} = Trackguests3.Persons.create_person(recent_attrs)
 
-      conn = log_in_user(conn, user)
+      # Make user admin to access all data
+      {:ok, admin_user} = Trackguests3.Accounts.update_user_admin(user, %{admin: true})
+
+      conn = log_in_user(conn, admin_user)
       
       # Export with last 30 days (should only include recent person)
       start_date = Date.add(Date.utc_today(), -30)
@@ -291,6 +380,37 @@ defmodule Trackguests3Web.HistoryLiveTest do
       # Should include recent person but not old person
       assert csv_content =~ recent_person.name
       refute csv_content =~ old_person.name
+    end
+
+    test "Non-admin user can only access data from their assigned property", %{conn: conn, user: user} do
+      # Create two different residences
+      user_residence = residence_fixture()
+      other_residence = residence_fixture()
+      
+      user_room = rooms_fixture(%{residence_id: user_residence.id})
+      other_room = rooms_fixture(%{residence_id: other_residence.id})
+      
+      # Create person in user's property
+      user_person_attrs = Map.put(@create_attrs, :room_id, user_room.id)
+                         |> Map.put(:check_in_time, DateTime.utc_now())
+      {:ok, user_person} = Trackguests3.Persons.create_person(user_person_attrs)
+      
+      # Create person in other property
+      other_person_attrs = Map.put(@update_attrs, :room_id, other_room.id)
+                          |> Map.put(:check_in_time, DateTime.utc_now())
+      {:ok, other_person} = Trackguests3.Persons.create_person(other_person_attrs)
+      
+      # Assign user to their property (not admin)
+      {:ok, property_user} = Trackguests3.Accounts.update_user_property(user, %{property_id: user_residence.id})
+      
+      conn = log_in_user(conn, property_user)
+      conn = get(conn, ~p"/history/export.csv")
+      
+      csv_content = response(conn, 200)
+      
+      # Should include person from user's property but not from other property
+      assert csv_content =~ user_person.name
+      refute csv_content =~ other_person.name
     end
   end
 

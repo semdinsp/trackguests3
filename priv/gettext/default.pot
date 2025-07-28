@@ -26,7 +26,7 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:207
+#: lib/trackguests3_web/live/user_live/settings.ex:279
 #, elixir-autogen, elixir-format
 msgid "Active"
 msgstr ""
@@ -42,17 +42,17 @@ msgstr ""
 msgid "Browse by date range • Export to CSV"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:131
+#: lib/trackguests3_web/live/user_live/settings.ex:203
 #, elixir-autogen, elixir-format
 msgid "Change Email"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:127
+#: lib/trackguests3_web/live/user_live/settings.ex:199
 #, elixir-autogen, elixir-format
 msgid "Changing..."
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:218
+#: lib/trackguests3_web/live/user_live/settings.ex:290
 #, elixir-autogen, elixir-format
 msgid "Choose a property to manage..."
 msgstr ""
@@ -62,33 +62,34 @@ msgstr ""
 msgid "Choose your preferred language"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:142
+#: lib/trackguests3_web/live/user_live/settings.ex:214
 #, elixir-autogen, elixir-format
 msgid "Choose your preferred theme"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:235
+#: lib/trackguests3_web/live/user_live/settings.ex:307
 #, elixir-autogen, elixir-format
 msgid "Clear Selection"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:287
+#: lib/trackguests3_web/live/user_live/settings.ex:359
 #, elixir-autogen, elixir-format
 msgid "Confirm New Password"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:202
+#: lib/trackguests3_web/live/user_live/settings.ex:274
 #, elixir-autogen, elixir-format
 msgid "Current Property"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:109
-#: lib/trackguests3_web/live/user_live/settings.ex:122
+#: lib/trackguests3_web/live/user_live/settings.ex:181
+#: lib/trackguests3_web/live/user_live/settings.ex:194
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:107
 #, elixir-autogen, elixir-format
 msgid "Email Address"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:540
+#: lib/trackguests3_web/live/user_live/settings.ex:640
 #, elixir-autogen, elixir-format
 msgid "Failed to clear property selection"
 msgstr ""
@@ -103,7 +104,7 @@ msgstr ""
 msgid "Language Preferences"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:484
+#: lib/trackguests3_web/live/user_live/settings.ex:558
 #, elixir-autogen, elixir-format
 msgid "Language updated successfully!"
 msgstr ""
@@ -113,32 +114,32 @@ msgstr ""
 msgid "Manage your account preferences and security settings"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:279
+#: lib/trackguests3_web/live/user_live/settings.ex:351
 #, elixir-autogen, elixir-format
 msgid "New Password"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:241
+#: lib/trackguests3_web/live/user_live/settings.ex:313
 #, elixir-autogen, elixir-format
 msgid "Note:"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:251
+#: lib/trackguests3_web/live/user_live/settings.ex:323
 #, elixir-autogen, elixir-format
 msgid "Password & Security"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:188
+#: lib/trackguests3_web/live/user_live/settings.ex:260
 #, elixir-autogen, elixir-format
 msgid "Property Management"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:532
+#: lib/trackguests3_web/live/user_live/settings.ex:632
 #, elixir-autogen, elixir-format
 msgid "Property selection cleared successfully!"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:513
+#: lib/trackguests3_web/live/user_live/settings.ex:613
 #, elixir-autogen, elixir-format
 msgid "Property selection updated successfully!"
 msgstr ""
@@ -148,20 +149,21 @@ msgstr ""
 msgid "Save Language"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:227
+#: lib/trackguests3_web/live/user_live/settings.ex:299
 #, elixir-autogen, elixir-format
 msgid "Save Property Selection"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:178
+#: lib/trackguests3_web/live/user_live/settings.ex:250
 #, elixir-autogen, elixir-format
 msgid "Save Theme"
 msgstr ""
 
 #: lib/trackguests3_web/live/user_live/settings.ex:95
-#: lib/trackguests3_web/live/user_live/settings.ex:174
-#: lib/trackguests3_web/live/user_live/settings.ex:223
-#: lib/trackguests3_web/live/user_live/settings.ex:291
+#: lib/trackguests3_web/live/user_live/settings.ex:167
+#: lib/trackguests3_web/live/user_live/settings.ex:246
+#: lib/trackguests3_web/live/user_live/settings.ex:295
+#: lib/trackguests3_web/live/user_live/settings.ex:363
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -171,22 +173,23 @@ msgstr ""
 msgid "Select Language"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:216
+#: lib/trackguests3_web/live/user_live/settings.ex:288
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "Select Property"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:152
+#: lib/trackguests3_web/live/user_live/settings.ex:224
 #, elixir-autogen, elixir-format
 msgid "Select Theme"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:189
+#: lib/trackguests3_web/live/user_live/settings.ex:261
 #, elixir-autogen, elixir-format
 msgid "Select your managed property for check-ins"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:241
+#: lib/trackguests3_web/live/user_live/settings.ex:313
 #, elixir-autogen, elixir-format
 msgid "Selecting a property will make it your default for guest check-ins and property management features."
 msgstr ""
@@ -196,27 +199,27 @@ msgstr ""
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:141
+#: lib/trackguests3_web/live/user_live/settings.ex:213
 #, elixir-autogen, elixir-format
 msgid "Theme Preferences"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:458
+#: lib/trackguests3_web/live/user_live/settings.ex:532
 #, elixir-autogen, elixir-format
 msgid "Theme updated successfully!"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:295
+#: lib/trackguests3_web/live/user_live/settings.ex:367
 #, elixir-autogen, elixir-format
 msgid "Update Password"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:110
+#: lib/trackguests3_web/live/user_live/settings.ex:182
 #, elixir-autogen, elixir-format
 msgid "Update your email address"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:252
+#: lib/trackguests3_web/live/user_live/settings.ex:324
 #, elixir-autogen, elixir-format
 msgid "Update your password to keep your account secure"
 msgstr ""
@@ -239,4 +242,191 @@ msgstr ""
 #: lib/trackguests3_web/components/core_components.ex:74
 #, elixir-autogen, elixir-format
 msgid "close"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:120
+#, elixir-autogen, elixir-format
+msgid "Available Languages for Guests"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:109
+#, elixir-autogen, elixir-format
+msgid "Guest Language Options"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:159
+#, elixir-autogen, elixir-format
+msgid "Guest Language Selection"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:584
+#, elixir-autogen, elixir-format
+msgid "Guest language options updated successfully!"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:171
+#, elixir-autogen, elixir-format
+msgid "Save Guest Language Options"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:110
+#, elixir-autogen, elixir-format
+msgid "Select which languages guests can choose from during check-in/check-out"
+msgstr ""
+
+#: lib/trackguests3_web/live/user_live/settings.ex:161
+#, elixir-autogen, elixir-format
+msgid "Selected languages will appear as options on guest check-in and check-out pages. At least one language must be selected."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:52
+#, elixir-autogen, elixir-format
+msgid "Active Visitors"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:46
+#, elixir-autogen, elixir-format
+msgid "Check In Instead"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:110
+#, elixir-autogen, elixir-format
+msgid "Check Out"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:28
+#, elixir-autogen, elixir-format
+msgid "Checking in guests to your managed property"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:98
+#, elixir-autogen, elixir-format
+msgid "Full Name"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:15
+#, elixir-autogen, elixir-format
+msgid "Guest Check-In"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:91
+#, elixir-autogen, elixir-format
+msgid "Guest Information"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.ex:165
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:219
+#, elixir-autogen, elixir-format
+msgid "Language changed successfully!"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:40
+#, elixir-autogen, elixir-format
+msgid "No Active Visitors"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:36
+#, elixir-autogen, elixir-format
+msgid "Please select a property and complete guest information"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:53
+#, elixir-autogen, elixir-format
+msgid "Select your name to complete check-out:"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:47
+#, elixir-autogen, elixir-format
+msgid "Switch to Guest Check-Out"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:29
+#, elixir-autogen, elixir-format
+msgid "Thank you for your visit! Please check out below."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:188
+#, elixir-autogen, elixir-format
+msgid "Thank you! You have been checked out successfully."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:41
+#, elixir-autogen, elixir-format
+msgid "There are currently no checked-in visitors."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:199
+#, elixir-autogen, elixir-format
+msgid "There was an error checking you out. Please try again."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:28
+#, elixir-autogen, elixir-format
+msgid "Visitor Check-Out"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:18
+#, elixir-autogen, elixir-format
+msgid "Welcome to"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:34
+#, elixir-autogen, elixir-format
+msgid "You don't have a property set. Please select a property below."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Your Property"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:90
+#, elixir-autogen, elixir-format
+msgid "Checked in:"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:80
+#, elixir-autogen, elixir-format
+msgid "Details unavailable"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:82
+#, elixir-autogen, elixir-format
+msgid "No room assigned"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:97
+#, elixir-autogen, elixir-format
+msgid "Purpose:"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:121
+#, elixir-autogen, elixir-format
+msgid "Return to Home"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:80
+#, elixir-autogen, elixir-format
+msgid "Room ID"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:77
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:80
+#, elixir-autogen, elixir-format
+msgid "Visiting:"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:67
+#, elixir-autogen, elixir-format
+msgid "Visitor"
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:182
+#, elixir-autogen, elixir-format
+msgid "Thank you! You have been checked out successfully from %{room_name}."
+msgstr ""
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:185
+#, elixir-autogen, elixir-format
+msgid "Thank you! You have been checked out successfully from Room ID %{room_id}."
 msgstr ""

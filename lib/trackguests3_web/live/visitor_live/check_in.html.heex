@@ -1,29 +1,39 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
   <div class="space-y-8">
+    <!-- Language Selector -->
+    <div class="flex justify-end">
+      <.language_selector 
+        current_locale={@current_locale} 
+        available_locales={@available_locales}
+        language_dropdown_open={@language_dropdown_open}
+        class="relative"
+      />
+    </div>
+
     <!-- Header Section -->
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-platinum mb-4">Guest Check-In</h1>
+      <h1 class="text-4xl font-bold text-platinum mb-4"><%= gettext("Guest Check-In") %></h1>
       <%= if @residence do %>
         <p class="text-xl text-gray-600">
-          Welcome to <span class="font-semibold text-platinum"><%= @residence.title %></span>
+          <%= gettext("Welcome to") %> <span class="font-semibold text-platinum"><%= @residence.title %></span>
           <%= if @user_residence && @residence.id == @user_residence.id do %>
             <span class="inline-flex items-center px-2 py-1 ml-2 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-              Your Property
+              <%= gettext("Your Property") %>
             </span>
           <% end %>
         </p>
         <p class="text-sm text-gray-500 mt-2"><%= @residence.address %></p>
         <%= if @user_residence && @residence.id == @user_residence.id do %>
           <p class="text-xs text-blue-600 mt-1">
-            Checking in guests to your managed property
+            <%= gettext("Checking in guests to your managed property") %>
           </p>
         <% end %>
       <% else %>
         <p class="text-xl text-gray-600">
           <%= if @user_residence do %>
-            You don't have a property set. Please select a property below.
+            <%= gettext("You don't have a property set. Please select a property below.") %>
           <% else %>
-            Please select a property and complete guest information
+            <%= gettext("Please select a property and complete guest information") %>
           <% end %>
         </p>
       <% end %>
@@ -34,7 +44,7 @@
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>
-          Switch to Guest Check-Out
+          <%= gettext("Switch to Guest Check-Out") %>
         </a>
       </div>
     </div>
@@ -46,7 +56,7 @@
           <!-- Property Selection (if no residence context) -->
           <%= if !@residence do %>
             <div>
-              <label class="block text-sm font-medium text-platinum mb-3">Select Property</label>
+              <label class="block text-sm font-medium text-platinum mb-3"><%= gettext("Select Property") %></label>
               <%= if @user_residence do %>
                 <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
                   <div class="flex items-center justify-between">
@@ -78,14 +88,14 @@
           <!-- Guest Information -->
           <div class="space-y-4">
             <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
-              Guest Information
+              <%= gettext("Guest Information") %>
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <.input 
                 field={@form[:name]} 
                 type="text" 
-                label="Full Name" 
+                label={gettext("Full Name")} 
                 class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
                 placeholder="Enter guest's full name"
                 required
@@ -94,7 +104,7 @@
               <.input 
                 field={@form[:email]} 
                 type="email" 
-                label="Email Address" 
+                label={gettext("Email Address")} 
                 class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
                 placeholder="guest@example.com"
               />

@@ -189,6 +189,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
 
   @impl true
   def mount(params, _session, socket) do
+    current_user = socket.assigns.current_scope.user
     residence_id = params["residence_id"]
     residence = if residence_id, do: Accomodation.get_residence!(residence_id), else: nil
 
@@ -197,13 +198,26 @@ defmodule Trackguests3Web.RoomsLive.Index do
         Accomodation.list_rooms_with_residences()
         |> Enum.filter(&(&1.residence_id == residence.id))
       else
-        # For general room listing, use the new function that preloads residence data
-        Accomodation.list_rooms_with_residences()
+        # For general room listing, filter based on user permissions
+        all_rooms = Accomodation.list_rooms_with_residences()
+        
+        if Trackguests3.Accounts.admin?(current_user) do
+          # Admin users can see all rooms
+          all_rooms
+        else
+          # Normal users can only see rooms from their assigned property
+          if current_user.property_id do
+            all_rooms |> Enum.filter(&(&1.residence_id == current_user.property_id))
+          else
+            # User has no property assigned, show empty list
+            []
+          end
+        end
       end
 
     {:ok,
      socket
-     |> assign(:current_scope, %{})
+     |> assign(:current_scope, socket.assigns.current_scope)
      |> assign(:residence, residence)
      |> assign(:rooms, rooms)
      |> assign(:page_title, if(residence, do: "Rooms in #{residence.title}", else: "All Rooms"))}

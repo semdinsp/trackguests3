@@ -20,35 +20,37 @@ defmodule Trackguests3Web.Router do
   scope "/", Trackguests3Web do
     pipe_through(:browser)
 
-    # Main routes that work with or without auth
-    live("/residences", ResidencesLive.Index, :index)
-    live("/residences/new", ResidencesLive.Form, :new)
-    live("/residences/:id", ResidencesLive.Show, :show)
-    live("/residences/:id/edit", ResidencesLive.Form, :edit)
+    live_session :with_current_scope,
+      on_mount: [{Trackguests3Web.UserAuth, :mount_current_scope}] do
+      # Main routes that work with or without auth but need current_scope
+      live("/residences", ResidencesLive.Index, :index)
+      live("/residences/new", ResidencesLive.Form, :new)
+      live("/residences/:id", ResidencesLive.Show, :show)
+      live("/residences/:id/edit", ResidencesLive.Form, :edit)
 
-    live("/rooms", RoomsLive.Index, :index)
+      live("/rooms", RoomsLive.Index, :index)
 
-    # Residence-specific room routes
-    live("/residences/:residence_id/rooms", RoomsLive.Index, :residence_rooms)
-    live("/residences/:residence_id/rooms/new", RoomsLive.Form, :new)
-    live("/rooms/new", RoomsLive.Form, :new)
-    live("/rooms/:id", RoomsLive.Show, :show)
-    live("/rooms/:id/edit", RoomsLive.Form, :edit)
+      # Residence-specific room routes
+      live("/residences/:residence_id/rooms", RoomsLive.Index, :residence_rooms)
+      live("/residences/:residence_id/rooms/new", RoomsLive.Form, :new)
+      live("/rooms/new", RoomsLive.Form, :new)
+      live("/rooms/:id", RoomsLive.Show, :show)
+      live("/rooms/:id/edit", RoomsLive.Form, :edit)
 
-    # Property management routes
-    live("/property", PropertyLive.Dashboard, :index)
-    live("/property/new", PropertyLive.Form, :new)
-    live("/property/edit", PropertyLive.Form, :edit)
-    live("/property/select", PropertyLive.Select, :index)
-    live("/property/rooms", PropertyLive.Rooms, :index)
-    live("/property/rooms/new", PropertyLive.Rooms, :new)
-    live("/property/rooms/:id/edit", PropertyLive.Rooms, :edit)
+      # Property management routes
+      live("/property", PropertyLive.Dashboard, :index)
+      live("/property/new", PropertyLive.Form, :new)
+      live("/property/edit", PropertyLive.Form, :edit)
+      live("/property/select", PropertyLive.Select, :index)
+      live("/property/rooms", PropertyLive.Rooms, :index)
+      live("/property/rooms/new", PropertyLive.Rooms, :new)
+      live("/property/rooms/:id/edit", PropertyLive.Rooms, :edit)
 
-    # History routes
-    live("/history", HistoryLive.Index, :index)
-    get("/history/export.csv", HistoryController, :export_csv)
+      # History routes
+      live("/history", HistoryLive.Index, :index)
+    end
 
-    # Visitor routes (public)
+    # Visitor routes (public - no auth needed)
     live("/visitor/check-in", VisitorLive.CheckIn, :index)
     live("/visitor/check-out", VisitorLive.CheckOut, :index)
   end
@@ -77,6 +79,9 @@ defmodule Trackguests3Web.Router do
       
     end
 
+    # CSV export route requires authentication to enforce property restrictions
+    get("/history/export.csv", HistoryController, :export_csv)
+    
     post("/users/update-password", UserSessionController, :update_password)
   end
 

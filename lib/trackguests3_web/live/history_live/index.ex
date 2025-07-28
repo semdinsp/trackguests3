@@ -18,7 +18,9 @@ defmodule Trackguests3Web.HistoryLive.Index do
      |> assign(:loading, false)
      |> assign(:current_scope, socket.assigns[:current_scope])
      |> assign(:page_title, "Guest History")
-     |> load_history_data()}
+     |> assign(:kpi_metrics, %{})
+     |> load_history_data()
+     |> load_kpi_metrics()}
   end
 
   @impl true
@@ -33,7 +35,8 @@ defmodule Trackguests3Web.HistoryLive.Index do
          |> assign(:start_date, start_date)
          |> assign(:end_date, end_date)
          |> assign(:loading, true)
-         |> load_history_data()}
+         |> load_history_data()
+         |> load_kpi_metrics()}
       else
         {:noreply,
          socket
@@ -153,5 +156,57 @@ defmodule Trackguests3Web.HistoryLive.Index do
 
   defp days_in_range(start_date, end_date) do
     Date.diff(end_date, start_date) + 1
+  end
+
+  defp load_kpi_metrics(socket) do
+    try do
+      # Get current checked-in guests count
+      checked_in_count = Persons.list_persons()
+                        |> Enum.count(fn person -> person.status == "checked_in" end)
+
+      # Get total room count
+      total_rooms = Accomodation.count_rooms()
+
+      # Get total properties count
+      total_properties = Accomodation.count_residences()
+
+      # Calculate unique visitors for current date range
+      unique_visitors = socket.assigns.history_data
+                       |> Enum.uniq_by(& &1.email)
+                       |> length()
+
+      # Calculate total visits for current date range
+      total_visits = length(socket.assigns.history_data)
+
+      # Calculate occupancy rate (checked in guests / total rooms * 100)
+      occupancy_rate = if total_rooms > 0 do
+        (checked_in_count / total_rooms * 100) |> Float.round(1)
+      else
+        0.0
+      end
+
+      metrics = %{
+        checked_in_count: checked_in_count,
+        total_rooms: total_rooms,
+        total_properties: total_properties,
+        unique_visitors: unique_visitors,
+        total_visits: total_visits,
+        occupancy_rate: occupancy_rate
+      }
+
+      assign(socket, :kpi_metrics, metrics)
+    rescue
+      _ ->
+        # If there's an error, assign default metrics
+        default_metrics = %{
+          checked_in_count: 0,
+          total_rooms: 0,
+          total_properties: 0,
+          unique_visitors: 0,
+          total_visits: 0,
+          occupancy_rate: 0.0
+        }
+        assign(socket, :kpi_metrics, default_metrics)
+    end
   end
 end

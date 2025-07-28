@@ -12,7 +12,7 @@ defmodule Trackguests3Web.AdminLive.UserFormComponent do
         <:subtitle>Edit user admin privileges and details</:subtitle>
       </.header>
 
-      <form
+      <.form
         for={@form}
         id="user-form"
         phx-target={@myself}
@@ -25,7 +25,7 @@ defmodule Trackguests3Web.AdminLive.UserFormComponent do
         <div>
           <.button phx-disable-with="Saving...">Save User</.button>
         </div>
-      </form>
+      </.form>
     </div>
     """
   end

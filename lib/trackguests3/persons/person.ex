@@ -119,6 +119,6 @@ defmodule Trackguests3.Persons.Person do
     |> cast(attrs, [:check_out_time, :status])
     |> validate_required([:check_out_time, :status])
     |> validate_inclusion(:status, ["checked_out"])
-    |> put_change(:room_id, nil)
+    # Keep room_id unchanged during checkout to preserve location information
   end
 end

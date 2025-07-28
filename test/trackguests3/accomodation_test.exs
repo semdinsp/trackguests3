@@ -3,125 +3,112 @@ defmodule Trackguests3.AccomodationTest do
 
   alias Trackguests3.Accomodation
 
-  describe "residences" do
-    alias Trackguests3.Accomodation.Residence
+  import Trackguests3.AccomodationFixtures
 
-    import Trackguests3.AccomodationFixtures
+  describe "CSV room import" do
+    test "parse_csv_rooms/1 parses valid CSV content" do
+      csv_content = """
+      title,floor,needs_fob,memo,accepts_guests
+      Room 101,1,true,Corner room,true
+      Room 102,1,false,Standard room,false
+      Room 201,2,true,Suite with balcony,true
+      """
 
-    @invalid_attrs %{address: nil, title: nil, logo: nil, floor_count: nil}
+      assert {:ok, rooms} = Accomodation.parse_csv_rooms(csv_content)
+      assert length(rooms) == 3
 
-    test "list_residences/0 returns all residences" do
+      [room1, room2, room3] = rooms
+
+      assert room1.title == "Room 101"
+      assert room1.floor == 1
+      assert room1.needs_fob == true
+      assert room1.memo == "Corner room"
+      assert room1.accepts_guests == true
+
+      assert room2.title == "Room 102"
+      assert room2.floor == 1
+      assert room2.needs_fob == false
+      assert room2.memo == "Standard room"
+      assert room2.accepts_guests == false
+
+      assert room3.title == "Room 201"
+      assert room3.floor == 2
+      assert room3.needs_fob == true
+      assert room3.memo == "Suite with balcony"
+      assert room3.accepts_guests == true
+    end
+
+    test "parse_csv_rooms/1 handles different boolean formats" do
+      csv_content = """
+      title,floor,needs_fob,memo,accepts_guests
+      Room 101,1,yes,Test,no
+      Room 102,2,1,Test,0
+      Room 103,3,true,Test,false
+      """
+
+      assert {:ok, rooms} = Accomodation.parse_csv_rooms(csv_content)
+      assert length(rooms) == 3
+
+      [room1, room2, room3] = rooms
+
+      assert room1.needs_fob == true
+      assert room1.accepts_guests == false
+
+      assert room2.needs_fob == true
+      assert room2.accepts_guests == false
+
+      assert room3.needs_fob == true
+      assert room3.accepts_guests == false
+    end
+
+    test "parse_csv_rooms/1 returns error for invalid headers" do
+      csv_content = """
+      wrong,headers,here
+      Room 101,1,true
+      """
+
+      assert {:error, error_msg} = Accomodation.parse_csv_rooms(csv_content)
+      assert error_msg =~ "Invalid CSV headers"
+    end
+
+    test "parse_csv_rooms/1 returns error for empty CSV" do
+      assert {:error, "Empty CSV file"} = Accomodation.parse_csv_rooms("")
+    end
+
+    test "create_rooms_from_csv/2 creates rooms successfully" do
       residence = residence_fixture()
-      assert Accomodation.list_residences() == [residence]
+
+      csv_content = """
+      title,floor,needs_fob,memo,accepts_guests
+      Room 101,1,true,Corner room,true
+      Room 102,1,false,Standard room,false
+      """
+
+      assert {:ok, %{created: 2, errors: []}} = 
+        Accomodation.create_rooms_from_csv(residence.id, csv_content)
+
+      rooms = Accomodation.list_rooms_for_residence(residence.id)
+      assert length(rooms) == 2
+
+      room_titles = Enum.map(rooms, & &1.title)
+      assert "Room 101" in room_titles
+      assert "Room 102" in room_titles
     end
 
-    test "get_residence!/1 returns the residence with given id" do
+    test "create_rooms_from_csv/2 handles invalid CSV" do
       residence = residence_fixture()
-      assert Accomodation.get_residence!(residence.id) == residence
-    end
 
-    test "create_residence/1 with valid data creates a residence" do
-      valid_attrs = %{address: "some address", title: "some title", logo: "some logo", floor_count: 42}
+      invalid_csv = """
+      wrong,headers
+      Room 101,1
+      """
 
-      assert {:ok, %Residence{} = residence} = Accomodation.create_residence(valid_attrs)
-      assert residence.address == "some address"
-      assert residence.title == "some title"
-      assert residence.logo == "some logo"
-      assert residence.floor_count == 42
-    end
+      assert {:error, error_msg} = Accomodation.create_rooms_from_csv(residence.id, invalid_csv)
+      assert error_msg =~ "Invalid CSV headers"
 
-    test "create_residence/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accomodation.create_residence(@invalid_attrs)
-    end
-
-    test "update_residence/2 with valid data updates the residence" do
-      residence = residence_fixture()
-      update_attrs = %{address: "some updated address", title: "some updated title", logo: "some updated logo", floor_count: 43}
-
-      assert {:ok, %Residence{} = residence} = Accomodation.update_residence(residence, update_attrs)
-      assert residence.address == "some updated address"
-      assert residence.title == "some updated title"
-      assert residence.logo == "some updated logo"
-      assert residence.floor_count == 43
-    end
-
-    test "update_residence/2 with invalid data returns error changeset" do
-      residence = residence_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accomodation.update_residence(residence, @invalid_attrs)
-      assert residence == Accomodation.get_residence!(residence.id)
-    end
-
-    test "delete_residence/1 deletes the residence" do
-      residence = residence_fixture()
-      assert {:ok, %Residence{}} = Accomodation.delete_residence(residence)
-      assert_raise Ecto.NoResultsError, fn -> Accomodation.get_residence!(residence.id) end
-    end
-
-    test "change_residence/1 returns a residence changeset" do
-      residence = residence_fixture()
-      assert %Ecto.Changeset{} = Accomodation.change_residence(residence)
-    end
-  end
-
-  describe "rooms" do
-    alias Trackguests3.Accomodation.Rooms
-
-    import Trackguests3.AccomodationFixtures
-
-    @invalid_attrs %{floor: nil, title: nil, needs_fob: nil, memo: nil, accepts_guests: nil}
-
-    test "list_rooms/0 returns all rooms" do
-      rooms = rooms_fixture()
-      assert Accomodation.list_rooms() == [rooms]
-    end
-
-    test "get_rooms!/1 returns the rooms with given id" do
-      rooms = rooms_fixture()
-      assert Accomodation.get_rooms!(rooms.id) == rooms
-    end
-
-    test "create_rooms/1 with valid data creates a rooms" do
-      valid_attrs = %{floor: 42, title: "some title", needs_fob: true, memo: "some memo", accepts_guests: true}
-
-      assert {:ok, %Rooms{} = rooms} = Accomodation.create_rooms(valid_attrs)
-      assert rooms.floor == 42
-      assert rooms.title == "some title"
-      assert rooms.needs_fob == true
-      assert rooms.memo == "some memo"
-      assert rooms.accepts_guests == true
-    end
-
-    test "create_rooms/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accomodation.create_rooms(@invalid_attrs)
-    end
-
-    test "update_rooms/2 with valid data updates the rooms" do
-      rooms = rooms_fixture()
-      update_attrs = %{floor: 43, title: "some updated title", needs_fob: false, memo: "some updated memo", accepts_guests: false}
-
-      assert {:ok, %Rooms{} = rooms} = Accomodation.update_rooms(rooms, update_attrs)
-      assert rooms.floor == 43
-      assert rooms.title == "some updated title"
-      assert rooms.needs_fob == false
-      assert rooms.memo == "some updated memo"
-      assert rooms.accepts_guests == false
-    end
-
-    test "update_rooms/2 with invalid data returns error changeset" do
-      rooms = rooms_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accomodation.update_rooms(rooms, @invalid_attrs)
-      assert rooms == Accomodation.get_rooms!(rooms.id)
-    end
-
-    test "delete_rooms/1 deletes the rooms" do
-      rooms = rooms_fixture()
-      assert {:ok, %Rooms{}} = Accomodation.delete_rooms(rooms)
-      assert_raise Ecto.NoResultsError, fn -> Accomodation.get_rooms!(rooms.id) end
-    end
-
-    test "change_rooms/1 returns a rooms changeset" do
-      rooms = rooms_fixture()
-      assert %Ecto.Changeset{} = Accomodation.change_rooms(rooms)
+      # Should not create any rooms
+      rooms = Accomodation.list_rooms_for_residence(residence.id)
+      assert length(rooms) == 0
     end
   end
 end

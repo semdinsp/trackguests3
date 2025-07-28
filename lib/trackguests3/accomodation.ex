@@ -366,4 +366,131 @@ defmodule Trackguests3.Accomodation do
     )
     |> Repo.all()
   end
+
+  @doc """
+  Creates multiple rooms from CSV data for a residence.
+  
+  ## Examples
+  
+      iex> create_rooms_from_csv(residence_id, csv_data)
+      {:ok, %{created: 5, errors: []}}
+      
+      iex> create_rooms_from_csv(residence_id, invalid_csv_data)
+      {:error, "Invalid CSV format"}
+  """
+  def create_rooms_from_csv(residence_id, csv_content) when is_binary(csv_content) do
+    case parse_csv_rooms(csv_content) do
+      {:ok, room_data} ->
+        create_rooms_bulk(residence_id, room_data)
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @doc """
+  Parses CSV content and returns room data.
+  
+  Expected CSV format:
+  title,floor,needs_fob,memo,accepts_guests
+  Room 101,1,true,Corner room,true
+  Room 102,1,false,Standard room,true
+  """
+  def parse_csv_rooms(csv_content) do
+    try do
+      lines = String.split(csv_content, "\n", trim: true)
+      
+      case lines do
+        [] ->
+          {:error, "Empty CSV file"}
+          
+        [header | data_lines] ->
+          expected_headers = ["title", "floor", "needs_fob", "memo", "accepts_guests"]
+          actual_headers = 
+            header
+            |> String.split(",")
+            |> Enum.map(&String.trim/1)
+            |> Enum.map(&String.downcase/1)
+          
+          if actual_headers == expected_headers do
+            rooms = 
+              data_lines
+              |> Enum.with_index(2)
+              |> Enum.reduce([], fn {line, line_number}, acc ->
+                case parse_csv_line(line, line_number) do
+                  {:ok, room_data} -> [room_data | acc]
+                  {:error, _} -> acc  # Skip invalid lines
+                end
+              end)
+              |> Enum.reverse()
+            
+            {:ok, rooms}
+          else
+            {:error, "Invalid CSV headers. Expected: #{Enum.join(expected_headers, ", ")}"}
+          end
+      end
+    rescue
+      _ -> {:error, "Invalid CSV format"}
+    end
+  end
+
+  defp parse_csv_line(line, line_number) do
+    try do
+      [title, floor, needs_fob, memo, accepts_guests] = 
+        line
+        |> String.split(",")
+        |> Enum.map(&String.trim/1)
+      
+      parsed_floor = 
+        case Integer.parse(floor) do
+          {num, ""} -> num
+          _ -> raise "Invalid floor number"
+        end
+      
+      parsed_needs_fob = parse_boolean(needs_fob)
+      parsed_accepts_guests = parse_boolean(accepts_guests)
+      
+      {:ok, %{
+        title: title,
+        floor: parsed_floor,
+        needs_fob: parsed_needs_fob,
+        memo: memo,
+        accepts_guests: parsed_accepts_guests
+      }}
+    rescue
+      _ -> {:error, "Invalid data on line #{line_number}"}
+    end
+  end
+
+  defp parse_boolean(value) do
+    case String.downcase(String.trim(value)) do
+      val when val in ["true", "yes", "1", "y"] -> true
+      val when val in ["false", "no", "0", "n"] -> false
+      _ -> false  # Default to false for invalid values
+    end
+  end
+
+  defp create_rooms_bulk(residence_id, room_data) do
+    results = 
+      room_data
+      |> Enum.map(fn room_attrs ->
+        room_attrs
+        |> Map.put(:residence_id, residence_id)
+        |> create_rooms()
+      end)
+    
+    {created, errors} = 
+      results
+      |> Enum.reduce({0, []}, fn
+        {:ok, _room}, {created_count, errors} ->
+          {created_count + 1, errors}
+        {:error, changeset}, {created_count, errors} ->
+          error_msg = 
+            changeset.errors
+            |> Enum.map(fn {field, {msg, _}} -> "#{field}: #{msg}" end)
+            |> Enum.join(", ")
+          {created_count, [error_msg | errors]}
+      end)
+    
+    {:ok, %{created: created, errors: Enum.reverse(errors)}}
+  end
 end

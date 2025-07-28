@@ -12,8 +12,11 @@ defmodule Trackguests3Web.HistoryController do
     start_datetime = DateTime.new!(start_date, ~T[00:00:00])
     end_datetime = DateTime.new!(Date.add(end_date, 1), ~T[00:00:00])
     
-    # Get history data
-    history_data = get_history_data(start_datetime, end_datetime)
+    # Get current user and check permissions
+    current_user = conn.assigns.current_scope.user
+    
+    # Get history data based on user permissions
+    history_data = get_history_data(start_datetime, end_datetime, current_user)
     
     # Generate CSV content
     csv_content = generate_csv(history_data)
@@ -49,7 +52,7 @@ defmodule Trackguests3Web.HistoryController do
     {start_date, end_date}
   end
 
-  defp get_history_data(start_datetime, end_datetime) do
+  defp get_history_data(start_datetime, end_datetime, current_user) do
     try do
       # Get all persons (guests) within the date range
       persons = Persons.list_persons()
@@ -60,10 +63,30 @@ defmodule Trackguests3Web.HistoryController do
         check_out_time = person.check_out_time
         
         # Include if check-in or check-out happened within the range
-        (check_in_time && DateTime.compare(check_in_time, start_datetime) != :lt && 
+        date_in_range = (check_in_time && DateTime.compare(check_in_time, start_datetime) != :lt && 
          DateTime.compare(check_in_time, end_datetime) == :lt) ||
         (check_out_time && DateTime.compare(check_out_time, start_datetime) != :lt && 
          DateTime.compare(check_out_time, end_datetime) == :lt)
+        
+        # Apply property filtering for non-admin users
+        property_authorized = if Trackguests3.Accounts.admin?(current_user) do
+          # Admin users can see all data
+          true
+        else
+          # Non-admin users can only see data from their assigned property
+          if current_user.property_id && person.room_id do
+            # Get the residence_id for the person's room
+            case Accomodation.get_room(person.room_id) do
+              {:ok, room} -> room.residence_id == current_user.property_id
+              {:error, _} -> false
+            end
+          else
+            # If user has no property assigned or person has no room, deny access
+            false
+          end
+        end
+        
+        date_in_range && property_authorized
       end)
       |> Enum.map(fn person ->
         # Get room and residence information
