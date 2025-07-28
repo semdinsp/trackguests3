@@ -2,6 +2,7 @@ import Config
 
 # Configure your database
 config :trackguests3, Trackguests3.Repo,
+  adapter: Ecto.Adapters.SQLite3,
   database: Path.expand("../trackguests3_dev.db", Path.dirname(__ENV__.file)),
   pool_size: 5,
   stacktrace: true,
