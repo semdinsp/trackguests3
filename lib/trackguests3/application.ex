@@ -12,6 +12,7 @@ defmodule Trackguests3.Application do
       Trackguests3.Repo,
       {DNSCluster, query: Application.get_env(:trackguests3, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Trackguests3.PubSub},
+      {Finch, name: Trackguests3.Finch},  # email support
       # Start a worker by calling: Trackguests3.Worker.start_link(arg)
       # {Trackguests3.Worker, arg},
       # Start to serve requests, typically the last entry

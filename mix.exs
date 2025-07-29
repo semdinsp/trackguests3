@@ -59,7 +59,18 @@ defmodule Trackguests3.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      # scott mailer
+      {:ex_aws, "~> 2.1"},
+      {:ex_aws_s3, "~> 2.0"},
+      {:hackney, "~> 1.18"},
+      {:poison, "~> 3.0"},
+      # stripe support
+      # end exasw3
+      {:sweet_xml, "~> 0.7"},
+      # scott start mailer swoosh gmail
+      {:mail, ">= 0.3.1"},
+      {:gen_smtp, "~> 1.1.1"},
     ]
   end
 
