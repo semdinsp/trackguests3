@@ -5,7 +5,7 @@ import Config
 # when generating URLs.
 
 config :trackguests3, Trackguests3Web.Endpoint,
-  url: [host: "trackguests3-bitter-waterfall-3438", port: 8080],
+  url: [host: "trackguests3-bitter-waterfall-3438.fly.dev", port: 8080],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Configures Swoosh API Client

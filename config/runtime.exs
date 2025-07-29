@@ -53,6 +53,7 @@ if config_env() == :prod do
 
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
+  Logger.info("Scott: Startup: Using host: #{host}, port: #{port} env: #{Mix.env()} end ")
 
   config :trackguests3, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
