@@ -6,6 +6,7 @@ defmodule Trackguests3Web.UserAuth do
 
   alias Trackguests3.Accounts
   alias Trackguests3.Accounts.Scope
+  require Logger
 
   # Make the remember me cookie valid for 14 days. This should match
   # the session validity setting in UserToken.
@@ -91,7 +92,11 @@ defmodule Trackguests3Web.UserAuth do
 
   # Reissue the session token if it is older than the configured reissue age.
   defp maybe_reissue_user_session_token(conn, user, token_inserted_at) do
-    token_age = DateTime.diff(DateTime.utc_now(:second), token_inserted_at, :day)
+    Logger.info("Scott: maybe_reissue_user_session_token datetimenow: #{inspect(DateTime.utc_now(:second))} and token_inserted_at: #{inspect(token_inserted_at)}")
+    {:ok, tia_utc}= DateTime.from_naive(token_inserted_at, "Etc/UTC" )
+    token_age = DateTime.diff(DateTime.utc_now(:second), tia_utc  , :day)
+
+    # scott was: token_age = DateTime.diff(DateTime.utc_now(:second), token_inserted_at, :day)
 
     if token_age >= @session_reissue_age_in_days do
       create_or_extend_session(conn, user, %{})
