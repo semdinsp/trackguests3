@@ -9,7 +9,7 @@ defmodule Trackguests3.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Trackguests3", "contact@example.com"})
+      |> from({"Trackguests3", "info@alzheimer-memory.com"})
       |> subject(subject)
       |> text_body(body)
 
