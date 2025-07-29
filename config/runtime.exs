@@ -55,9 +55,16 @@ if config_env() == :prod do
   port = String.to_integer(System.get_env("PORT") || "4000")
   #Logger.info("Scott: Startup: Using host: #{host}, port: #{port} env: runtime.exs end ")
 
+  config :trackguests3, Trackguests3.Mailer,
+    adapter: Swoosh.Adapters.ExAwsAmazonSES,
+    access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+    secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+    region: "us-east-1"
+
   config :trackguests3, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :trackguests3, Trackguests3Web.Endpoint,
+    check_origin: ["https://trackguests3-bitter-waterfall-3438.fly.dev" ],
     url: [host: host, port: 443, scheme: "https"],
     http: [
       # Enable IPv6 and bind on all interfaces.

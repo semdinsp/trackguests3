@@ -9,7 +9,7 @@ config :trackguests3, Trackguests3Web.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch: Trackguests3.Finch
+# config :swoosh, api_client: Swoosh.ApiClient.Finch, finch: Trackguests3.Finch
 
 # Disable Swoosh Local Memory Storage
 config :swoosh, local: false
