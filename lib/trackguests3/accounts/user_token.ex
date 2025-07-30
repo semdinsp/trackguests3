@@ -21,7 +21,7 @@ defmodule Trackguests3.Accounts.UserToken do
     field :authenticated_at, :utc_datetime
     belongs_to :user, Trackguests3.Accounts.User
 
-    timestamps( updated_at: false)
+    timestamps(type: :utc_datetime, updated_at: false)
   end
 
 

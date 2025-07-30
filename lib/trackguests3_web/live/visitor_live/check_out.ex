@@ -127,7 +127,8 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
   end
 
   @impl true
-  def mount(_params, session, socket) do
+  def mount(params, session, socket) do
+    url_locale = params["locale"]
     checked_in_persons = Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
 
     # Get available locales - try to get from authenticated user or use defaults
@@ -152,8 +153,8 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
       _ -> ["en", "es", "fr"]
     end
 
-    # Get current locale from session or default to first available
-    current_locale = session["locale"] || List.first(available_locales) || "en"
+    # Get current locale from URL, session, or default to first available
+    current_locale = url_locale || session["locale"] || List.first(available_locales) || "en"
     
     # Set the gettext locale
     Gettext.put_locale(Trackguests3Web.Gettext, current_locale)
@@ -164,7 +165,8 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
      |> assign(:checked_in_persons, checked_in_persons)
      |> assign(:current_locale, current_locale)
      |> assign(:available_locales, available_locales)
-     |> assign(:language_dropdown_open, false)}
+     |> assign(:language_dropdown_open, false)
+     |> assign(:locale_changed_at, System.monotonic_time())}
   end
 
   @impl true
@@ -212,11 +214,11 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
     # Set the gettext locale
     Gettext.put_locale(Trackguests3Web.Gettext, locale)
     
+    # Force a complete re-render by redirecting to the same page with locale parameter
     {:noreply,
      socket
-     |> assign(:current_locale, locale)
-     |> assign(:language_dropdown_open, false)
-     |> put_flash(:info, gettext("Language changed successfully!"))}
+     |> put_flash(:info, gettext("Language changed successfully!"))
+     |> push_navigate(to: "/visitor/check-out?locale=#{locale}")}
   end
 
   defp preload_room(person) do

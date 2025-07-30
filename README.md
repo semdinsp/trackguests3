@@ -27,3 +27,11 @@ mix phx.new trackguests2 --binary-id --database postgres
 mix phx.gen.live Accomodation Rooms rooms  title:string residence_id:references:residences floor:integer needs_fob:boolean memo:string accepts_guests:boolean
 
 mix phx.gen.live Accomodation Persons persons name:string room_id:references:rooms sex:string memo:string resident:boolean visitor:boolean staff:boolean:false phone:string email:string
+
+# ADMIN ACTIVITIES
+## Add admin user
+  Trackguests3.Accounts.update_user_admin(u,%{admin: true})
+
+## Find user
+  Trackguests3.Accounts.list_users()
+  Trackguests3.Accounts.get_user_by_email(email)

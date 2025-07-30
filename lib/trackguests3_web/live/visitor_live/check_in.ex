@@ -9,6 +9,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
   @impl true
   def mount(params, session, socket) do
     residence_id = params["residence_id"]
+    url_locale = params["locale"]
     
     # Get user's property if they're authenticated (this is optional for public check-in)
     {user_residence, available_locales} = try do
@@ -42,8 +43,8 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       true -> nil
     end
 
-    # Get current locale from session or default to first available
-    current_locale = session["locale"] || List.first(available_locales) || "en"
+    # Get current locale from URL, session, or default to first available
+    current_locale = url_locale || session["locale"] || List.first(available_locales) || "en"
     
     # Set the gettext locale
     Gettext.put_locale(Trackguests3Web.Gettext, current_locale)
@@ -63,7 +64,8 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
      |> assign(:current_locale, current_locale)
      |> assign(:available_locales, available_locales)
      |> assign(:language_dropdown_open, false)
-     |> assign(:page_title, "Guest Check-In")}
+     |> assign(:page_title, "Guest Check-In")
+     |> assign(:locale_changed_at, System.monotonic_time())}
   end
 
   @impl true
@@ -158,11 +160,18 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
     # Set the gettext locale
     Gettext.put_locale(Trackguests3Web.Gettext, locale)
     
+    # Store the selected locale in the session for persistence
+    # Force a complete re-render by redirecting to the same page
+    residence_param = if socket.assigns.residence do
+      "?residence_id=#{socket.assigns.residence.id}&locale=#{locale}"
+    else
+      "?locale=#{locale}"
+    end
+    
     {:noreply,
      socket
-     |> assign(:current_locale, locale)
-     |> assign(:language_dropdown_open, false)
-     |> put_flash(:info, gettext("Language changed successfully!"))}
+     |> put_flash(:info, gettext("Language changed successfully!"))
+     |> push_navigate(to: "/visitor/check-in#{residence_param}")}
   end
 
   defp get_room_options(nil) do
