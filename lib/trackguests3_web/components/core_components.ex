@@ -183,7 +183,7 @@ defmodule Trackguests3Web.CoreComponents do
     <fieldset class="fieldset mb-2">
       <label>
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
-        <span class="label">
+        <span class="label text-sm text-base-content/70">
           <input
             type="checkbox"
             id={@id}
@@ -204,7 +204,7 @@ defmodule Trackguests3Web.CoreComponents do
     ~H"""
     <fieldset class="fieldset mb-2">
       <label>
-        <span :if={@label} class="label mb-1">{@label}</span>
+        <span :if={@label} class="label mb-1 text-sm text-base-content/70">{@label}</span>
         <select
           id={@id}
           name={@name}
@@ -225,7 +225,7 @@ defmodule Trackguests3Web.CoreComponents do
     ~H"""
     <fieldset class="fieldset mb-2">
       <label>
-        <span :if={@label} class="label mb-1">{@label}</span>
+        <span :if={@label} class="label mb-1 text-sm text-base-content/70">{@label}</span>
         <textarea
           id={@id}
           name={@name}
@@ -246,7 +246,7 @@ defmodule Trackguests3Web.CoreComponents do
     ~H"""
     <fieldset class="fieldset mb-2">
       <label>
-        <span :if={@label} class="label mb-1">{@label}</span>
+        <span :if={@label} class="label mb-1 text-sm text-base-content/70">{@label}</span>
         <input
           type={@type}
           name={@name}
