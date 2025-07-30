@@ -137,11 +137,11 @@ defmodule Trackguests3Web.LayoutsTest do
       
       # App layout should not contain admin navigation
       refute html =~ "Admin Panel"
-      # But should contain the main navigation
+      # But should contain the main navigation (Properties was removed from main nav)
       assert html =~ "TrackGuests"
-      assert html =~ "Properties"
       assert html =~ "Rooms"
       assert html =~ "Check-In"
+      assert html =~ "Check-Out"
     end
   end
 

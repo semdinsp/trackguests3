@@ -53,6 +53,9 @@ defmodule Trackguests3Web.Router do
     # Visitor routes (public - no auth needed)
     live("/visitor/check-in", VisitorLive.CheckIn, :index)
     live("/visitor/check-out", VisitorLive.CheckOut, :index)
+    
+    # Public guides page
+    live("/guides", GuidesLive, :index)
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
