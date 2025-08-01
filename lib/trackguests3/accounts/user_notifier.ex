@@ -80,7 +80,10 @@ defmodule Trackguests3.Accounts.UserNotifier do
               <!-- Footer -->
               <div style="background-color: #f8fafc; padding: 1.5rem 2rem; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.75rem; color: #64748b;">
                   <p style="margin: 0 0 0.5rem 0;">Easily track your visitors</p>
-                  <p style="margin: 0;">This email was sent to <%= @email %> from <%= @appurl %></p>
+                  <p style="margin: 0;">This email was sent to <%= @email %> from
+                   <a href="<%= @appurl %>" style="display: inline-block; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; text-decoration: none; padding: 0.875rem 2rem; border-radius: 6px; font-weight: 600; font-size: 0.375rem; transition: transform 0.2s ease;">
+                          TrackGuest App
+                   </a> </p>
               </div>
           </div>
       </body>
@@ -91,16 +94,19 @@ defmodule Trackguests3.Accounts.UserNotifier do
   end
 
   defp deliver_magic_link_instructions(user, url) do
-    content = build_html_email_content(user.email, url, "You can log in by visiting the URL below:",
-                "If you didn't request this, please ignore this email.")
-      text_content="test"
+
+    prefixmessage=  " You can log in by visiting the URL below:"
+    postfixmessage= "If you didn't request this change, please ignore this email."
+    content = build_html_email_content(user.email, url,  prefixmessage, postfixmessage)
+    text_content=generate_text_content(prefixmessage, url, postfixmessage)
     deliver(user.email, "Log in instructions", text_content, content)
   end
 
   defp deliver_confirmation_instructions(user, url) do
-    content = build_html_email_content(user.email, url, " You can confirm your account by visiting the URL below:",
-                "If you didn't request this, please ignore this email.")
-      text_content="test"
+    prefixmessage= " You can confirm your account by visiting the URL below:"
+    postfixmessage= "If you didn't request this change, please ignore this email."
+    content = build_html_email_content(user.email, url,  prefixmessage, postfixmessage)
+    text_content=generate_text_content(prefixmessage, url, postfixmessage)
     deliver(user.email, "Confirmation instructions", text_content, content)
   end
 
@@ -108,12 +114,26 @@ defmodule Trackguests3.Accounts.UserNotifier do
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    content = build_html_email_content(user.email, url, " You can change your email by visiting the URL below:",
-                "If you didn't request this change, please ignore this email.")
-     text_content="test"
+    prefixmessage=  " You can change your email by visiting the URL below:"
+    postfixmessage= "If you didn't request this change, please ignore this email."
+    content = build_html_email_content(user.email, url,  prefixmessage, postfixmessage)
+    text_content=generate_text_content(prefixmessage, url, postfixmessage)
     deliver(user.email, "Update email instructions", text_content, content)
   end
 
+ def generate_text_content(prefixmessage, url, postfixmessage) do
+    """
+    ==============================
+
+    #{prefixmessage}
+
+    #{url}
+
+    #{postfixmessage}
+
+    ==============================
+    """
+  end
   # ORIGINAL
   def old_deliver_update_email_instructions(user, url) do
     deliver(user.email, "Update email instructions", """
