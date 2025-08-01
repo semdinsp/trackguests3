@@ -194,7 +194,7 @@ defmodule Trackguests3Web.UserLive.Settings do
                 label={gettext("Email Address")}
                 autocomplete="username"
                 required
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                class="input-luxury"
               />
               <.button class="btn-luxury" phx-disable-with={gettext("Changing...")}>
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -288,7 +288,7 @@ defmodule Trackguests3Web.UserLive.Settings do
                 label={gettext("Select Property")}
                 options={@property_options}
                 prompt={gettext("Choose a property to manage...")}
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                class="select input-luxury"
               />
               
               <div class="flex items-center space-x-3">
@@ -351,14 +351,14 @@ defmodule Trackguests3Web.UserLive.Settings do
                 label={gettext("New Password")}
                 autocomplete="new-password"
                 required
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                class="input-luxury"
               />
               <.input
                 field={@password_form[:password_confirmation]}
                 type="password"
                 label={gettext("Confirm New Password")}
                 autocomplete="new-password"
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                class="input-luxury"
               />
               <.button class="btn-luxury" phx-disable-with={gettext("Saving...")}>
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
