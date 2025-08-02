@@ -13,6 +13,12 @@ defmodule Trackguests3.Accounts.User do
     field :locale, :string, default: "en"
     field :locales_to_show_guests, {:array, :string}, default: ["en"]
     field :admin, :boolean, default: false
+    
+    # Google OAuth fields
+    field :google_id, :string
+    field :first_name, :string
+    field :last_name, :string
+    field :picture_url, :string
 
     belongs_to :property, Trackguests3.Accomodation.Residence
 
@@ -162,6 +168,26 @@ defmodule Trackguests3.Accounts.User do
     user
     |> cast(attrs, [:property_id])
     |> foreign_key_constraint(:property_id)
+  end
+
+  @doc """
+  A user changeset for Google OAuth registration.
+  """
+  def google_oauth_changeset(user, attrs \\ %{}) do
+    user
+    |> cast(attrs, [:email, :google_id, :first_name, :last_name, :picture_url, :confirmed_at])
+    |> validate_required([:email, :google_id])
+    |> validate_email([])
+    |> unique_constraint(:google_id)
+  end
+
+  @doc """
+  A user changeset for updating Google OAuth info on existing users.
+  """
+  def google_info_changeset(user, attrs \\ %{}) do
+    user
+    |> cast(attrs, [:google_id, :first_name, :last_name, :picture_url])
+    |> unique_constraint(:google_id)
   end
 
   @doc """

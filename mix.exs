@@ -71,6 +71,8 @@ defmodule Trackguests3.MixProject do
       # scott start mailer swoosh gmail
       {:mail, ">= 0.3.1"},
       {:gen_smtp, "~> 1.1.1"},
+      # Google OAuth
+      {:elixir_auth_google, "~> 1.6"},
     ]
   end
 

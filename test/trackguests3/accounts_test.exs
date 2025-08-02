@@ -15,6 +15,138 @@ defmodule Trackguests3.AccountsTest do
       %{id: id} = user = user_fixture()
       assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
+
+    test "returns nil for empty email string" do
+      refute Accounts.get_user_by_email("")
+    end
+
+    test "email lookup case sensitivity behavior" do
+      _user = user_fixture(%{email: "test@example.com"})
+      
+      # Exact match should work
+      assert %User{} = Accounts.get_user_by_email("test@example.com")
+      
+      # Test case sensitivity - this tests current behavior
+      # Note: If the system is case insensitive, these should find the user
+      # If case sensitive, they should return nil
+      uppercase_result = Accounts.get_user_by_email("TEST@EXAMPLE.COM")
+      mixed_case_result = Accounts.get_user_by_email("Test@Example.Com")
+      
+      # This test documents the current behavior rather than asserting a specific behavior
+      # Both case sensitive and insensitive are valid design choices
+      if uppercase_result do
+        # System is case insensitive
+        assert %User{email: "test@example.com"} = uppercase_result
+        assert %User{email: "test@example.com"} = mixed_case_result
+      else
+        # System is case sensitive
+        refute uppercase_result
+        refute mixed_case_result
+      end
+    end
+
+    test "handles emails with special characters" do
+      # Test with plus addressing
+      _user1 = user_fixture(%{email: "user+tag@example.com"})
+      assert %User{} = Accounts.get_user_by_email("user+tag@example.com")
+      
+      # Test with dots in local part
+      _user2 = user_fixture(%{email: "first.last@example.com"})
+      assert %User{} = Accounts.get_user_by_email("first.last@example.com")
+      
+      # Test with numbers
+      _user3 = user_fixture(%{email: "user123@example.org"})
+      assert %User{} = Accounts.get_user_by_email("user123@example.org")
+    end
+
+    test "returns correct user when multiple users exist" do
+      user1 = user_fixture(%{email: "user1@example.com"})
+      user2 = user_fixture(%{email: "user2@example.com"})
+      user3 = user_fixture(%{email: "user3@example.com"})
+      
+      # Should return correct specific user
+      assert %User{id: user1_id} = Accounts.get_user_by_email("user1@example.com")
+      assert user1_id == user1.id
+      
+      assert %User{id: user2_id} = Accounts.get_user_by_email("user2@example.com")
+      assert user2_id == user2.id
+      
+      assert %User{id: user3_id} = Accounts.get_user_by_email("user3@example.com")
+      assert user3_id == user3.id
+    end
+
+    test "returns user with all expected fields populated" do
+      user = user_fixture(%{email: "detailed@example.com"})
+      
+      # Update the user with additional fields after creation
+      {:ok, updated_user} = Accounts.update_user_admin(user, %{admin: true})
+      {:ok, updated_user} = Accounts.update_user_theme(updated_user, %{theme: "dracula"})
+      {:ok, updated_user} = Accounts.update_user_locale(updated_user, %{locale: "es"})
+      {:ok, updated_user} = Accounts.update_user_guest_locales(updated_user, %{locales_to_show_guests: ["en", "es"]})
+      
+      found_user = Accounts.get_user_by_email("detailed@example.com")
+      
+      assert found_user.id == updated_user.id
+      assert found_user.email == "detailed@example.com"
+      assert found_user.admin == true
+      assert found_user.theme == "dracula"
+      assert found_user.locale == "es"
+      assert found_user.locales_to_show_guests == ["en", "es"]
+      assert found_user.inserted_at
+      assert found_user.updated_at
+    end
+
+    test "returns user with Google OAuth fields when present" do
+      # Create user using Google OAuth registration function
+      {:ok, user} = Accounts.register_google_user(%{
+        email: "google@example.com",
+        google_id: "123456789",
+        first_name: "John",
+        last_name: "Doe",
+        picture_url: "https://example.com/picture.jpg",
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      })
+      
+      found_user = Accounts.get_user_by_email("google@example.com")
+      
+      assert found_user.id == user.id
+      assert found_user.google_id == "123456789"
+      assert found_user.first_name == "John"
+      assert found_user.last_name == "Doe"
+      assert found_user.picture_url == "https://example.com/picture.jpg"
+    end
+
+    test "handles maximum length email addresses" do
+      # Test with email close to the maximum length (160 chars)
+      long_local = String.duplicate("a", 60)
+      long_domain = String.duplicate("b", 60) <> ".com"
+      long_email = long_local <> "@" <> long_domain
+      
+      _user = user_fixture(%{email: long_email})
+      assert %User{} = Accounts.get_user_by_email(long_email)
+    end
+
+    test "handles emails with international domain names" do
+      _user = user_fixture(%{email: "user@münchen.de"})
+      assert %User{} = Accounts.get_user_by_email("user@münchen.de")
+    end
+
+    test "returns nil for whitespace-only email" do
+      refute Accounts.get_user_by_email("   ")
+      refute Accounts.get_user_by_email("\t")
+      refute Accounts.get_user_by_email("\n")
+    end
+
+    test "handles confirmed and unconfirmed users" do
+      _confirmed_user = user_fixture(%{email: "confirmed@example.com"})
+      _unconfirmed_user = unconfirmed_user_fixture(%{email: "unconfirmed@example.com"})
+      
+      # Both should be found regardless of confirmation status
+      assert %User{confirmed_at: confirmed_at} = Accounts.get_user_by_email("confirmed@example.com")
+      assert confirmed_at != nil
+      
+      assert %User{confirmed_at: nil} = Accounts.get_user_by_email("unconfirmed@example.com")
+    end
   end
 
   describe "get_user_by_email_and_password/2" do

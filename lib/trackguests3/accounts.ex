@@ -125,6 +125,42 @@ defmodule Trackguests3.Accounts do
     |> Repo.insert()
   end
 
+  @doc """
+  Registers a user via Google OAuth.
+
+  ## Examples
+
+      iex> register_google_user(%{email: "user@example.com", google_id: "123"})
+      {:ok, %User{}}
+
+      iex> register_google_user(%{email: "invalid"})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def register_google_user(attrs) do
+    %User{}
+    |> User.google_oauth_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a user's Google OAuth information.
+
+  ## Examples
+
+      iex> update_user_google_info(user, %{google_id: "123", picture_url: "..."})
+      {:ok, %User{}}
+
+      iex> update_user_google_info(user, %{google_id: nil})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_google_info(user, attrs) do
+    user
+    |> User.google_info_changeset(attrs)
+    |> Repo.update()
+  end
+
   ## Settings
 
   @doc """

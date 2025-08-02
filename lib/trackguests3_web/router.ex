@@ -127,5 +127,9 @@ defmodule Trackguests3Web.Router do
 
     post("/users/log-in", UserSessionController, :create)
     delete("/users/log-out", UserSessionController, :delete)
+    
+    # Google OAuth routes
+    get("/auth/google", GoogleAuthController, :request)
+    get("/auth/google/callback", GoogleAuthController, :callback)
   end
 end
