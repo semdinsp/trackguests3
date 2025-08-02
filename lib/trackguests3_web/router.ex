@@ -56,6 +56,10 @@ defmodule Trackguests3Web.Router do
     
     # Public guides page
     live("/guides", GuidesLive, :index)
+    
+    # Legal pages
+    live("/privacy", PrivacyLive, :index)
+    live("/tos", TermsOfServiceLive, :index)
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
