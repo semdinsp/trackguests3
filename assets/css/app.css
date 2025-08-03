@@ -253,3 +253,48 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Table Zebra Stripes - Improved Readability */
+.table.table-zebra tbody tr:nth-child(even) {
+  @apply bg-gray-100;
+}
+
+[data-theme="dark"] .table.table-zebra tbody tr:nth-child(even) {
+  @apply bg-gray-800;
+}
+
+/* Ensure text remains readable on zebra stripes */
+.table.table-zebra tbody tr:nth-child(even) td {
+  @apply text-gray-900;
+}
+
+[data-theme="dark"] .table.table-zebra tbody tr:nth-child(even) td {
+  @apply text-gray-100;
+}
+
+/* Form Labels - Ensure all labels appear above input fields */
+.fieldset label {
+  @apply flex flex-col;
+}
+
+.fieldset label .label {
+  @apply block mb-2 text-sm font-medium text-gray-700;
+}
+
+[data-theme="dark"] .fieldset label .label {
+  @apply text-gray-300;
+}
+
+/* Override any DaisyUI label styles that might cause inline positioning */
+.fieldset label input,
+.fieldset label select,
+.fieldset label textarea {
+  @apply mt-0;
+}
+
+/* Ensure consistent spacing between label and input */
+.fieldset label .label + input,
+.fieldset label .label + select,
+.fieldset label .label + textarea {
+  @apply mt-1;
+}

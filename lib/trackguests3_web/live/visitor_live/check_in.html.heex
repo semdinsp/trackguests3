@@ -85,13 +85,14 @@
             </div>
           <% end %>
 
-          <!-- Guest Information -->
-          <div class="space-y-4">
-            <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
-              <%= gettext("Guest Information") %>
-            </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Side-by-side layout for Guest Information and Visit Details -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Guest Information -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
+                <%= gettext("Guest Information") %>
+              </h3>
+              
               <.input 
                 field={@form[:name]} 
                 type="text" 
@@ -108,9 +109,7 @@
                 class="input-luxury"
                 placeholder="guest@example.com"
               />
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <.input 
                 field={@form[:phone]} 
                 type="tel" 
@@ -127,15 +126,13 @@
                 placeholder="Company name (optional)"
               />
             </div>
-          </div>
 
-          <!-- Visit Details -->
-          <div class="space-y-4">
-            <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
-              Visit Details
-            </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Visit Details -->
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
+                Visit Details
+              </h3>
+              
               <.input 
                 field={@form[:visitor_type]} 
                 type="select" 
@@ -144,39 +141,41 @@
                 class="select input-luxury"
               />
               
-              <div>
-                <label class="block text-sm font-medium text-platinum mb-3">Room Assignment</label>
-                <div class="relative">
-                  <input 
-                    type="text"
-                    id="room-search"
-                    name="room_search"
-                    value={@selected_room_display}
-                    placeholder="Start typing room name or floor..."
-                    phx-keyup="search_rooms"
-                    phx-debounce="300"
-                    class="input-luxury"
-                    autocomplete="off"
-                    required
-                  />
-                  <input type="hidden" name="person[room_id]" value={@selected_room_id} />
-                  
-                  <%= if length(@room_search_results) > 0 do %>
-                    <div class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                      <%= for room <- @room_search_results do %>
-                        <button 
-                          type="button"
-                          phx-click="select_room"
-                          phx-value-room_id={room.id}
-                          phx-value-room_display={room.display}
-                          class="w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none border-b border-gray-100 last:border-b-0"
-                        >
-                          <div class="text-sm font-medium text-gray-900"><%= room.display %></div>
-                        </button>
-                      <% end %>
-                    </div>
-                  <% end %>
-                </div>
+              <div class="fieldset mb-2">
+                <label>
+                  <span class="label mb-1 text-sm text-base-content/70">Room Assignment</span>
+                  <div class="relative">
+                    <input 
+                      type="text"
+                      id="room-search"
+                      name="room_search"
+                      value={@selected_room_display}
+                      placeholder="Start typing room name or floor..."
+                      phx-keyup="search_rooms"
+                      phx-debounce="300"
+                      class="input-luxury"
+                      autocomplete="off"
+                      required
+                    />
+                    <input type="hidden" name="person[room_id]" value={@selected_room_id} />
+                    
+                    <%= if length(@room_search_results) > 0 do %>
+                      <div class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                        <%= for room <- @room_search_results do %>
+                          <button 
+                            type="button"
+                            phx-click="select_room"
+                            phx-value-room_id={room.id}
+                            phx-value-room_display={room.display}
+                            class="w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none border-b border-gray-100 last:border-b-0"
+                          >
+                            <div class="text-sm font-medium text-gray-900"><%= room.display %></div>
+                          </button>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                </label>
                 
                 <%= if @selected_room_id do %>
                   <div class="mt-2 text-sm text-green-600 flex items-center">
@@ -187,24 +186,27 @@
                   </div>
                 <% end %>
               </div>
+
+              <.input 
+                field={@form[:purpose_of_visit]} 
+                type="text" 
+                label="Purpose of Visit" 
+                class="input-luxury"
+                placeholder="Business meeting, personal visit, etc."
+              />
+
+              <.input 
+                field={@form[:fob]} 
+                type="text" 
+                label="Key Fob ID" 
+                class="input-luxury"
+                placeholder="Enter fob ID if required for selected room"
+              />
             </div>
+          </div>
 
-            <.input 
-              field={@form[:purpose_of_visit]} 
-              type="text" 
-              label="Purpose of Visit" 
-              class="input-luxury"
-              placeholder="Business meeting, personal visit, etc."
-            />
-
-            <.input 
-              field={@form[:fob]} 
-              type="text" 
-              label="Key Fob ID" 
-              class="input-luxury"
-              placeholder="Enter fob ID if required for selected room"
-            />
-
+          <!-- Special Notes - Full Width -->
+          <div class="space-y-4">
             <.input 
               field={@form[:memo]} 
               type="textarea" 

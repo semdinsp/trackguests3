@@ -55,24 +55,29 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
               
               <%= for person <- @checked_in_persons do %>
                 <div class="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-6 hover:shadow-luxury transition-all duration-300 group">
-                  <div class="flex justify-between items-center">
-                    <div class="flex-1">
-                      <div class="flex items-center mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-800 rounded-xl flex items-center justify-center mr-4">
+                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <!-- Guest Information Column -->
+                    <div class="lg:col-span-1">
+                      <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-800 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
                           <span class="text-white font-bold text-lg"><%= String.first(person.name) %></span>
                         </div>
-                        <div>
-                          <h4 class="text-xl font-bold text-platinum"><%= person.name %></h4>
-                          <p class="text-gray-600 font-medium">
+                        <div class="min-w-0 flex-1">
+                          <h4 class="text-xl font-bold text-platinum truncate"><%= person.name %></h4>
+                          <p class="text-gray-600 font-medium truncate">
                             <%= if person.company, do: person.company, else: gettext("Visitor") %>
                           </p>
                         </div>
                       </div>
-                      <div class="ml-16 space-y-2">
-                        <div class="flex items-center text-sm text-gray-600">
-                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
-                          </svg>
+                    </div>
+
+                    <!-- Visit Details Column -->
+                    <div class="lg:col-span-1 space-y-2">
+                      <div class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                        </svg>
+                        <span class="truncate">
                           <%= if person.room do %>
                             <%= gettext("Visiting:") %> <%= person.room.title %>
                           <% else %>
@@ -82,33 +87,37 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
                               <%= gettext("No room assigned") %>
                             <% end %>
                           <% end %>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-500">
-                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                          </svg>
-                          <%= gettext("Checked in:") %> <%= Calendar.strftime(person.check_in_time, "%I:%M %p") %>
-                        </div>
-                        <%= if person.purpose_of_visit do %>
-                          <div class="flex items-center text-sm text-gray-500">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                            <%= gettext("Purpose:") %> <%= person.purpose_of_visit %>
-                          </div>
-                        <% end %>
+                        </span>
                       </div>
+                      <div class="flex items-center text-sm text-gray-500">
+                        <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span><%= gettext("Checked in:") %> <%= Calendar.strftime(person.check_in_time, "%I:%M %p") %></span>
+                      </div>
+                      <%= if person.purpose_of_visit do %>
+                        <div class="flex items-center text-sm text-gray-500">
+                          <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                          </svg>
+                          <span class="truncate"><%= gettext("Purpose:") %> <%= person.purpose_of_visit %></span>
+                        </div>
+                      <% end %>
                     </div>
-                    <button
-                      phx-click="check_out"
-                      phx-value-person-id={person.id}
-                      class="btn-luxury inline-flex items-center ml-6 group-hover:scale-105 transition-transform"
-                    >
-                      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
-                      <%= gettext("Check Out") %>
-                    </button>
+
+                    <!-- Action Column -->
+                    <div class="lg:col-span-1 flex justify-end">
+                      <button
+                        phx-click="check_out"
+                        phx-value-person-id={person.id}
+                        class="btn-luxury inline-flex items-center group-hover:scale-105 transition-transform w-full lg:w-auto justify-center"
+                      >
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <%= gettext("Check Out") %>
+                      </button>
+                    </div>
                   </div>
                 </div>
               <% end %>
@@ -129,7 +138,12 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
   @impl true
   def mount(params, session, socket) do
     url_locale = params["locale"]
-    checked_in_persons = Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
+    
+    # Get checked-in persons filtered by user's property if authenticated
+    checked_in_persons = get_filtered_checked_in_persons(socket)
+    
+    # Get property name for page title
+    property_name = get_property_name(socket)
 
     # Get available locales - try to get from authenticated user or use defaults
     available_locales = try do
@@ -158,10 +172,17 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
     
     # Set the gettext locale
     Gettext.put_locale(Trackguests3Web.Gettext, current_locale)
+    
+    # Build page title with property name if available
+    page_title = if property_name do
+      "Visitor Check-Out [#{property_name}]"
+    else
+      "Visitor Check-Out"
+    end
 
     {:ok,
      socket
-     |> assign(:page_title, "Visitor Check-Out")
+     |> assign(:page_title, page_title)
      |> assign(:checked_in_persons, checked_in_persons)
      |> assign(:current_locale, current_locale)
      |> assign(:available_locales, available_locales)
@@ -175,7 +196,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
 
     case Persons.check_out_person(person) do
       {:ok, updated_person} ->
-        checked_in_persons = Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
+        checked_in_persons = get_filtered_checked_in_persons(socket)
         
         # Create success message with room information (now preserved in updated_person)
         checkout_message = if updated_person.room_id do
@@ -233,6 +254,65 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
       end
     else
       %{person | room: nil}
+    end
+  end
+
+  defp get_property_name(socket) do
+    try do
+      case socket.assigns[:current_scope] do
+        nil -> nil
+        scope when is_map(scope) ->
+          case Map.get(scope, :user) do
+            nil -> nil
+            user when is_map(user) ->
+              user_id = Map.get(user, :id) || user.id
+              user = Accounts.get_user_with_property!(user_id)
+              if user.property, do: user.property.title, else: nil
+            user ->
+              user = Accounts.get_user_with_property!(user.id)
+              if user.property, do: user.property.title, else: nil
+          end
+      end
+    rescue
+      _ -> nil
+    end
+  end
+
+  defp get_filtered_checked_in_persons(socket) do
+    try do
+      case socket.assigns[:current_scope] do
+        nil -> 
+          # No user logged in, show all checked-in persons
+          Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
+        scope when is_map(scope) ->
+          case Map.get(scope, :user) do
+            nil -> 
+              Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
+            user when is_map(user) ->
+              user_id = Map.get(user, :id) || user.id
+              user = Accounts.get_user_with_property!(user_id)
+              if user.property do
+                # Filter by user's property - function already executes query and preloads room
+                Persons.list_current_visitors_for_residence(user.property.id)
+              else
+                # User has no property, show all
+                Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
+              end
+            user ->
+              user = Accounts.get_user_with_property!(user.id)
+              if user.property do
+                # Filter by user's property - function already executes query and preloads room
+                Persons.list_current_visitors_for_residence(user.property.id)
+              else
+                # User has no property, show all
+                Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
+              end
+          end
+      end
+    rescue
+      _ -> 
+        # Fallback to showing all checked-in persons
+        Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
     end
   end
 end

@@ -48,11 +48,10 @@ defmodule Trackguests3Web.Router do
 
       # History routes
       live("/history", HistoryLive.Index, :index)
+      
+      # Visitor check-in route (public - no auth needed but can access current_scope)
+      live("/visitor/check-in", VisitorLive.CheckIn, :index)
     end
-
-    # Visitor routes (public - no auth needed)
-    live("/visitor/check-in", VisitorLive.CheckIn, :index)
-    live("/visitor/check-out", VisitorLive.CheckOut, :index)
     
     # Public guides page
     live("/guides", GuidesLive, :index)
@@ -84,6 +83,8 @@ defmodule Trackguests3Web.Router do
       live("/users/settings", UserLive.Settings, :edit)
       live("/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email)
       
+      # Visitor check-out requires authentication to enforce property restrictions
+      live("/visitor/check-out", VisitorLive.CheckOut, :index)
     end
 
     # CSV export route requires authentication to enforce property restrictions
