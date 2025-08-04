@@ -151,6 +151,30 @@
   @apply bg-gray-800 border-gray-600 text-gray-100 placeholder:text-gray-400 focus:border-gray-400;
 }
 
+/* Select specific styling for better visibility */
+select.input-luxury {
+  @apply appearance-none bg-gray-50 text-gray-900 font-medium;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 3rem;
+}
+
+[data-theme="dark"] select.input-luxury {
+  @apply bg-gray-800 text-gray-100;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%9CA3AF' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+
+/* Option styling */
+select.input-luxury option {
+  @apply bg-white text-gray-900 py-2;
+}
+
+[data-theme="dark"] select.input-luxury option {
+  @apply bg-gray-800 text-gray-100;
+}
+
 /* Navigation Components */
 .nav-link-luxury {
   @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 tracking-wide;

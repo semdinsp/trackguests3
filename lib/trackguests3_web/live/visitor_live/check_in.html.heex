@@ -136,9 +136,14 @@
               <.input 
                 field={@form[:visitor_type]} 
                 type="select" 
-                label="Visitor Type" 
-                options={[{"Visitor", "visitor"}, {"Staff", "staff"}, {"Resident", "resident"}]}
-                class="select input-luxury"
+                label={gettext("Visitor Type")} 
+                options={[
+                  {gettext("Visitor"), "visitor"}, 
+                  {gettext("Staff"), "staff"}, 
+                  {gettext("Resident"), "resident"}
+                ]}
+                class="input-luxury"
+                prompt={gettext("Select visitor type...")}
               />
               
               <div class="fieldset mb-2">

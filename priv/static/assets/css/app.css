@@ -4237,6 +4237,32 @@
     border-color: var(--color-gray-400);
   }
 }
+select.input-luxury {
+  appearance: none;
+  background-color: var(--color-gray-50);
+  --tw-font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-900);
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 3rem;
+}
+[data-theme="dark"] select.input-luxury {
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-100);
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%9CA3AF' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+}
+select.input-luxury option {
+  background-color: var(--color-white);
+  padding-block: calc(var(--spacing) * 2);
+  color: var(--color-gray-900);
+}
+[data-theme="dark"] select.input-luxury option {
+  background-color: var(--color-gray-800);
+  color: var(--color-gray-100);
+}
 .nav-link-luxury {
   border-radius: var(--radius-lg);
   padding-inline: calc(var(--spacing) * 4);
