@@ -5,6 +5,9 @@ Prefer using LiveView instead of regular Controllers.
 
 The code we generate should be high quality and responsive for mobile, ipad and laptop
 
+## Phoenix Programming Guidelines
+Please refer to AGENTS.md for detailed Phoenix, Elixir, and web development guidelines that must be followed when working on this project.
+
 ## Project Overview
 - **Purpose**: Guest management system for properties/residences
 - **Technology Stack**: Elixir/Phoenix with LiveView focus
