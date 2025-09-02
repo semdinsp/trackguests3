@@ -1,5 +1,8 @@
 This is a web application written using the Phoenix web framework.
 
+## FLy.io and elixir mix.env()
+When deployed to produciton environments using fly.io  is not availabe so please don't use mix.env and other mix fucntions in production
+
 ## Elixir guidelines
 
 - Elixir lists **do not support index based access via the access syntax**

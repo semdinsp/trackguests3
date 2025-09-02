@@ -67,6 +67,9 @@ defmodule Trackguests3Web.AdminLive.Residences do
         <:col :let={{_id, residence}} label="Title"><%= residence.title %></:col>
         <:col :let={{_id, residence}} label="Address"><%= residence.address %></:col>
         <:col :let={{_id, residence}} label="Floor Count"><%= residence.floor_count %></:col>
+        <:col :let={{_id, residence}} label="Timezone">
+          <%= format_timezone_display(residence.timezone) %>
+        </:col>
         <:col :let={{_id, residence}} label="Created">
           <%= Calendar.strftime(residence.inserted_at, "%Y-%m-%d") %>
         </:col>
@@ -105,4 +108,14 @@ defmodule Trackguests3Web.AdminLive.Residences do
     </Trackguests3Web.Layouts.admin>
     """
   end
+
+  defp format_timezone_display(timezone) when is_binary(timezone) do
+    timezone_options = Accomodation.get_supported_timezones()
+    case Enum.find(timezone_options, fn {_display, tz} -> tz == timezone end) do
+      {display_name, _} -> display_name
+      nil -> timezone  # Fallback to raw timezone if not found in supported list
+    end
+  end
+  
+  defp format_timezone_display(_), do: "Not Set"
 end

@@ -6,7 +6,7 @@ defmodule Trackguests3Web.LayoutsTest do
   alias Trackguests3Web.Layouts
 
   # Helper to create proper assigns for root layout
-  defp root_assigns(current_scope \\ nil) do
+  defp root_assigns(current_scope) do
     %{
       current_scope: current_scope,
       inner_content: []
@@ -82,17 +82,17 @@ defmodule Trackguests3Web.LayoutsTest do
     end
 
     test "layout handles malformed current_scope gracefully" do
-      # Test with incomplete scope structure
+      # Test with incomplete scope structure - empty scope shows unauthenticated state
       assigns = root_assigns(%{})
       
       html = render_component(&Layouts.root/1, assigns)
       
       refute html =~ "Admin"
-      # With empty current_scope map, it shows as authenticated user
-      assert html =~ "Settings"
-      assert html =~ "Log out"
-      # Should show "User" as fallback email
-      assert html =~ "User"
+      # With empty current_scope map, it shows unauthenticated state (no user key)
+      refute html =~ "Settings"  # No Settings link for empty scope
+      refute html =~ "Log out"   # No logout link for empty scope
+      assert html =~ "Register"  # Shows register link instead
+      assert html =~ "Log in"    # Shows login link instead
     end
 
     test "layout handles current_scope with user but no admin field" do
@@ -137,9 +137,9 @@ defmodule Trackguests3Web.LayoutsTest do
       
       # App layout should not contain admin navigation
       refute html =~ "Admin Panel"
-      # But should contain the main navigation (Properties was removed from main nav)
-      assert html =~ "TrackGuests"
-      assert html =~ "Rooms"
+      # App layout now only contains secondary navigation, not the main brand
+      refute html =~ "TrackGuests"  # Brand is now in root layout only
+      assert html =~ "Manage Rooms"  # Shows for authenticated users
       assert html =~ "Check-In"
       assert html =~ "Check-Out"
     end

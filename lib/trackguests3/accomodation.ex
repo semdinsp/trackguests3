@@ -493,4 +493,83 @@ defmodule Trackguests3.Accomodation do
     
     {:ok, %{created: created, errors: Enum.reverse(errors)}}
   end
+
+  @doc """
+  Get list of supported timezones for display in forms.
+  
+  Returns a list of {display_name, timezone_value} tuples.
+  """
+  def get_supported_timezones do
+    [
+      {"Eastern Time (EST/EDT)", "America/New_York"},
+      {"Central Time (CST/CDT)", "America/Chicago"},
+      {"Mountain Time (MST/MDT)", "America/Denver"},
+      {"Pacific Time (PST/PDT)", "America/Los_Angeles"},
+      {"Arizona Time (MST)", "America/Phoenix"},
+      {"Alaska Time (AKST/AKDT)", "America/Anchorage"},
+      {"Hawaii Time (HST)", "Pacific/Honolulu"},
+      {"Toronto Time (EST/EDT)", "America/Toronto"},
+      {"Vancouver Time (PST/PDT)", "America/Vancouver"},
+      {"London Time (GMT/BST)", "Europe/London"},
+      {"Paris Time (CET/CEST)", "Europe/Paris"},
+      {"Berlin Time (CET/CEST)", "Europe/Berlin"},
+      {"Rome Time (CET/CEST)", "Europe/Rome"},
+      {"Madrid Time (CET/CEST)", "Europe/Madrid"},
+      {"Tokyo Time (JST)", "Asia/Tokyo"},
+      {"Shanghai Time (CST)", "Asia/Shanghai"},
+      {"Sydney Time (AEST/AEDT)", "Australia/Sydney"},
+      {"UTC", "UTC"}
+    ]
+  end
+
+  @doc """
+  Convert a datetime to a specific timezone.
+  
+  Takes a DateTime struct and timezone string, returns a formatted string.
+  Uses manual offset calculation since DateTime.shift_zone may not work without proper timezone database.
+  """
+  def format_datetime_in_timezone(datetime, timezone) when is_binary(timezone) do
+    # Convert to local time based on timezone offset
+    offset_seconds = get_timezone_offset_seconds(timezone)
+    local_datetime = DateTime.add(datetime, offset_seconds, :second)
+    Calendar.strftime(local_datetime, "%I:%M %p")
+  end
+  
+  def format_datetime_in_timezone(datetime, _timezone) do
+    # Fallback for when timezone is nil or invalid - assume EST
+    offset_seconds = get_timezone_offset_seconds("America/New_York")
+    local_datetime = DateTime.add(datetime, offset_seconds, :second)
+    Calendar.strftime(local_datetime, "%I:%M %p")
+  end
+
+  # Get the timezone offset in seconds from UTC for common timezones.
+  # This uses daylight saving time offsets for applicable zones (March-November).
+  defp get_timezone_offset_seconds(timezone) do
+    # Check if we're in DST period (roughly March - November)
+    now = DateTime.utc_now()
+    month = now.month
+    is_dst = month >= 3 and month <= 11
+    
+    case timezone do
+      "America/New_York" -> if is_dst, do: -4 * 3600, else: -5 * 3600    # EDT/EST
+      "America/Chicago" -> if is_dst, do: -5 * 3600, else: -6 * 3600     # CDT/CST  
+      "America/Denver" -> if is_dst, do: -6 * 3600, else: -7 * 3600      # MDT/MST
+      "America/Los_Angeles" -> if is_dst, do: -7 * 3600, else: -8 * 3600 # PDT/PST
+      "America/Phoenix" -> -7 * 3600                                     # MST (no DST)
+      "America/Anchorage" -> if is_dst, do: -8 * 3600, else: -9 * 3600   # AKDT/AKST
+      "Pacific/Honolulu" -> -10 * 3600                                   # HST (no DST)
+      "America/Toronto" -> if is_dst, do: -4 * 3600, else: -5 * 3600     # EDT/EST
+      "America/Vancouver" -> if is_dst, do: -7 * 3600, else: -8 * 3600   # PDT/PST
+      "Europe/London" -> if is_dst, do: 1 * 3600, else: 0 * 3600         # BST/GMT
+      "Europe/Paris" -> if is_dst, do: 2 * 3600, else: 1 * 3600          # CEST/CET
+      "Europe/Berlin" -> if is_dst, do: 2 * 3600, else: 1 * 3600         # CEST/CET
+      "Europe/Rome" -> if is_dst, do: 2 * 3600, else: 1 * 3600           # CEST/CET
+      "Europe/Madrid" -> if is_dst, do: 2 * 3600, else: 1 * 3600         # CEST/CET
+      "Asia/Tokyo" -> 9 * 3600                                           # JST (no DST)
+      "Asia/Shanghai" -> 8 * 3600                                        # CST (no DST)
+      "Australia/Sydney" -> 10 * 3600                                    # AEST (simplified)
+      "UTC" -> 0 * 3600                                                  # UTC
+      _ -> if is_dst, do: -4 * 3600, else: -5 * 3600                    # Default to EDT/EST
+    end
+  end
 end

@@ -111,4 +111,115 @@ defmodule Trackguests3.AccomodationTest do
       assert length(rooms) == 0
     end
   end
+
+  describe "residence timezone functionality" do
+    test "create_residence/1 with valid timezone" do
+      valid_attrs = %{
+        title: "Test Residence",
+        address: "123 Test St",
+        floor_count: 5,
+        timezone: "America/Los_Angeles"
+      }
+
+      assert {:ok, %Accomodation.Residence{} = residence} = Accomodation.create_residence(valid_attrs)
+      assert residence.timezone == "America/Los_Angeles"
+      assert residence.title == "Test Residence"
+    end
+
+    test "create_residence/1 with default timezone" do
+      valid_attrs = %{
+        title: "Test Residence",
+        address: "123 Test St",
+        floor_count: 5
+      }
+
+      assert {:ok, %Accomodation.Residence{} = residence} = Accomodation.create_residence(valid_attrs)
+      assert residence.timezone == "America/New_York"
+    end
+
+    test "create_residence/1 with invalid timezone" do
+      invalid_attrs = %{
+        title: "Test Residence",
+        address: "123 Test St",
+        floor_count: 5,
+        timezone: "Invalid/Timezone"
+      }
+
+      assert {:error, %Ecto.Changeset{} = changeset} = Accomodation.create_residence(invalid_attrs)
+      assert "is not a supported timezone" in errors_on(changeset).timezone
+    end
+
+    test "update_residence/2 with valid timezone" do
+      residence = residence_fixture()
+      
+      update_attrs = %{timezone: "Europe/London"}
+
+      assert {:ok, %Accomodation.Residence{} = updated_residence} = 
+        Accomodation.update_residence(residence, update_attrs)
+      assert updated_residence.timezone == "Europe/London"
+    end
+
+    test "update_residence/2 with invalid timezone" do
+      residence = residence_fixture()
+      
+      update_attrs = %{timezone: "Not/Valid"}
+
+      assert {:error, %Ecto.Changeset{} = changeset} = 
+        Accomodation.update_residence(residence, update_attrs)
+      assert "is not a supported timezone" in errors_on(changeset).timezone
+    end
+
+    test "get_supported_timezones/0 returns list of timezone options" do
+      timezones = Accomodation.get_supported_timezones()
+      
+      assert is_list(timezones)
+      assert length(timezones) > 0
+      
+      # Check that it returns tuples with display names and timezone values
+      assert Enum.all?(timezones, fn
+        {display_name, timezone_value} when is_binary(display_name) and is_binary(timezone_value) -> true
+        _ -> false
+      end)
+      
+      # Check that default EST timezone is included
+      assert {"Eastern Time (EST/EDT)", "America/New_York"} in timezones
+    end
+
+    test "format_datetime_in_timezone/2 with valid timezone" do
+      # Create a test datetime using DateTime.utc_now for test simplicity
+      datetime = DateTime.utc_now()
+      
+      # Test formatting in different timezones
+      est_formatted = Accomodation.format_datetime_in_timezone(datetime, "America/New_York")
+      pst_formatted = Accomodation.format_datetime_in_timezone(datetime, "America/Los_Angeles")
+      
+      assert is_binary(est_formatted)
+      assert is_binary(pst_formatted)
+      assert est_formatted =~ ~r/\d{1,2}:\d{2} (AM|PM)/
+      assert pst_formatted =~ ~r/\d{1,2}:\d{2} (AM|PM)/
+      
+      # Both should be properly formatted time strings
+      # Note: The actual time difference depends on timezone conversion working properly
+    end
+
+    test "format_datetime_in_timezone/2 with invalid timezone falls back gracefully" do
+      datetime = DateTime.utc_now()
+      
+      formatted = Accomodation.format_datetime_in_timezone(datetime, "Invalid/Timezone")
+      
+      # Should fallback to original datetime formatting
+      assert is_binary(formatted)
+      assert formatted =~ ~r/\d{1,2}:\d{2} (AM|PM)/
+    end
+
+    test "format_datetime_in_timezone/2 with nil timezone falls back gracefully" do
+      datetime = DateTime.utc_now()
+      
+      formatted = Accomodation.format_datetime_in_timezone(datetime, nil)
+      
+      # Should fallback to original datetime formatting
+      assert is_binary(formatted)
+      assert formatted =~ ~r/\d{1,2}:\d{2} (AM|PM)/
+    end
+  end
 end

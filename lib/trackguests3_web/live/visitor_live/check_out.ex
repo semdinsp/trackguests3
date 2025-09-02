@@ -93,7 +93,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
                         <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span><%= gettext("Checked in:") %> <%= Calendar.strftime(person.check_in_time, "%I:%M %p") %></span>
+                        <span><%= gettext("Checked in:") %> <%= format_time_in_property_timezone(person.check_in_time, @property_timezone) %></span>
                       </div>
                       <%= if person.purpose_of_visit do %>
                         <div class="flex items-center text-sm text-gray-500">
@@ -142,8 +142,9 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
     # Get checked-in persons filtered by user's property if authenticated
     checked_in_persons = get_filtered_checked_in_persons(socket)
     
-    # Get property name for page title
+    # Get property name and timezone for page title and time display
     property_name = get_property_name(socket)
+    property_timezone = get_property_timezone(socket)
 
     # Get available locales - try to get from authenticated user or use defaults
     available_locales = try do
@@ -184,6 +185,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
      socket
      |> assign(:page_title, page_title)
      |> assign(:checked_in_persons, checked_in_persons)
+     |> assign(:property_timezone, property_timezone)
      |> assign(:current_locale, current_locale)
      |> assign(:available_locales, available_locales)
      |> assign(:language_dropdown_open, false)
@@ -314,5 +316,31 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
         # Fallback to showing all checked-in persons
         Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
     end
+  end
+
+  defp get_property_timezone(socket) do
+    try do
+      case socket.assigns[:current_scope] do
+        nil -> "America/New_York"  # Default timezone
+        scope when is_map(scope) ->
+          case Map.get(scope, :user) do
+            nil -> "America/New_York"
+            user when is_map(user) ->
+              user_id = Map.get(user, :id) || user.id
+              user = Accounts.get_user_with_property!(user_id)
+              if user.property && user.property.timezone, do: user.property.timezone, else: "America/New_York"
+            user ->
+              user = Accounts.get_user_with_property!(user.id)
+              if user.property && user.property.timezone, do: user.property.timezone, else: "America/New_York"
+          end
+      end
+    rescue
+      _ -> "America/New_York"  # Fallback timezone
+    end
+  end
+
+  defp format_time_in_property_timezone(datetime, timezone) do
+    alias Trackguests3.Accomodation
+    Accomodation.format_datetime_in_timezone(datetime, timezone)
   end
 end

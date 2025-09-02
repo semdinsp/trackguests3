@@ -196,7 +196,7 @@
                       role="listbox"
                       aria-label="Room search results"
                     >
-                      <%= for {room, index} <- Enum.with_index(@room_search_results) do %>
+                      <%= for {room, _index} <- Enum.with_index(@room_search_results) do %>
                         <li role="option">
                           <button 
                             type="button"

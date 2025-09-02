@@ -23,6 +23,13 @@ defmodule Trackguests3Web.AdminLive.ResidenceFormComponent do
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:address]} type="text" label="Address" />
         <.input field={@form[:floor_count]} type="number" label="Floor count" />
+        <.input 
+          field={@form[:timezone]} 
+          type="select" 
+          label="Timezone" 
+          options={@timezone_options}
+          prompt="Select timezone"
+        />
         
         <!-- CSV Room Upload Section -->
         <div class="border-t pt-4 mt-6">
@@ -92,10 +99,12 @@ defmodule Trackguests3Web.AdminLive.ResidenceFormComponent do
   @impl true
   def update(%{residence: residence} = assigns, socket) do
     changeset = Accomodation.change_residence(residence)
+    timezone_options = Accomodation.get_supported_timezones()
 
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:timezone_options, timezone_options)
      |> assign_form(changeset)}
   end
 
