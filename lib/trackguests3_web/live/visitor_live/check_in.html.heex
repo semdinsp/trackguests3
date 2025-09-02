@@ -38,28 +38,44 @@
         </p>
       <% end %>
       
-      <!-- Navigation Link to Check-out -->
-      <div class="mt-6">
-        <a href="/visitor/check-out" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Quick Actions -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <.link href="/visitor/check-out" class="btn-luxury inline-flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>
           <%= gettext("Switch to Guest Check-Out") %>
-        </a>
+        </.link>
+        <.link href="/history" class="nav-link-luxury inline-flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <%= gettext("View History") %>
+        </.link>
       </div>
     </div>
 
     <!-- Check-in Form -->
     <div class="max-w-2xl mx-auto">
       <div class="card-luxury">
-        <.form for={@form} id="check-in-form" phx-change="validate" phx-submit="check_in" class="space-y-6">
+        <.form 
+          for={@form} 
+          id="check-in-form" 
+          phx-change="validate" 
+          phx-submit="check_in" 
+          class="space-y-6"
+          role="form"
+          aria-labelledby="form-title"
+        >
+          <div id="form-title" class="sr-only">Guest Check-In Form</div>
+          
           <!-- Property Selection (if no residence context) -->
           <%= if !@residence do %>
-            <div>
-              <label class="block text-sm font-medium text-platinum mb-3"><%= gettext("Select Property") %></label>
+            <fieldset class="space-y-4">
+              <legend class="block text-sm font-medium text-platinum mb-3"><%= gettext("Select Property") %></legend>
               <%= if @user_residence do %>
                 <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                  <div class="flex items-center justify-between">
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div>
                       <p class="text-sm font-medium text-blue-900">Quick Check-in to Your Property</p>
                       <p class="text-xs text-blue-700"><%= @user_residence.title %></p>
@@ -67,31 +83,36 @@
                     <button type="button" 
                             phx-click="select_residence" 
                             phx-value-residence_id={@user_residence.id}
-                            class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="btn-luxury text-sm"
+                            aria-describedby="quick-property-desc">
                       Use My Property
                     </button>
                   </div>
+                  <p id="quick-property-desc" class="sr-only">Use your managed property for quick check-in</p>
                 </div>
-                <div class="text-center text-sm text-gray-500 mb-4">or</div>
+                <div class="text-center text-sm text-gray-500 mb-4" aria-hidden="true">or</div>
               <% end %>
+              <label for="residence-select" class="sr-only">Select a property from the list</label>
               <select phx-change="select_residence" 
                       name="residence_id" 
-                      class="w-full select input-luxury">
+                      id="residence-select"
+                      class="w-full select input-luxury"
+                      aria-required="true">
                 <option value="">Choose a property...</option>
                 <%= for {name, id} <- @residence_options do %>
                   <option value={id}><%= name %></option>
                 <% end %>
               </select>
-            </div>
+            </fieldset>
           <% end %>
 
           <!-- Side-by-side layout for Guest Information and Visit Details -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Guest Information -->
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
+            <fieldset class="space-y-4">
+              <legend class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
                 <%= gettext("Guest Information") %>
-              </h3>
+              </legend>
               
               <.input 
                 field={@form[:name]} 
@@ -125,13 +146,13 @@
                 class="input-luxury"
                 placeholder="Company name (optional)"
               />
-            </div>
+            </fieldset>
 
             <!-- Visit Details -->
-            <div class="space-y-4">
-              <h3 class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
+            <fieldset class="space-y-4">
+              <legend class="text-lg font-semibold text-platinum border-b border-gray-200 pb-2">
                 Visit Details
-              </h3>
+              </legend>
               
               <.input 
                 field={@form[:visitor_type]} 
@@ -146,45 +167,60 @@
                 prompt={gettext("Select visitor type...")}
               />
               
-              <div class="fieldset mb-2">
-                <label>
-                  <span class="label mb-1 text-sm text-base-content/70">Room Assignment</span>
-                  <div class="relative">
-                    <input 
-                      type="text"
-                      id="room-search"
-                      name="room_search"
-                      value={@selected_room_display}
-                      placeholder="Start typing room name or floor..."
-                      phx-keyup="search_rooms"
-                      phx-debounce="300"
-                      class="input-luxury"
-                      autocomplete="off"
-                      required
-                    />
-                    <input type="hidden" name="person[room_id]" value={@selected_room_id} />
-                    
-                    <%= if length(@room_search_results) > 0 do %>
-                      <div class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                        <%= for room <- @room_search_results do %>
+              <div class="space-y-2">
+                <label for="room-search" class="block text-sm font-medium text-gray-700">
+                  Room Assignment <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input 
+                    type="text"
+                    id="room-search"
+                    name="room_search"
+                    value={@selected_room_display}
+                    placeholder="Start typing room name or floor..."
+                    phx-keyup="search_rooms"
+                    phx-debounce="300"
+                    class="input-luxury"
+                    autocomplete="off"
+                    required
+                    aria-describedby="room-search-help"
+                    aria-expanded={if length(@room_search_results) > 0, do: "true", else: "false"}
+                    aria-autocomplete="list"
+                    role="combobox"
+                  />
+                  <input type="hidden" name="person[room_id]" value={@selected_room_id} />
+                  
+                  <%= if length(@room_search_results) > 0 do %>
+                    <ul 
+                      class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto" 
+                      role="listbox"
+                      aria-label="Room search results"
+                    >
+                      <%= for {room, index} <- Enum.with_index(@room_search_results) do %>
+                        <li role="option">
                           <button 
                             type="button"
                             phx-click="select_room"
                             phx-value-room_id={room.id}
                             phx-value-room_display={room.display}
-                            class="w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none border-b border-gray-100 last:border-b-0"
+                            class="w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none border-b border-gray-100 last:border-b-0 transition-colors"
+                            id="room-option-#{index}"
                           >
                             <div class="text-sm font-medium text-gray-900"><%= room.display %></div>
                           </button>
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                </label>
+                        </li>
+                      <% end %>
+                    </ul>
+                  <% end %>
+                </div>
+                
+                <p id="room-search-help" class="text-xs text-gray-500">
+                  Type to search for available rooms by name or floor
+                </p>
                 
                 <%= if @selected_room_id do %>
-                  <div class="mt-2 text-sm text-green-600 flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="mt-2 text-sm text-green-600 flex items-center" role="status" aria-live="polite">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                     Room selected: <%= @selected_room_display %>
@@ -207,11 +243,12 @@
                 class="input-luxury"
                 placeholder="Enter fob ID if required for selected room"
               />
-            </div>
+            </fieldset>
           </div>
 
           <!-- Special Notes - Full Width -->
-          <div class="space-y-4">
+          <fieldset class="space-y-4">
+            <legend class="sr-only">Additional Information</legend>
             <.input 
               field={@form[:memo]} 
               type="textarea" 
@@ -220,27 +257,35 @@
               placeholder="Any special requirements or notes..."
               rows="3"
             />
-          </div>
+          </fieldset>
 
           <!-- Submit Actions -->
-          <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-            <a href={if @residence, do: "/residences/#{@residence.id}", else: "/"} 
-               class="btn-secondary-luxury">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between pt-6 border-t border-gray-200 gap-3">
+            <.link 
+              href={if @residence, do: "/residences/#{@residence.id}", else: "/"} 
+              class="btn-secondary-luxury text-center"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
               </svg>
               Cancel
-            </a>
+            </.link>
             
-            <button type="submit" 
-                    phx-disable-with="Checking In..." 
-                    class="btn-luxury">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            <button 
+              type="submit" 
+              phx-disable-with="Checking In..." 
+              class="btn-luxury text-center"
+              aria-describedby="submit-help"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
               Complete Check-In
             </button>
           </div>
+          <p id="submit-help" class="text-xs text-gray-500 text-center mt-2">
+            Please ensure all required fields are filled before submitting
+          </p>
         </.form>
       </div>
     </div>

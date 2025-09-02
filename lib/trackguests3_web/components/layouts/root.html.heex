@@ -15,89 +15,276 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
   <body class="gradient-bg-luxury font-['Open_Sans'] text-gray-900 antialiased">
-    <ul class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end glass-luxury border-b border-gray-200/50 py-2">
-      <!-- Theme Toggle -->
-      <li class="flex items-center gap-2">
-        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-        </svg>
-        <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">
-          <span class="theme-toggle-handle"></span>
-        </button>
-        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-        </svg>
-      </li>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Mobile-First Navigation with Accessibility -->
+    <nav class="relative z-10 glass-luxury border-b border-gray-200/50" role="navigation" aria-label="Main navigation">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo and Brand -->
+          <div class="flex items-center">
+            <.link href={~p"/"} class="flex items-center space-x-2 group" aria-label="TrackGuests Home">
+              <div class="w-10 h-10 gradient-header-luxury rounded-lg flex items-center justify-center group-hover:shadow-luxury transition-all duration-300">
+                <span class="text-white font-bold text-lg">TG</span>
+              </div>
+              <span class="text-xl font-bold text-platinum tracking-tight hidden sm:inline">TrackGuests</span>
+            </.link>
+          </div>
 
-      <%= if @current_scope do %>
-        <li class="text-sm text-gray-600 font-medium">
-          <%= (is_struct(@current_scope) && Map.get(@current_scope, :user) && Map.get(Map.get(@current_scope, :user, %{}), :email)) || "User" %>
-        </li>
-        <%= if @current_scope && Map.get(@current_scope, :user) && Map.get(Map.get(@current_scope, :user, %{}), :admin) do %>
-          <li>
-            <.link href={~p"/admin"} class="nav-link-luxury text-sm">Admin</.link>
-          </li>
-        <% end %>
-        <li>
-          <.link href={~p"/guides"} class="nav-link-luxury text-sm">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            Guides
-          </.link>
-        </li>
-        <li>
-          <.link href={~p"/users/settings"} class="nav-link-luxury text-sm">Settings</.link>
-        </li>
-        <li>
-          <.link href={~p"/users/log-out"} method="delete" class="nav-link-luxury text-sm">Log out</.link>
-        </li>
-      <% else %>
-        <li>
-          <.link href={~p"/guides"} class="nav-link-luxury text-sm">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            Guides
-          </.link>
-        </li>
-        <li>
-          <.link href={~p"/users/register"} class="nav-link-luxury text-sm">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-            </svg>
-            Register
-          </.link>
-        </li>
-        <li>
-          <.link href={~p"/users/log-in"} class="nav-link-luxury text-sm">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-            </svg>
-            Log in
-          </.link>
-        </li>
-      <% end %>
-    </ul>
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center space-x-4">
+            <!-- Theme Toggle -->
+            <div class="flex items-center gap-2" role="group" aria-label="Theme toggle">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+              <button 
+                id="theme-toggle" 
+                class="theme-toggle" 
+                onclick="toggleTheme()"
+                aria-label="Toggle dark mode"
+                role="switch"
+                aria-checked="false"
+              >
+                <span class="theme-toggle-handle"></span>
+              </button>
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+              </svg>
+            </div>
+
+            <%= if @current_scope && Map.get(@current_scope, :user) do %>
+              <span class="text-sm text-gray-600 font-medium px-3 py-1 bg-gray-100 rounded-full">
+                <%= Map.get(@current_scope.user, :email) || "User" %>
+              </span>
+              <%= if Map.get(@current_scope.user, :admin) do %>
+                <.link href={~p"/admin"} class="nav-link-luxury text-sm">
+                  <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                  Admin
+                </.link>
+              <% end %>
+              <.link href={~p"/guides"} class="nav-link-luxury text-sm">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                Guides
+              </.link>
+              <.link href={~p"/users/settings"} class="nav-link-luxury text-sm">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Settings
+              </.link>
+              <.link href={~p"/users/log-out"} method="delete" class="nav-link-luxury text-sm text-red-600 hover:text-red-700">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Log out
+              </.link>
+            <% else %>
+              <.link href={~p"/guides"} class="nav-link-luxury text-sm">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                Guides
+              </.link>
+              <.link href={~p"/users/register"} class="btn-luxury text-sm">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+                Register
+              </.link>
+              <.link href={~p"/users/log-in"} class="btn-primary text-sm">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                Log in
+              </.link>
+            <% end %>
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden">
+            <button 
+              id="mobile-menu-button" 
+              class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+              aria-label="Toggle main menu"
+              onclick="toggleMobileMenu()"
+            >
+              <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" id="menu-open-icon">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+              <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" id="menu-close-icon">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+          <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 shadow-lg">
+            <!-- Theme Toggle Mobile -->
+            <div class="flex items-center justify-center gap-2 py-3 border-b border-gray-100" role="group" aria-label="Theme toggle">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+              <button 
+                id="theme-toggle-mobile" 
+                class="theme-toggle" 
+                onclick="toggleTheme()"
+                aria-label="Toggle dark mode"
+                role="switch"
+                aria-checked="false"
+              >
+                <span class="theme-toggle-handle"></span>
+              </button>
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+              </svg>
+            </div>
+
+            <%= if @current_scope && Map.get(@current_scope, :user) do %>
+              <div class="text-center py-2 border-b border-gray-100">
+                <span class="text-sm text-gray-600 font-medium">
+                  <%= Map.get(@current_scope.user, :email) || "User" %>
+                </span>
+              </div>
+              <%= if Map.get(@current_scope.user, :admin) do %>
+                <.link href={~p"/admin"} class="mobile-nav-link" onclick="closeMobileMenu()">
+                  <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                  Admin Panel
+                </.link>
+              <% end %>
+              <.link href={~p"/guides"} class="mobile-nav-link" onclick="closeMobileMenu()">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                User Guides
+              </.link>
+              <.link href={~p"/users/settings"} class="mobile-nav-link" onclick="closeMobileMenu()">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Account Settings
+              </.link>
+              <.link href={~p"/users/log-out"} method="delete" class="mobile-nav-link text-red-600 hover:text-red-700 border-t border-gray-100" onclick="closeMobileMenu()">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Log Out
+              </.link>
+            <% else %>
+              <.link href={~p"/guides"} class="mobile-nav-link" onclick="closeMobileMenu()">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                User Guides
+              </.link>
+              <.link href={~p"/users/register"} class="mobile-nav-link bg-gray-50" onclick="closeMobileMenu()">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+                Create Account
+              </.link>
+              <.link href={~p"/users/log-in"} class="mobile-nav-link bg-gray-800 text-white hover:bg-gray-700" onclick="closeMobileMenu()">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                Sign In
+              </.link>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </nav>
 
     <script>
       function toggleTheme() {
         const html = document.documentElement;
         const toggle = document.getElementById('theme-toggle');
+        const toggleMobile = document.getElementById('theme-toggle-mobile');
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         
         html.setAttribute('data-theme', newTheme);
         toggle.classList.toggle('dark');
+        if (toggleMobile) toggleMobile.classList.toggle('dark');
+        
+        // Update ARIA attributes
+        const isDark = newTheme === 'dark';
+        toggle.setAttribute('aria-checked', isDark);
+        if (toggleMobile) toggleMobile.setAttribute('aria-checked', isDark);
+        
         localStorage.setItem('theme', newTheme);
       }
 
-      // Load saved theme or default to light
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      if (savedTheme === 'dark') {
-        document.getElementById('theme-toggle').classList.add('dark');
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuButton = document.getElementById('mobile-menu-button');
+        const openIcon = document.getElementById('menu-open-icon');
+        const closeIcon = document.getElementById('menu-close-icon');
+        
+        const isOpen = !mobileMenu.classList.contains('hidden');
+        
+        if (isOpen) {
+          mobileMenu.classList.add('hidden');
+          openIcon.classList.remove('hidden');
+          closeIcon.classList.add('hidden');
+          menuButton.setAttribute('aria-expanded', 'false');
+        } else {
+          mobileMenu.classList.remove('hidden');
+          openIcon.classList.add('hidden');
+          closeIcon.classList.remove('hidden');
+          menuButton.setAttribute('aria-expanded', 'true');
+        }
       }
+      
+      function closeMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuButton = document.getElementById('mobile-menu-button');
+        const openIcon = document.getElementById('menu-open-icon');
+        const closeIcon = document.getElementById('menu-close-icon');
+        
+        mobileMenu.classList.add('hidden');
+        openIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+      
+      // Close mobile menu on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMobileMenu();
+        }
+      });
+
+      // Load saved theme or default to light
+      document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        const toggle = document.getElementById('theme-toggle');
+        const toggleMobile = document.getElementById('theme-toggle-mobile');
+        
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const isDark = savedTheme === 'dark';
+        
+        if (isDark) {
+          toggle.classList.add('dark');
+          if (toggleMobile) toggleMobile.classList.add('dark');
+        }
+        
+        toggle.setAttribute('aria-checked', isDark);
+        if (toggleMobile) toggleMobile.setAttribute('aria-checked', isDark);
+      });
     </script>
 
     {@inner_content}

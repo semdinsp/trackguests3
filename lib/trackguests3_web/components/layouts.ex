@@ -32,47 +32,37 @@ defmodule Trackguests3Web.Layouts do
 
   def app(assigns) do
     ~H"""
-    <div class="min-h-screen gradient-bg-luxury">
-      <!-- Luxury Platinum Navigation Header -->
-      <header class="bg-white shadow-luxury-lg border-b border-gray-100 glass-luxury">
+    <div class="min-h-screen gradient-bg-luxury" id="main-content">
+      <!-- Secondary Navigation for Quick Actions -->
+      <div class="bg-white/50 backdrop-blur-sm border-b border-gray-200/30 py-3">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
-          <div class="flex justify-between items-center h-20">
-            <div class="flex items-center space-x-8">
-              <a href="/" class="flex items-center space-x-4 group">
-                <div class="w-14 h-14 gradient-header-luxury rounded-2xl flex items-center justify-center group-hover:shadow-luxury transition-all duration-300">
-                  <span class="text-white font-bold text-xl tracking-wide">TG</span>
-                </div>
-                <span class="text-3xl font-bold text-platinum tracking-tight">TrackGuests</span>
-              </a>
-              <nav class="hidden md:flex space-x-2">
-                <a href="/rooms" class="nav-link-luxury">
-                  <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                  </svg>
-                  Rooms
-                </a>
-              </nav>
-            </div>
-            <div class="flex items-center space-x-4">
-              <a href="/visitor/check-in" class="btn-luxury inline-flex items-center">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          <div class="flex items-center justify-center space-x-4">
+            <.link href="/visitor/check-in" class="btn-luxury inline-flex items-center text-sm">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              Guest Check-In
+            </.link>
+            <.link href="/visitor/check-out" class="btn-luxury inline-flex items-center text-sm">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              Guest Check-Out
+            </.link>
+            <%= if @current_scope && Map.get(@current_scope, :user) do %>
+              <.link href="/rooms" class="nav-link-luxury text-sm">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
-                Guest Check-In
-              </a>
-              <a href="/visitor/check-out" class="btn-luxury inline-flex items-center">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-                Guest Check-Out
-              </a>
-            </div>
+                Manage Rooms
+              </.link>
+            <% end %>
           </div>
         </div>
-      </header>
+      </div>
 
       <!-- Main Content Area with Luxury Styling -->
-      <main class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+      <main class="max-w-7xl mx-auto px-6 lg:px-8 py-12" role="main">
         {render_slot(@inner_block)}
       </main>
     </div>
@@ -172,29 +162,32 @@ defmodule Trackguests3Web.Layouts do
       <.flash kind={:info} flash={@flash} />
       <.flash kind={:error} flash={@flash} />
 
-      <.flash
-        id="client-error"
-        kind={:error}
-        title={gettext("We can't find the internet")}
-        phx-disconnected={show(".phx-client-error #client-error") |> JS.remove_attribute("hidden")}
-        phx-connected={hide("#client-error") |> JS.set_attribute({"hidden", ""})}
-        hidden
-      >
-        {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
-      </.flash>
+      <!-- Only show connection errors for logged-in users (not during logout redirect) -->
+      <%= if assigns[:current_scope] && assigns.current_scope[:user] do %>
+        <.flash
+          id="client-error"
+          kind={:error}
+          title={gettext("We can't find the internet")}
+          phx-disconnected={show(".phx-client-error #client-error") |> JS.remove_attribute("hidden")}
+          phx-connected={hide("#client-error") |> JS.set_attribute({"hidden", ""})}
+          hidden
+        >
+          {gettext("Attempting to reconnect")}
+          <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
+        </.flash>
 
-      <.flash
-        id="server-error"
-        kind={:error}
-        title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error") |> JS.remove_attribute("hidden")}
-        phx-connected={hide("#server-error") |> JS.set_attribute({"hidden", ""})}
-        hidden
-      >
-        {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
-      </.flash>
+        <.flash
+          id="server-error"
+          kind={:error}
+          title={gettext("Something went wrong!")}
+          phx-disconnected={show(".phx-server-error #server-error") |> JS.remove_attribute("hidden")}
+          phx-connected={hide("#server-error") |> JS.set_attribute({"hidden", ""})}
+          hidden
+        >
+          {gettext("Attempting to reconnect")}
+          <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
+        </.flash>
+      <% end %>
     </div>
     """
   end

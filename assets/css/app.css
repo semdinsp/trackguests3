@@ -322,3 +322,116 @@ select.input-luxury option {
 .fieldset label .label + textarea {
   @apply mt-1;
 }
+
+/* Mobile Navigation Styles */
+.mobile-nav-link {
+  @apply block px-3 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-all duration-200;
+}
+
+[data-theme="dark"] .mobile-nav-link {
+  @apply text-gray-300 hover:text-gray-100 hover:bg-gray-700;
+}
+
+.mobile-nav-link:focus {
+  @apply outline-none ring-2 ring-inset ring-gray-500;
+}
+
+/* Focus management for navigation */
+.nav-link-luxury:focus,
+button:focus {
+  @apply outline-none ring-2 ring-offset-2 ring-gray-500;
+}
+
+[data-theme="dark"] .nav-link-luxury:focus,
+[data-theme="dark"] button:focus {
+  @apply ring-gray-400;
+}
+
+/* Skip to content link for screen readers */
+.skip-link {
+  @apply absolute -top-full left-6 z-50 bg-white px-4 py-2 text-gray-900 underline transition-all focus:top-4;
+}
+
+[data-theme="dark"] .skip-link {
+  @apply bg-gray-900 text-gray-100;
+}
+
+/* Secondary button styles referenced in templates */
+.btn-secondary-luxury {
+  @apply bg-transparent border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium tracking-wide transition-all duration-300 hover:bg-gray-100 hover:border-gray-400 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:outline-none;
+}
+
+[data-theme="dark"] .btn-secondary-luxury {
+  @apply border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500;
+}
+
+.btn-secondary-luxury:hover {
+  @apply scale-[1.01] transform;
+}
+
+/* Ensure proper button sizing consistency */
+.btn-luxury,
+.btn-primary,
+.btn-secondary-luxury {
+  @apply min-h-[2.5rem] inline-flex items-center justify-center;
+}
+
+/* Loading spinner component */
+.spinner {
+  @apply inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-current;
+}
+
+/* Enhanced form accessibility */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+}
+
+/* Improved mobile form layout */
+@media (max-width: 640px) {
+  .card-luxury {
+    @apply mx-2 px-4 py-6;
+  }
+  
+  .btn-luxury,
+  .btn-primary,
+  .btn-secondary-luxury {
+    @apply w-full justify-center;
+  }
+  
+  /* Mobile form improvements */
+  .grid.grid-cols-1.lg\\:grid-cols-2 {
+    @apply space-y-6;
+  }
+  
+  /* Better mobile spacing */
+  fieldset.space-y-4 {
+    @apply space-y-6;
+  }
+}
+
+/* Focus visible improvements */
+*:focus-visible {
+  @apply outline-none ring-2 ring-offset-2 ring-blue-500;
+}
+
+[data-theme="dark"] *:focus-visible {
+  @apply ring-blue-400;
+}
+
+/* Better contrast for dark mode form elements */
+[data-theme="dark"] input:required:invalid {
+  @apply border-red-400;
+}
+
+[data-theme="dark"] .text-red-500 {
+  @apply text-red-400;
+}
+
+/* Enhanced error states */
+.input-luxury:invalid {
+  @apply border-red-300 focus:border-red-500 focus:ring-red-200;
+}
+
+[data-theme="dark"] .input-luxury:invalid {
+  @apply border-red-600 focus:border-red-400;
+}
