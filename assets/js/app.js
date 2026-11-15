@@ -35,6 +35,12 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
+// Reset a form after a successful submit (clears :user-invalid styling)
+window.addEventListener("phx:reset-form", ({detail}) => {
+  const form = document.getElementById(detail.id)
+  if (form) form.reset()
+})
+
 // Apply a theme chosen on the settings page (pushed via push_event "set-theme")
 window.addEventListener("phx:set-theme", ({detail}) => {
   const theme = detail.theme === "dark" ? "dark" : "light"

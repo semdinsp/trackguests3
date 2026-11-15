@@ -102,7 +102,10 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
            |> assign(:form, to_form(Persons.change_person(%Person{})))
            |> assign(:selected_room_id, nil)
            |> assign(:selected_room_display, "")
-           |> assign(:room_search_results, [])}
+           |> assign(:room_search_results, [])
+           # Clear the browser's "user touched this field" state so the
+           # emptied form doesn't show error borders for the next guest
+           |> push_event("reset-form", %{id: "check-in-form"})}
 
         {:error, changeset} ->
           Logger.error("Guest check-in failed: #{inspect(changeset.errors)}")
