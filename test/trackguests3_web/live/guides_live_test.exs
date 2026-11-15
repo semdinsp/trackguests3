@@ -408,8 +408,8 @@ defmodule Trackguests3Web.GuidesLiveTest do
     test "includes back to home link with TG icon", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, ~p"/guides")
 
-      # Check for back to home link
-      assert html =~ "Back to Home"
+      # The site header logo links home (the page no longer repeats it)
+      assert html =~ "TrackGuests Home"
       assert html =~ "href=\"/\""
       # Check for TG icon
       assert html =~ ">TG<"
