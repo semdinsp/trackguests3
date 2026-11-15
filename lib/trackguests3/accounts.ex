@@ -67,6 +67,11 @@ defmodule Trackguests3.Accounts do
   def admin?(_), do: false
 
   @doc """
+  Returns the total number of users.
+  """
+  def count_users, do: Repo.aggregate(User, :count, :id)
+
+  @doc """
   Returns which residences (properties) the user may see.
 
     * `:all` - admins see every residence

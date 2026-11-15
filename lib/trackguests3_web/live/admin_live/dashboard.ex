@@ -3,7 +3,16 @@ defmodule Trackguests3Web.AdminLive.Dashboard do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Admin Dashboard")}
+    {:ok,
+     assign(socket,
+       page_title: "Admin Dashboard",
+       counts: %{
+         users: Trackguests3.Accounts.count_users(),
+         residences: Trackguests3.Accomodation.count_residences(),
+         rooms: Trackguests3.Accomodation.count_rooms(),
+         persons: Trackguests3.Persons.count_persons()
+       }
+     )}
   end
 
   @impl true
@@ -31,7 +40,7 @@ defmodule Trackguests3Web.AdminLive.Dashboard do
                 <div class="ml-5 w-0 flex-1">
                   <dl>
                     <dt class="text-sm font-medium text-gray-500 truncate">Users</dt>
-                    <dd class="text-lg font-medium text-gray-900">—</dd>
+                    <dd class="text-lg font-medium text-gray-900">{@counts.users}</dd>
                   </dl>
                 </div>
               </div>
@@ -57,7 +66,7 @@ defmodule Trackguests3Web.AdminLive.Dashboard do
                 <div class="ml-5 w-0 flex-1">
                   <dl>
                     <dt class="text-sm font-medium text-gray-500 truncate">Residences</dt>
-                    <dd class="text-lg font-medium text-gray-900">—</dd>
+                    <dd class="text-lg font-medium text-gray-900">{@counts.residences}</dd>
                   </dl>
                 </div>
               </div>
@@ -83,7 +92,7 @@ defmodule Trackguests3Web.AdminLive.Dashboard do
                 <div class="ml-5 w-0 flex-1">
                   <dl>
                     <dt class="text-sm font-medium text-gray-500 truncate">Rooms</dt>
-                    <dd class="text-lg font-medium text-gray-900">—</dd>
+                    <dd class="text-lg font-medium text-gray-900">{@counts.rooms}</dd>
                   </dl>
                 </div>
               </div>
@@ -109,7 +118,7 @@ defmodule Trackguests3Web.AdminLive.Dashboard do
                 <div class="ml-5 w-0 flex-1">
                   <dl>
                     <dt class="text-sm font-medium text-gray-500 truncate">Persons</dt>
-                    <dd class="text-lg font-medium text-gray-900">—</dd>
+                    <dd class="text-lg font-medium text-gray-900">{@counts.persons}</dd>
                   </dl>
                 </div>
               </div>
