@@ -437,3 +437,20 @@ button:focus {
 [data-theme="dark"] .input-luxury:user-invalid {
   @apply border-red-600 focus:border-red-400;
 }
+
+/* Dark-mode fallbacks for raw Tailwind utilities used directly in templates.
+   This app themes dark mode via [data-theme="dark"] rather than a Tailwind
+   dark variant, so plain bg-white / text-gray-* stayed light-theme colours
+   (white panels, near-invisible gray text) unless each class is mapped here. */
+[data-theme="dark"] .bg-white { @apply bg-gray-800; }
+[data-theme="dark"] .bg-white\/50 { @apply bg-gray-900/60; }
+[data-theme="dark"] .bg-gray-50 { @apply bg-gray-900; }
+[data-theme="dark"] .bg-gray-100 { @apply bg-gray-700; }
+[data-theme="dark"] .text-gray-900 { @apply text-gray-100; }
+[data-theme="dark"] .text-gray-800 { @apply text-gray-200; }
+[data-theme="dark"] .text-gray-700 { @apply text-gray-300; }
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-gray-500 { @apply text-gray-400; }
+[data-theme="dark"] .border-gray-100,
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-gray-200\/30 { @apply border-gray-700; }
