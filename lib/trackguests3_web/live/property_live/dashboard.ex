@@ -30,17 +30,10 @@ defmodule Trackguests3Web.PropertyLive.Dashboard do
 
   @impl true
   def handle_event("select_property", %{"residence_id" => residence_id}, socket) do
-    case Accounts.update_user_property(socket.assigns.user, %{property_id: residence_id}) do
-      {:ok, updated_user} ->
-        updated_user = Accounts.get_user_with_property!(updated_user.id)
-        
-        {:noreply,
-         socket
-         |> assign(:user, updated_user)
-         |> put_flash(:info, "Property selected successfully")}
-
-      {:error, _changeset} ->
-        {:noreply, put_flash(socket, :error, "Failed to select property")}
+    if Accounts.admin?(socket.assigns.user) do
+      select_property(socket, residence_id)
+    else
+      {:noreply, put_flash(socket, :error, gettext("Only an administrator can assign you to an existing property."))}
     end
   end
 
@@ -161,5 +154,20 @@ defmodule Trackguests3Web.PropertyLive.Dashboard do
       <% end %>
     </div>
     """
+  end
+
+  defp select_property(socket, residence_id) do
+    case Accounts.update_user_property(socket.assigns.user, %{property_id: residence_id}) do
+      {:ok, updated_user} ->
+        updated_user = Accounts.get_user_with_property!(updated_user.id)
+        
+        {:noreply,
+         socket
+         |> assign(:user, updated_user)
+         |> put_flash(:info, "Property selected successfully")}
+
+      {:error, _changeset} ->
+        {:noreply, put_flash(socket, :error, "Failed to select property")}
+    end
   end
 end

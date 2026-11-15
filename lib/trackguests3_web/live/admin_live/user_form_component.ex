@@ -2,6 +2,7 @@ defmodule Trackguests3Web.AdminLive.UserFormComponent do
   use Trackguests3Web, :live_component
 
   alias Trackguests3.Accounts
+  alias Trackguests3.Accomodation
 
   @impl true
   def render(assigns) do
@@ -22,6 +23,13 @@ defmodule Trackguests3Web.AdminLive.UserFormComponent do
       >
         <.input field={@form[:email]} type="email" label="Email" readonly />
         <.input field={@form[:admin]} type="checkbox" label="Admin" />
+        <.input
+          field={@form[:property_id]}
+          type="select"
+          label={gettext("Property")}
+          options={@property_options}
+          prompt={gettext("No property")}
+        />
         <div>
           <.button phx-disable-with="Saving...">Save User</.button>
         </div>
@@ -37,6 +45,7 @@ defmodule Trackguests3Web.AdminLive.UserFormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:property_options, Enum.map(Accomodation.list_residences(), &{&1.title, &1.id}))
      |> assign_form(changeset)}
   end
 

@@ -282,7 +282,12 @@ defmodule Trackguests3Web.UserLive.Settings do
                 </div>
               <% end %>
               
+              <p :if={!@can_select_property} class="text-sm text-gray-600">
+                {gettext("Ask an administrator to assign you to your property.")}
+              </p>
+
               <.input
+                :if={@can_select_property}
                 field={@property_form[:property_id]}
                 type="select"
                 label={gettext("Select Property")}
@@ -292,7 +297,7 @@ defmodule Trackguests3Web.UserLive.Settings do
               />
               
               <div class="flex items-center space-x-3">
-                <.button class="btn-luxury" phx-disable-with={gettext("Saving...")}>
+                <.button :if={@can_select_property} class="btn-luxury" phx-disable-with={gettext("Saving...")}>
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
@@ -427,8 +432,9 @@ defmodule Trackguests3Web.UserLive.Settings do
     ]
 
     # Get property options
+    # Only admins may pick an existing property; others must be assigned
     property_options = try do
-      Accomodation.list_residences()
+      if(Accounts.admin?(user), do: Accomodation.list_residences(), else: [])
       |> Enum.map(&{&1.title, &1.id})
     rescue
       _ -> []
@@ -445,6 +451,7 @@ defmodule Trackguests3Web.UserLive.Settings do
       |> assign(:guest_locales_form, to_form(guest_locales_changeset))
       |> assign(:property_form, to_form(property_changeset))
       |> assign(:property_options, property_options)
+      |> assign(:can_select_property, Accounts.admin?(user))
       |> assign(:available_themes, available_themes)
       |> assign(:available_locales, available_locales)
       |> assign(:trigger_submit, false)
@@ -602,22 +609,10 @@ defmodule Trackguests3Web.UserLive.Settings do
   end
 
   def handle_event("update_property", params, socket) do
-    %{"user" => user_params} = params
-    user = socket.assigns.current_scope.user
-
-    case Accounts.update_user_property(user, user_params) do
-      {:ok, updated_user} ->
-        # Get the updated user with property preloaded
-        user_with_property = Accounts.get_user_with_property!(updated_user.id)
-        
-        info = gettext("Property selection updated successfully!")
-        {:noreply, 
-         socket 
-         |> assign(:current_property, user_with_property.property)
-         |> put_flash(:info, info)}
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, :property_form, to_form(changeset, action: :insert))}
+    if socket.assigns.can_select_property do
+      update_property(socket, params)
+    else
+      {:noreply, put_flash(socket, :error, gettext("Only an administrator can assign you to an existing property."))}
     end
   end
 
@@ -638,6 +633,26 @@ defmodule Trackguests3Web.UserLive.Settings do
 
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, gettext("Failed to clear property selection"))}
+    end
+  end
+
+  defp update_property(socket, params) do
+    %{"user" => user_params} = params
+    user = socket.assigns.current_scope.user
+
+    case Accounts.update_user_property(user, user_params) do
+      {:ok, updated_user} ->
+        # Get the updated user with property preloaded
+        user_with_property = Accounts.get_user_with_property!(updated_user.id)
+        
+        info = gettext("Property selection updated successfully!")
+        {:noreply, 
+         socket 
+         |> assign(:current_property, user_with_property.property)
+         |> put_flash(:info, info)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :property_form, to_form(changeset, action: :insert))}
     end
   end
 end
