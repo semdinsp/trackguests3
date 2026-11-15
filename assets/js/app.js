@@ -35,6 +35,19 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
+// Apply a theme chosen on the settings page (pushed via push_event "set-theme")
+window.addEventListener("phx:set-theme", ({detail}) => {
+  const theme = detail.theme === "dark" ? "dark" : "light"
+  document.documentElement.setAttribute("data-theme", theme)
+  try { localStorage.setItem("theme", theme) } catch (_) {}
+  for (const id of ["theme-toggle", "theme-toggle-mobile"]) {
+    const toggle = document.getElementById(id)
+    if (!toggle) continue
+    toggle.classList.toggle("dark", theme === "dark")
+    toggle.setAttribute("aria-checked", theme === "dark")
+  }
+})
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 
