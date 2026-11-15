@@ -106,8 +106,10 @@ defmodule Trackguests3.Accounts do
   Returns an `%Ecto.Changeset{}` for changing user admin status.
   """
   def change_user_admin(user, attrs \\ %{}) do
+    # Admin-only: also lets an administrator assign the user to a property
     user
-    |> Ecto.Changeset.cast(attrs, [:admin])
+    |> Ecto.Changeset.cast(attrs, [:admin, :property_id])
+    |> Ecto.Changeset.foreign_key_constraint(:property_id)
   end
 
   @doc """

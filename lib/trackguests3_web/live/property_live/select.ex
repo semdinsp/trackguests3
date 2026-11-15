@@ -6,8 +6,11 @@ defmodule Trackguests3Web.PropertyLive.Select do
 
   @impl true
   def mount(_params, _session, socket) do
-    residences = Accomodation.list_residences()
     user = Accounts.get_user_with_property!(socket.assigns.current_scope.user.id)
+
+    # Joining an existing property grants access to its guest data, so only
+    # admins may do it here. Non-admins don't even see the list of properties.
+    residences = if Accounts.admin?(user), do: Accomodation.list_residences(), else: []
 
     {:ok,
      socket
@@ -18,6 +21,14 @@ defmodule Trackguests3Web.PropertyLive.Select do
 
   @impl true
   def handle_event("select_property", %{"residence_id" => residence_id}, socket) do
+    if Accounts.admin?(socket.assigns.user) do
+      select_property(socket, residence_id)
+    else
+      {:noreply, put_flash(socket, :error, gettext("Only an administrator can assign you to an existing property."))}
+    end
+  end
+
+  defp select_property(socket, residence_id) do
     case Accounts.update_user_property(socket.assigns.user, %{property_id: residence_id}) do
       {:ok, _updated_user} ->
         {:noreply,
@@ -41,6 +52,24 @@ defmodule Trackguests3Web.PropertyLive.Select do
         </p>
       </div>
 
+      <%= if !Accounts.admin?(@user) do %>
+        <div class="text-center py-12">
+          <h3 class="mt-2 text-sm font-medium text-gray-900">
+            {gettext("Access to a property is granted by an administrator")}
+          </h3>
+          <p class="mt-1 text-sm text-gray-500">
+            {gettext("Ask an administrator to assign you to your property.")}
+            <%= if is_nil(@user.property_id) do %>
+              {gettext("Or create a new property of your own.")}
+            <% end %>
+          </p>
+          <div :if={is_nil(@user.property_id)} class="mt-6">
+            <.link navigate={~p"/property/new"}>
+              <.button>{gettext("Create New Property")}</.button>
+            </.link>
+          </div>
+        </div>
+      <% else %>
       <%= if @residences == [] do %>
         <div class="text-center py-12">
           <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,6 +122,7 @@ defmodule Trackguests3Web.PropertyLive.Select do
             </div>
           <% end %>
         </div>
+      <% end %>
       <% end %>
 
       <div class="flex justify-center">
