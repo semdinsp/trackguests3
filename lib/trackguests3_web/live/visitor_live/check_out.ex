@@ -7,7 +7,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_scope={@current_scope}>
       <div class="max-w-2xl mx-auto">
         <!-- Language Selector -->
         <div class="flex justify-end mb-8">
@@ -52,8 +52,26 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
                 <h3 class="text-xl font-semibold text-platinum mb-2"><%= gettext("Active Visitors") %></h3>
                 <p class="text-gray-600"><%= gettext("Select your name to complete check-out:") %></p>
               </div>
-              
-              <%= for person <- @checked_in_persons do %>
+
+              <form :if={length(@checked_in_persons) > 3} id="visitor-filter" phx-change="filter_visitors" phx-submit="filter_visitors" role="search">
+                <label for="visitor-search" class="sr-only">{gettext("Find a visitor by name")}</label>
+                <input
+                  type="search"
+                  id="visitor-search"
+                  name="q"
+                  value={@visitor_query}
+                  placeholder={gettext("Find a visitor by name…")}
+                  phx-debounce="200"
+                  autocomplete="off"
+                  class="input-luxury w-full"
+                />
+              </form>
+
+              <p :if={visible_persons(@checked_in_persons, @visitor_query) == []} class="text-center text-gray-600 py-6">
+                {gettext("No visitors match “%{query}”.", query: @visitor_query)}
+              </p>
+
+              <%= for person <- visible_persons(@checked_in_persons, @visitor_query) do %>
                 <div class="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-6 hover:shadow-luxury transition-all duration-300 group">
                   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
                     <!-- Guest Information Column -->
@@ -110,6 +128,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
                       <button
                         phx-click="check_out"
                         phx-value-person-id={person.id}
+                        data-confirm={gettext("Check out %{name}?", name: person.name)}
                         class="btn-luxury inline-flex items-center group-hover:scale-105 transition-transform w-full lg:w-auto justify-center"
                       >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,6 +201,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
      socket
      |> assign(:page_title, page_title)
      |> assign(:checked_in_persons, checked_in_persons)
+     |> assign(:visitor_query, "")
      |> assign(:property_timezone, property_timezone)
      |> assign(:current_locale, current_locale)
      |> assign(:available_locales, available_locales)
@@ -191,35 +211,18 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
 
   @impl true
   def handle_event("check_out", %{"person-id" => person_id}, socket) do
-    person = Persons.get_person!(person_id)
+    # Only guests on this user's (property-filtered) list may be checked out
+    case Enum.find(socket.assigns.checked_in_persons, &(to_string(&1.id) == person_id)) do
+      nil ->
+        {:noreply, put_flash(socket, :error, gettext("That visitor is not checked in here."))}
 
-    case Persons.check_out_person(person) do
-      {:ok, updated_person} ->
-        checked_in_persons = get_filtered_checked_in_persons(socket)
-        
-        # Create success message with room information (now preserved in updated_person)
-        checkout_message = if updated_person.room_id do
-          try do
-            room = Trackguests3.Accomodation.get_rooms!(updated_person.room_id)
-            gettext("Thank you! You have been checked out successfully from %{room_name}.", room_name: room.title)
-          rescue
-            _ ->
-              gettext("Thank you! You have been checked out successfully from Room ID %{room_id}.", room_id: updated_person.room_id)
-          end
-        else
-          gettext("Thank you! You have been checked out successfully.")
-        end
-
-        {:noreply,
-         socket
-         |> put_flash(:info, checkout_message)
-         |> assign(:checked_in_persons, checked_in_persons)}
-
-      {:error, _changeset} ->
-        {:noreply,
-         socket
-         |> put_flash(:error, gettext("There was an error checking you out. Please try again."))}
+      person ->
+        check_out(socket, person)
     end
+  end
+
+  def handle_event("filter_visitors", %{"q" => query}, socket) do
+    {:noreply, assign(socket, :visitor_query, String.trim(query))}
   end
 
   def handle_event("toggle_language_dropdown", _params, socket) do
@@ -324,5 +327,42 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
   defp format_time_in_property_timezone(datetime, timezone) do
     alias Trackguests3.Accomodation
     Accomodation.format_datetime_in_timezone(datetime, timezone)
+  end
+
+  defp visible_persons(persons, ""), do: persons
+
+  defp visible_persons(persons, query) do
+    q = String.downcase(query)
+    Enum.filter(persons, &String.contains?(String.downcase(&1.name || ""), q))
+  end
+
+  defp check_out(socket, person) do
+    case Persons.check_out_person(person) do
+      {:ok, updated_person} ->
+        checked_in_persons = get_filtered_checked_in_persons(socket)
+        
+        # Create success message with room information (now preserved in updated_person)
+        checkout_message = if updated_person.room_id do
+          try do
+            room = Trackguests3.Accomodation.get_rooms!(updated_person.room_id)
+            gettext("Thank you! You have been checked out successfully from %{room_name}.", room_name: room.title)
+          rescue
+            _ ->
+              gettext("Thank you! You have been checked out successfully from Room ID %{room_id}.", room_id: updated_person.room_id)
+          end
+        else
+          gettext("Thank you! You have been checked out successfully.")
+        end
+
+        {:noreply,
+         socket
+         |> put_flash(:info, checkout_message)
+         |> assign(:checked_in_persons, checked_in_persons)}
+
+      {:error, _changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, gettext("There was an error checking you out. Please try again."))}
+    end
   end
 end
