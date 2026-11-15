@@ -49,12 +49,12 @@ defmodule Trackguests3Web.GuidesLive do
       <!-- Navigation Tabs -->
       <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav class="flex space-x-8" aria-label="Tabs">
+          <nav class="flex gap-6 sm:gap-8 overflow-x-auto -mb-px" aria-label="Tabs">
             <button
               phx-click="show_section"
               phx-value-section="overview"
               class={[
-                "py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200",
+                "py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap shrink-0 transition-colors duration-200",
                 if(@current_section == "overview", 
                   do: "border-purple-500 text-purple-600", 
                   else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300")
@@ -69,7 +69,7 @@ defmodule Trackguests3Web.GuidesLive do
               phx-click="show_section"
               phx-value-section="check-in"
               class={[
-                "py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200",
+                "py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap shrink-0 transition-colors duration-200",
                 if(@current_section == "check-in", 
                   do: "border-purple-500 text-purple-600", 
                   else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300")
@@ -84,7 +84,7 @@ defmodule Trackguests3Web.GuidesLive do
               phx-click="show_section"
               phx-value-section="check-out"
               class={[
-                "py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200",
+                "py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap shrink-0 transition-colors duration-200",
                 if(@current_section == "check-out", 
                   do: "border-purple-500 text-purple-600", 
                   else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300")
@@ -99,7 +99,7 @@ defmodule Trackguests3Web.GuidesLive do
               phx-click="show_section"
               phx-value-section="features"
               class={[
-                "py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200",
+                "py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap shrink-0 transition-colors duration-200",
                 if(@current_section == "features", 
                   do: "border-purple-500 text-purple-600", 
                   else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300")
@@ -114,7 +114,7 @@ defmodule Trackguests3Web.GuidesLive do
               phx-click="show_section"
               phx-value-section="admin"
               class={[
-                "py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200",
+                "py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap shrink-0 transition-colors duration-200",
                 if(@current_section == "admin", 
                   do: "border-purple-500 text-purple-600", 
                   else: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300")
