@@ -20,17 +20,7 @@ defmodule Trackguests3Web.GuidesLive do
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <!-- Header Section -->
       <div class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
-          <!-- Back to Home Link - Top Right -->
-          <div class="absolute top-4 right-4 sm:right-6 lg:right-8">
-            <a href="/" class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 group">
-              <div class="w-10 h-10 gradient-header-luxury rounded-xl flex items-center justify-center group-hover:shadow-luxury transition-all duration-300">
-                <span class="text-white font-bold text-sm tracking-wide">TG</span>
-              </div>
-              <span class="text-sm font-medium hidden sm:inline">Back to Home</span>
-            </a>
-          </div>
-          
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="text-center">
             <div class="w-20 h-20 gradient-header-luxury rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-luxury">
               <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
