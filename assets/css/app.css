@@ -144,7 +144,7 @@
 
 /* Input Components */
 .input-luxury {
-  @apply bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
+  @apply bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 text-base text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
 }
 
 [data-theme="dark"] .input-luxury {
@@ -154,6 +154,8 @@
 /* Select specific styling for better visibility */
 select.input-luxury {
   @apply appearance-none bg-gray-50 text-gray-900 font-medium;
+  /* daisyUI .select fixes height at 2.5rem, which clips text under our padding */
+  height: auto;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
   background-position: right 1rem center;
   background-repeat: no-repeat;
@@ -419,7 +421,7 @@ button:focus {
 }
 
 /* Better contrast for dark mode form elements */
-[data-theme="dark"] input:required:invalid {
+[data-theme="dark"] input:required:user-invalid {
   @apply border-red-400;
 }
 
@@ -428,10 +430,27 @@ button:focus {
 }
 
 /* Enhanced error states */
-.input-luxury:invalid {
+.input-luxury:user-invalid {
   @apply border-red-300 focus:border-red-500 focus:ring-red-200;
 }
 
-[data-theme="dark"] .input-luxury:invalid {
+[data-theme="dark"] .input-luxury:user-invalid {
   @apply border-red-600 focus:border-red-400;
 }
+
+/* Dark-mode fallbacks for raw Tailwind utilities used directly in templates.
+   This app themes dark mode via [data-theme="dark"] rather than a Tailwind
+   dark variant, so plain bg-white / text-gray-* stayed light-theme colours
+   (white panels, near-invisible gray text) unless each class is mapped here. */
+[data-theme="dark"] .bg-white { @apply bg-gray-800; }
+[data-theme="dark"] .bg-white\/50 { @apply bg-gray-900/60; }
+[data-theme="dark"] .bg-gray-50 { @apply bg-gray-900; }
+[data-theme="dark"] .bg-gray-100 { @apply bg-gray-700; }
+[data-theme="dark"] .text-gray-900 { @apply text-gray-100; }
+[data-theme="dark"] .text-gray-800 { @apply text-gray-200; }
+[data-theme="dark"] .text-gray-700 { @apply text-gray-300; }
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-gray-500 { @apply text-gray-400; }
+[data-theme="dark"] .border-gray-100,
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-gray-200\/30 { @apply border-gray-700; }

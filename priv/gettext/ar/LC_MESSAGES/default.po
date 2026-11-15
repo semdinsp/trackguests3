@@ -21,7 +21,7 @@ msgstr ""
 msgid "Account Settings"
 msgstr ""
 
-#: lib/trackguests3_web/components/core_components.ex:339
+#: lib/trackguests3_web/components/core_components.ex:340
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -31,8 +31,8 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: lib/trackguests3_web/components/layouts.ex:175
-#: lib/trackguests3_web/components/layouts.ex:187
+#: lib/trackguests3_web/components/layouts.ex:183
+#: lib/trackguests3_web/components/layouts.ex:195
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
@@ -194,7 +194,7 @@ msgstr ""
 msgid "Selecting a property will make it your default for guest check-ins and property management features."
 msgstr ""
 
-#: lib/trackguests3_web/components/layouts.ex:182
+#: lib/trackguests3_web/components/layouts.ex:190
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
@@ -234,7 +234,7 @@ msgstr ""
 msgid "View and export guest check-in/check-out records"
 msgstr ""
 
-#: lib/trackguests3_web/components/layouts.ex:170
+#: lib/trackguests3_web/components/layouts.ex:178
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
@@ -468,7 +468,7 @@ msgid "You already have a property. Edit it from My Property."
 msgstr ""
 
 #: lib/trackguests3_web/live/residences_live/form.ex:47
-#: lib/trackguests3_web/live/residences_live/index.ex:121
+#: lib/trackguests3_web/live/residences_live/index.ex:125
 #: lib/trackguests3_web/live/residences_live/show.ex:243
 #: lib/trackguests3_web/live/rooms_live/form.ex:145
 #: lib/trackguests3_web/live/rooms_live/form.ex:206
@@ -479,18 +479,18 @@ msgstr ""
 msgid "You do not have access to that property."
 msgstr ""
 
-#: lib/trackguests3_web/live/property_live/select.ex:58
+#: lib/trackguests3_web/live/property_live/select.ex:59
 #, elixir-autogen, elixir-format
 msgid "Access to a property is granted by an administrator"
 msgstr ""
 
-#: lib/trackguests3_web/live/property_live/select.ex:61
+#: lib/trackguests3_web/live/property_live/select.ex:62
 #: lib/trackguests3_web/live/user_live/settings.ex:286
 #, elixir-autogen, elixir-format
 msgid "Ask an administrator to assign you to your property."
 msgstr ""
 
-#: lib/trackguests3_web/live/property_live/select.ex:68
+#: lib/trackguests3_web/live/property_live/select.ex:69
 #, elixir-autogen, elixir-format
 msgid "Create New Property"
 msgstr ""
@@ -507,7 +507,7 @@ msgstr ""
 msgid "Only an administrator can assign you to an existing property."
 msgstr ""
 
-#: lib/trackguests3_web/live/property_live/select.ex:63
+#: lib/trackguests3_web/live/property_live/select.ex:64
 #, elixir-autogen, elixir-format
 msgid "Or create a new property of your own."
 msgstr ""
@@ -515,4 +515,24 @@ msgstr ""
 #: lib/trackguests3_web/live/admin_live/user_form_component.ex:29
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Property"
+msgstr ""
+
+#: lib/trackguests3_web/live/dashboard_live.html.heex:215
+#, elixir-autogen, elixir-format
+msgid "Check in a guest"
+msgstr ""
+
+#: lib/trackguests3_web/live/dashboard_live.html.heex:208
+#, elixir-autogen, elixir-format
+msgid "Guest check-in and check-out"
+msgstr ""
+
+#: lib/trackguests3_web/live/dashboard_live.html.heex:218
+#, elixir-autogen, elixir-format
+msgid "Staff log in"
+msgstr ""
+
+#: lib/trackguests3_web/live/dashboard_live.html.heex:211
+#, elixir-autogen, elixir-format
+msgid "Visitors sign in and out here. Staff log in to manage rooms and guest history."
 msgstr ""

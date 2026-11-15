@@ -35,22 +35,22 @@ defmodule Trackguests3Web.Layouts do
     <div class="min-h-screen gradient-bg-luxury" id="main-content">
       <!-- Secondary Navigation for Quick Actions -->
       <div class="bg-white/50 backdrop-blur-sm border-b border-gray-200/30 py-3">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-          <div class="flex items-center justify-center space-x-4">
-            <.link href="/visitor/check-in" class="btn-luxury inline-flex items-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <.link href="/visitor/check-in" class="btn-luxury inline-flex items-center whitespace-nowrap text-sm max-sm:w-auto! max-sm:px-3! max-sm:py-2!">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
               Guest Check-In
             </.link>
-            <.link href="/visitor/check-out" class="btn-luxury inline-flex items-center text-sm">
+            <.link href="/visitor/check-out" class="btn-luxury inline-flex items-center whitespace-nowrap text-sm max-sm:w-auto! max-sm:px-3! max-sm:py-2!">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
               </svg>
               Guest Check-Out
             </.link>
             <%= if @current_scope && Map.get(@current_scope, :user) do %>
-              <.link href="/rooms" class="nav-link-luxury text-sm">
+              <.link href="/rooms" class="nav-link-luxury inline-flex items-center whitespace-nowrap text-sm">
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
@@ -95,7 +95,7 @@ defmodule Trackguests3Web.Layouts do
                 <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
                   <span class="text-white font-bold text-sm">A</span>
                 </div>
-                <h1 class="text-xl font-semibold text-gray-900">Admin Panel</h1>
+                <h1 class="text-lg sm:text-xl font-semibold text-gray-900 whitespace-nowrap">Admin Panel</h1>
               </div>
               <nav class="hidden md:flex space-x-1">
                 <.link href="/admin" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100">
@@ -121,18 +121,26 @@ defmodule Trackguests3Web.Layouts do
                 </.link>
               </nav>
             </div>
-            <div class="flex items-center space-x-4">
-              <.link href="/" class="text-sm text-gray-500 hover:text-gray-700">
+            <div class="flex items-center gap-4">
+              <.link href="/" class="text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap">
                 ← Back to Site
               </.link>
               <%= if @current_scope && Map.get(@current_scope, :user) do %>
-                <span class="text-sm text-gray-600"><%= Map.get(@current_scope, :user) |> Map.get(:email) %></span>
-                <.link href="/users/log-out" method="delete" class="text-sm text-gray-500 hover:text-gray-700">
+                <span class="hidden md:inline text-sm text-gray-600"><%= Map.get(@current_scope, :user) |> Map.get(:email) %></span>
+                <.link href="/users/log-out" method="delete" class="text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap">
                   Log out
                 </.link>
               <% end %>
             </div>
           </div>
+          <nav class="md:hidden flex gap-1 overflow-x-auto pb-3 -mx-3" aria-label="Admin sections">
+            <.link :for={{label, href} <- [{"Dashboard", "/admin"}, {"Users", "/admin/users"}, {"Residences", "/admin/residences"}, {"Rooms", "/admin/rooms"}, {"Persons", "/admin/persons"}, {"User Guides", "/guides"}]}
+              href={href}
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 whitespace-nowrap"
+            >
+              {label}
+            </.link>
+          </nav>
         </div>
       </header>
 

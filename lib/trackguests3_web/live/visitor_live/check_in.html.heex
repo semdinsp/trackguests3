@@ -180,7 +180,7 @@
                     placeholder="Start typing room name or floor..."
                     phx-keyup="search_rooms"
                     phx-debounce="300"
-                    class="input-luxury"
+                    class="input-luxury w-full"
                     autocomplete="off"
                     required
                     aria-describedby="room-search-help"
@@ -196,7 +196,7 @@
                       role="listbox"
                       aria-label="Room search results"
                     >
-                      <%= for {room, _index} <- Enum.with_index(@room_search_results) do %>
+                      <%= for {room, index} <- Enum.with_index(@room_search_results) do %>
                         <li role="option">
                           <button 
                             type="button"
@@ -204,7 +204,7 @@
                             phx-value-room_id={room.id}
                             phx-value-room_display={room.display}
                             class="w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none border-b border-gray-100 last:border-b-0 transition-colors"
-                            id="room-option-#{index}"
+                            id={"room-option-#{index}"}
                           >
                             <div class="text-sm font-medium text-gray-900"><%= room.display %></div>
                           </button>
@@ -274,11 +274,11 @@
             <button 
               type="submit" 
               phx-disable-with="Checking In..." 
-              class="btn-luxury text-center"
+              class="btn-primary text-center"
               aria-describedby="submit-help"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
               Complete Check-In
             </button>

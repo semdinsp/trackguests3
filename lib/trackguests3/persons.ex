@@ -33,6 +33,11 @@ defmodule Trackguests3.Persons do
   def list_persons(:none), do: []
 
   @doc """
+  Returns the total number of persons (guests and visitors).
+  """
+  def count_persons, do: Repo.aggregate(Person, :count, :id)
+
+  @doc """
   Returns the list of currently checked-in persons.
   """
   def list_checked_in_persons do

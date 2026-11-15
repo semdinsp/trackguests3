@@ -45,6 +45,7 @@ defmodule Trackguests3Web.PropertyLive.Dashboard do
   @impl true
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash} current_scope={@current_scope}>
     <div class="space-y-6">
       <div>
         <h1 class="text-3xl font-bold text-gray-900">My Property</h1>
@@ -153,6 +154,7 @@ defmodule Trackguests3Web.PropertyLive.Dashboard do
         </div>
       <% end %>
     </div>
+    </Layouts.app>
     """
   end
 

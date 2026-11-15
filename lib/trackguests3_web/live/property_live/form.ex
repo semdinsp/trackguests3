@@ -84,6 +84,7 @@ defmodule Trackguests3Web.PropertyLive.Form do
   @impl true
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash} current_scope={@current_scope}>
     <div class="max-w-2xl mx-auto">
       <div class="space-y-6">
         <div>
@@ -149,6 +150,7 @@ defmodule Trackguests3Web.PropertyLive.Form do
         </div>
       </div>
     </div>
+    </Layouts.app>
     """
   end
 end

@@ -26,7 +26,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
         </nav>
 
         <div class="card-luxury">
-          <div class="flex items-center justify-between mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h1 class="text-2xl font-bold text-platinum">
                 <%= if @residence do %>
@@ -100,36 +100,36 @@ defmodule Trackguests3Web.RoomsLive.Index do
               <table class="w-full">
                 <thead>
                   <tr class="border-b border-gray-200">
-                    <th class="text-left py-4 px-4 font-semibold text-platinum">Room Name</th>
+                    <th class="text-left py-4 px-2 sm:px-4 font-semibold text-platinum">Room Name</th>
                     <%= if !@residence do %>
-                      <th class="text-left py-4 px-4 font-semibold text-platinum">Property</th>
+                      <th class="hidden md:table-cell text-left py-4 px-2 sm:px-4 font-semibold text-platinum">Property</th>
                     <% end %>
-                    <th class="text-left py-4 px-4 font-semibold text-platinum">Floor</th>
-                    <th class="text-left py-4 px-4 font-semibold text-platinum">Access</th>
-                    <th class="text-left py-4 px-4 font-semibold text-platinum">Guests</th>
-                    <th class="text-left py-4 px-4 font-semibold text-platinum">Notes</th>
-                    <th class="text-right py-4 px-4 font-semibold text-platinum">Actions</th>
+                    <th class="text-left py-4 px-2 sm:px-4 font-semibold text-platinum">Floor</th>
+                    <th class="hidden md:table-cell text-left py-4 px-2 sm:px-4 font-semibold text-platinum">Access</th>
+                    <th class="hidden md:table-cell text-left py-4 px-2 sm:px-4 font-semibold text-platinum">Guests</th>
+                    <th class="hidden md:table-cell text-left py-4 px-2 sm:px-4 font-semibold text-platinum">Notes</th>
+                    <th class="text-right py-4 px-2 sm:px-4 font-semibold text-platinum">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <%= for room <- @rooms do %>
                     <tr id={"rooms_collection-#{room.id}"} class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
-                      <td class="py-4 px-4">
-                        <div class="font-medium text-platinum">{room.title}</div>
+                      <td class="py-4 px-2 sm:px-4">
+                        <a href={"/rooms/#{room.id}"} class="font-medium text-platinum hover:underline">{room.title}</a>
                       </td>
                       <%= if !@residence do %>
-                        <td class="py-4 px-4">
+                        <td class="hidden md:table-cell py-4 px-2 sm:px-4">
                           <div class="text-sm text-gray-600">
                             {room.residence && room.residence.title || "Not assigned"}
                           </div>
                         </td>
                       <% end %>
-                      <td class="py-4 px-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800">
+                      <td class="py-4 px-2 sm:px-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800">
                           Floor {room.floor}
                         </span>
                       </td>
-                      <td class="py-4 px-4">
+                      <td class="hidden md:table-cell py-4 px-2 sm:px-4">
                         <div class="flex items-center space-x-2">
                           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-10.712 3.712M15 7l-3.5 3.5M15 7l3.5 3.5M3 13a9 9 0 1018 0v0"/>
@@ -139,7 +139,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
                           </span>
                         </div>
                       </td>
-                      <td class="py-4 px-4">
+                      <td class="hidden md:table-cell py-4 px-2 sm:px-4">
                         <div class="flex items-center space-x-2">
                           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857"/>
@@ -149,7 +149,7 @@ defmodule Trackguests3Web.RoomsLive.Index do
                           </span>
                         </div>
                       </td>
-                      <td class="py-4 px-4">
+                      <td class="hidden md:table-cell py-4 px-2 sm:px-4">
                         <%= if room.memo && String.trim(room.memo) != "" do %>
                           <div class="text-sm text-gray-600 max-w-xs truncate" title={room.memo}>
                             {room.memo}
@@ -158,10 +158,10 @@ defmodule Trackguests3Web.RoomsLive.Index do
                           <span class="text-gray-400 text-sm">No notes</span>
                         <% end %>
                       </td>
-                      <td class="py-4 px-4">
-                        <div class="flex items-center justify-end space-x-2">
+                      <td class="py-4 px-2 sm:px-4">
+                        <div class="flex items-center justify-end gap-2">
                           <a href={"/rooms/#{room.id}"} 
-                             class="text-sm nav-link-luxury px-3 py-1 rounded-lg hover:bg-gray-100 transition-colors">
+                             class="hidden sm:inline text-sm nav-link-luxury px-3 py-1 rounded-lg hover:bg-gray-100 transition-colors">
                             View
                           </a>
                           <a href={"/rooms/#{room.id}/edit"} 

@@ -331,6 +331,7 @@ defmodule Trackguests3Web.CoreComponents do
       end
 
     ~H"""
+    <div class="overflow-x-auto">
     <table class="table table-zebra">
       <thead>
         <tr>
@@ -350,7 +351,7 @@ defmodule Trackguests3Web.CoreComponents do
             {render_slot(col, @row_item.(row))}
           </td>
           <td :if={@action != []} class="w-0 font-semibold">
-            <div class="flex gap-4">
+            <div class="flex gap-4 whitespace-nowrap">
               <%= for action <- @action do %>
                 {render_slot(action, @row_item.(row))}
               <% end %>
@@ -359,6 +360,7 @@ defmodule Trackguests3Web.CoreComponents do
         </tr>
       </tbody>
     </table>
+    </div>
     """
   end
 

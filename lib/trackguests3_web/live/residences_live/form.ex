@@ -54,7 +54,7 @@ defmodule Trackguests3Web.ResidencesLive.Form do
 
     # Non-admins may only create a property when they don't have one yet;
     # the new property is then assigned to them (see save_residence/3).
-    if Accounts.admin?(user) or is_nil(user.property_id) do
+    if Accounts.can_create_residence?(user) do
       assign_new(socket)
     else
       socket

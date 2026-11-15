@@ -1,4 +1,5 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
+  <%= if @current_scope && @current_scope.user do %>
   <div class="space-y-8">
     <!-- Dashboard Header -->
     <div class="text-center">
@@ -77,7 +78,11 @@
       <div class="card-luxury">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-platinum">Properties Overview</h3>
-          <a href="/residences/new" class="btn-secondary-luxury text-sm">
+          <a
+            :if={Accounts.can_create_residence?(@current_scope.user)}
+            href="/residences/new"
+            class="btn-secondary-luxury text-sm"
+          >
             Add Property
           </a>
         </div>
@@ -163,7 +168,11 @@
     <div class="card-luxury">
       <h3 class="text-xl font-semibold text-platinum mb-6">Quick Actions</h3>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <a href="/residences/new" class="btn-luxury text-center">
+        <a
+          :if={Accounts.can_create_residence?(@current_scope.user)}
+          href="/residences/new"
+          class="btn-luxury text-center"
+        >
           <svg class="w-5 h-5 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
           </svg>
@@ -193,5 +202,22 @@
       </div>
     </div>
   </div>
+  <% else %>
+    <section class="max-w-xl mx-auto text-center py-8 sm:py-16">
+      <h1 class="text-3xl sm:text-4xl font-bold text-platinum mb-4">
+        {gettext("Guest check-in and check-out")}
+      </h1>
+      <p class="text-lg text-gray-600 mb-8">
+        {gettext("Visitors sign in and out here. Staff log in to manage rooms and guest history.")}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <.link navigate={~p"/visitor/check-in"} class="btn-primary px-6 py-3">
+          {gettext("Check in a guest")}
+        </.link>
+        <.link navigate={~p"/users/log-in"} class="btn-luxury">
+          {gettext("Staff log in")}
+        </.link>
+      </div>
+    </section>
+  <% end %>
 </Layouts.app>
-
