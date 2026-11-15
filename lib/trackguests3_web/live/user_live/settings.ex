@@ -68,7 +68,7 @@ defmodule Trackguests3Web.UserLive.Settings do
             <div class="space-y-6">
               <div>
                 <label class="block text-sm font-medium text-platinum mb-4"><%= gettext("Select Language") %></label>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
                   <%= for locale_option <- @available_locales do %>
                     <label class="relative cursor-pointer">
                       <input
@@ -79,10 +79,10 @@ defmodule Trackguests3Web.UserLive.Settings do
                         class="sr-only"
                         phx-change="validate_locale"
                       />
-                      <div class={"flex items-center p-4 rounded-xl border-2 transition-all duration-200 #{if @locale_form[:locale].value == locale_option.value, do: "border-purple-500 bg-purple-50 ring-2 ring-purple-200", else: "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}"}>
-                        <div class="flex items-center space-x-3">
-                          <div class="text-2xl">{locale_option.flag}</div>
-                          <div>
+                      <div class={"flex items-center p-3 sm:p-4 rounded-xl border-2 transition-all duration-200 #{if @locale_form[:locale].value == locale_option.value, do: "border-purple-500 bg-purple-50 ring-2 ring-purple-200", else: "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}"}>
+                        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                          <div class="text-xl sm:text-2xl">{locale_option.flag}</div>
+                          <div class="min-w-0">
                             <div class="font-medium text-gray-900">{locale_option.name}</div>
                             <div class="text-sm text-gray-500">{locale_option.native_name}</div>
                           </div>
@@ -118,7 +118,7 @@ defmodule Trackguests3Web.UserLive.Settings do
             <div class="space-y-6">
               <div>
                 <label class="block text-sm font-medium text-platinum mb-4"><%= gettext("Available Languages for Guests") %></label>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                   <%= for locale_option <- @available_locales do %>
                     <label class="relative cursor-pointer">
                       <input
