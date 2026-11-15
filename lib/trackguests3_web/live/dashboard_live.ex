@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.DashboardLive do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Accomodation
 
   @impl true
@@ -24,8 +25,12 @@ defmodule Trackguests3Web.DashboardLive do
   end
 
   defp assign_dashboard_data(socket) do
-    stats = Accomodation.get_dashboard_stats()
-    residences_with_stats = Accomodation.list_residences_with_stats()
+    # Anonymous visitors see no data; users see only their own property
+    user = socket.assigns[:current_scope] && socket.assigns.current_scope.user
+    filter = Accounts.residence_filter(user)
+
+    stats = Accomodation.get_dashboard_stats(filter)
+    residences_with_stats = Accomodation.list_residences_with_stats(filter)
 
     socket
     |> assign(:stats, stats)

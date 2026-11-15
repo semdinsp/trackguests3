@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.RoomsLive.Index do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Accomodation
 
   @impl true
@@ -191,33 +192,30 @@ defmodule Trackguests3Web.RoomsLive.Index do
   def mount(params, _session, socket) do
     current_user = socket.assigns.current_scope.user
     residence_id = params["residence_id"]
+
+    if residence_id && !Accounts.can_access_residence?(current_user, residence_id) do
+      {:ok,
+       socket
+       |> put_flash(:error, gettext("You do not have access to that property."))
+       |> push_navigate(to: ~p"/rooms")}
+    else
+      mount_rooms(socket, current_user, residence_id)
+    end
+  end
+
+  defp mount_rooms(socket, current_user, residence_id) do
     residence = if residence_id, do: Accomodation.get_residence!(residence_id), else: nil
 
     rooms =
       if residence do
-        Accomodation.list_rooms_with_residences()
-        |> Enum.filter(&(&1.residence_id == residence.id))
+        Accomodation.list_rooms_with_residences({:only, residence.id})
       else
-        # For general room listing, filter based on user permissions
-        all_rooms = Accomodation.list_rooms_with_residences()
-        
-        if Trackguests3.Accounts.admin?(current_user) do
-          # Admin users can see all rooms
-          all_rooms
-        else
-          # Normal users can only see rooms from their assigned property
-          if current_user.property_id do
-            all_rooms |> Enum.filter(&(&1.residence_id == current_user.property_id))
-          else
-            # User has no property assigned, show empty list
-            []
-          end
-        end
+        # Admins see all rooms, users only their property's, others none
+        Accomodation.list_rooms_with_residences(Accounts.residence_filter(current_user))
       end
 
     {:ok,
      socket
-     |> assign(:current_scope, socket.assigns.current_scope)
      |> assign(:residence, residence)
      |> assign(:rooms, rooms)
      |> assign(:page_title, if(residence, do: "Rooms in #{residence.title}", else: "All Rooms"))}
@@ -226,6 +224,15 @@ defmodule Trackguests3Web.RoomsLive.Index do
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     rooms = Accomodation.get_rooms!(id)
+
+    if Accounts.can_access_residence?(socket.assigns.current_scope.user, rooms.residence_id) do
+      delete_room(socket, rooms, id)
+    else
+      {:noreply, put_flash(socket, :error, gettext("You do not have access to that property."))}
+    end
+  end
+
+  defp delete_room(socket, rooms, id) do
     {:ok, _} = Accomodation.delete_rooms(rooms)
 
     # Update the room list
