@@ -1,3 +1,10 @@
 # Mix build artifacts and fetched dependencies (recreated by `mix deps.get` / `mix compile`)
 /_build/
 /deps/
+
+# Local environment / secrets
+.env
+
+# Local SQLite databases (dev and test), including WAL sidecar files
+/trackguests3_dev.db*
+/trackguests3_test*
