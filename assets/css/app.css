@@ -144,7 +144,7 @@
 
 /* Input Components */
 .input-luxury {
-  @apply bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
+  @apply bg-gray-50 border-2 border-gray-300 focus:border-gray-500 focus:ring-4 focus:ring-gray-200 rounded-xl px-6 py-4 text-base text-gray-900 placeholder:text-gray-500 transition-all duration-300 font-medium;
 }
 
 [data-theme="dark"] .input-luxury {
