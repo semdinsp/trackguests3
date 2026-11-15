@@ -98,10 +98,17 @@ defmodule Trackguests3Web.PropertyLive.Form do
         </div>
 
         <div class="bg-white shadow rounded-lg">
-          <form phx-change="validate" phx-submit="save" class="space-y-6 p-6">
+          <.form
+            :let={f}
+            for={@changeset}
+            id="property-form"
+            phx-change="validate"
+            phx-submit="save"
+            class="space-y-6 p-6"
+          >
             <div>
               <.input
-                field={@changeset[:title]}
+                field={f[:title]}
                 type="text"
                 label="Property Name"
                 placeholder="Enter property name"
@@ -111,7 +118,7 @@ defmodule Trackguests3Web.PropertyLive.Form do
 
             <div>
               <.input
-                field={@changeset[:address]}
+                field={f[:address]}
                 type="text"
                 label="Address"
                 placeholder="Enter property address"
@@ -121,7 +128,7 @@ defmodule Trackguests3Web.PropertyLive.Form do
 
             <div>
               <.input
-                field={@changeset[:floor_count]}
+                field={f[:floor_count]}
                 type="number"
                 label="Number of Floors"
                 placeholder="Enter number of floors"
@@ -138,7 +145,7 @@ defmodule Trackguests3Web.PropertyLive.Form do
                 <%= if @live_action == :new, do: "Create Property", else: "Update Property" %>
               </.button>
             </div>
-          </form>
+          </.form>
         </div>
       </div>
     </div>
