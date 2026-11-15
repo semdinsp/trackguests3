@@ -222,7 +222,7 @@ defmodule Trackguests3Web.UserLive.Settings do
             <div class="space-y-6">
               <div>
                 <label class="block text-sm font-medium text-platinum mb-4"><%= gettext("Select Theme") %></label>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 gap-4 max-w-md">
                   <%= for theme <- @available_themes do %>
                     <label class="relative cursor-pointer">
                       <input
@@ -403,18 +403,8 @@ defmodule Trackguests3Web.UserLive.Settings do
     property_changeset = Accounts.change_user_property(user, %{})
 
     available_themes = [
-      %{name: "Light", value: "light", preview_class: "bg-gradient-to-br from-white to-gray-100 border border-gray-200"},
-      %{name: "Cupcake", value: "cupcake", preview_class: "bg-gradient-to-br from-pink-200 to-pink-300"},
-      %{name: "Cyberpunk", value: "cyberpunk", preview_class: "bg-gradient-to-br from-cyan-400 to-purple-500"},
-      %{name: "Greyscale", value: "greyscale", preview_class: "bg-gradient-to-br from-gray-300 to-gray-600"},
-      %{name: "Retro", value: "retro", preview_class: "bg-gradient-to-br from-yellow-300 to-orange-400"},
-      %{name: "Synthwave", value: "synthwave", preview_class: "bg-gradient-to-br from-purple-600 to-pink-500"},
-      %{name: "Valentine", value: "valentine", preview_class: "bg-gradient-to-br from-red-300 to-pink-400"},
-      %{name: "Emerald", value: "emerald", preview_class: "bg-gradient-to-br from-green-300 to-emerald-400"},
-      %{name: "Corporate", value: "corporate", preview_class: "bg-gradient-to-br from-blue-300 to-blue-500"},
-      %{name: "Luxury", value: "luxury", preview_class: "bg-gradient-to-br from-purple-300 to-indigo-400"},
-      %{name: "Dracula", value: "dracula", preview_class: "bg-gradient-to-br from-purple-900 to-gray-900"},
-      %{name: "Night", value: "night", preview_class: "bg-gradient-to-br from-gray-800 to-black"}
+      %{name: gettext("Light"), value: "light", preview_class: "bg-gradient-to-br from-white to-gray-100 border border-gray-200"},
+      %{name: gettext("Dark"), value: "dark", preview_class: "bg-gradient-to-br from-gray-700 to-gray-900"}
     ]
 
     available_locales = [
@@ -535,9 +525,13 @@ defmodule Trackguests3Web.UserLive.Settings do
     user = socket.assigns.current_scope.user
 
     case Accounts.update_user_theme(user, user_params) do
-      {:ok, _user} ->
+      {:ok, user} ->
         info = gettext("Theme updated successfully!")
-        {:noreply, socket |> put_flash(:info, info)}
+
+        {:noreply,
+         socket
+         |> put_flash(:info, info)
+         |> push_event("set-theme", %{theme: user.theme})}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :theme_form, to_form(changeset, action: :insert))}

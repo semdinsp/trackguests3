@@ -253,4 +253,28 @@ defmodule Trackguests3Web.UserLive.SettingsTest do
       assert html =~ "한국어"  # Korean native name
     end
   end
+
+  describe "theme preferences" do
+    setup %{conn: conn} do
+      user = user_fixture()
+      %{conn: log_in_user(conn, user), user: user}
+    end
+
+    test "only offers themes the app supports", %{conn: conn} do
+      {:ok, _lv, html} = live(conn, ~p"/users/settings")
+
+      assert html =~ "Dark"
+      refute html =~ "Cupcake"
+      refute html =~ "Dracula"
+    end
+
+    test "saving a theme stores it and applies it in the browser", %{conn: conn, user: user} do
+      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+
+      lv |> form("#theme_form", user: %{theme: "dark"}) |> render_submit()
+
+      assert_push_event(lv, "set-theme", %{theme: "dark"})
+      assert Trackguests3.Accounts.get_user!(user.id).theme == "dark"
+    end
+  end
 end

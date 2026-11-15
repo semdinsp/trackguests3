@@ -80,7 +80,7 @@ defmodule Trackguests3.AccountsTest do
       
       # Update the user with additional fields after creation
       {:ok, updated_user} = Accounts.update_user_admin(user, %{admin: true})
-      {:ok, updated_user} = Accounts.update_user_theme(updated_user, %{theme: "dracula"})
+      {:ok, updated_user} = Accounts.update_user_theme(updated_user, %{theme: "dark"})
       {:ok, updated_user} = Accounts.update_user_locale(updated_user, %{locale: "es"})
       {:ok, updated_user} = Accounts.update_user_guest_locales(updated_user, %{locales_to_show_guests: ["en", "es"]})
       
@@ -89,7 +89,7 @@ defmodule Trackguests3.AccountsTest do
       assert found_user.id == updated_user.id
       assert found_user.email == "detailed@example.com"
       assert found_user.admin == true
-      assert found_user.theme == "dracula"
+      assert found_user.theme == "dark"
       assert found_user.locale == "es"
       assert found_user.locales_to_show_guests == ["en", "es"]
       assert found_user.inserted_at

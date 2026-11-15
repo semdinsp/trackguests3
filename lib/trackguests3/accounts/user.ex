@@ -131,8 +131,10 @@ defmodule Trackguests3.Accounts.User do
   A user changeset for changing the theme.
   """
   def theme_changeset(user, attrs \\ %{}) do
-    themes = ["light", "cupcake", "cyberpunk", "greyscale", "retro", "synthwave", "valentine", "emerald", "corporate", "luxury", "dracula", "night"]
-    
+    # Only the themes the stylesheet actually defines (see assets/css/app.css)
+    themes = ["light", "dark"]
+
+
     user
     |> cast(attrs, [:theme])
     |> validate_inclusion(:theme, themes, message: "is not a valid theme")

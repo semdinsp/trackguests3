@@ -7,7 +7,7 @@ defmodule Trackguests3Web.RoomsLive.Show do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_scope={@current_scope}>
       <.header>
         Rooms {@rooms.id}
         <:subtitle>This is a rooms record from your database.</:subtitle>
