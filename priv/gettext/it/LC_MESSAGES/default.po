@@ -31,8 +31,8 @@ msgstr "Azioni"
 msgid "Active"
 msgstr "Attivo"
 
-#: lib/trackguests3_web/components/layouts.ex:183
 #: lib/trackguests3_web/components/layouts.ex:195
+#: lib/trackguests3_web/components/layouts.ex:207
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
@@ -89,11 +89,12 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:635
+#: lib/trackguests3_web/live/user_live/settings.ex:629
 #, elixir-autogen, elixir-format
 msgid "Failed to clear property selection"
 msgstr ""
 
+#: lib/trackguests3_web/components/layouts/root.html.heex:175
 #: lib/trackguests3_web/live/user_live/settings.ex:22
 #, elixir-autogen, elixir-format
 msgid "Guest History"
@@ -104,7 +105,7 @@ msgstr "Cronologia Ospiti"
 msgid "Language Preferences"
 msgstr "Preferenze Lingua"
 
-#: lib/trackguests3_web/live/user_live/settings.ex:565
+#: lib/trackguests3_web/live/user_live/settings.ex:559
 #, elixir-autogen, elixir-format
 msgid "Language updated successfully!"
 msgstr "Lingua aggiornata con successo!"
@@ -134,12 +135,12 @@ msgstr "Password e Sicurezza"
 msgid "Property Management"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:627
+#: lib/trackguests3_web/live/user_live/settings.ex:621
 #, elixir-autogen, elixir-format
 msgid "Property selection cleared successfully!"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:648
+#: lib/trackguests3_web/live/user_live/settings.ex:642
 #, elixir-autogen, elixir-format
 msgid "Property selection updated successfully!"
 msgstr ""
@@ -194,7 +195,7 @@ msgstr ""
 msgid "Selecting a property will make it your default for guest check-ins and property management features."
 msgstr ""
 
-#: lib/trackguests3_web/components/layouts.ex:190
+#: lib/trackguests3_web/components/layouts.ex:202
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
@@ -204,7 +205,7 @@ msgstr ""
 msgid "Theme Preferences"
 msgstr "Preferenze Tema"
 
-#: lib/trackguests3_web/live/user_live/settings.ex:539
+#: lib/trackguests3_web/live/user_live/settings.ex:529
 #, elixir-autogen, elixir-format
 msgid "Theme updated successfully!"
 msgstr "Tema aggiornato con successo!"
@@ -234,7 +235,7 @@ msgstr ""
 msgid "View and export guest check-in/check-out records"
 msgstr ""
 
-#: lib/trackguests3_web/components/layouts.ex:178
+#: lib/trackguests3_web/components/layouts.ex:190
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
@@ -259,7 +260,7 @@ msgstr ""
 msgid "Guest Language Selection"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:591
+#: lib/trackguests3_web/live/user_live/settings.ex:585
 #, elixir-autogen, elixir-format
 msgid "Guest language options updated successfully!"
 msgstr ""
@@ -289,7 +290,7 @@ msgstr "Visitatori Attivi"
 msgid "Check In Instead"
 msgstr "Registra Entrata Invece"
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:118
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:137
 #, elixir-autogen, elixir-format
 msgid "Check Out"
 msgstr "Registra Uscita"
@@ -314,8 +315,8 @@ msgstr "Registrazione Ospiti"
 msgid "Guest Information"
 msgstr "Informazioni Ospite"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.ex:169
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:240
+#: lib/trackguests3_web/live/visitor_live/check_in.ex:172
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:243
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Language changed successfully!"
 msgstr "Lingua aggiornata con successo!"
@@ -345,7 +346,7 @@ msgstr ""
 msgid "Thank you for your visit! Please check out below."
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:210
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:354
 #, elixir-autogen, elixir-format
 msgid "Thank you! You have been checked out successfully."
 msgstr ""
@@ -355,7 +356,7 @@ msgstr ""
 msgid "There are currently no checked-in visitors."
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:221
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:365
 #, elixir-autogen, elixir-format
 msgid "There was an error checking you out. Please try again."
 msgstr ""
@@ -380,54 +381,54 @@ msgstr ""
 msgid "Your Property"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:96
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:114
 #, elixir-autogen, elixir-format
 msgid "Checked in:"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:85
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:103
 #, elixir-autogen, elixir-format
 msgid "Details unavailable"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:87
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:105
 #, elixir-autogen, elixir-format
 msgid "No room assigned"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:103
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:121
 #, elixir-autogen, elixir-format
 msgid "Purpose:"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:130
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:149
 #, elixir-autogen, elixir-format
 msgid "Return to Home"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:85
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:103
 #, elixir-autogen, elixir-format
 msgid "Room ID"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:82
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:85
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:100
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:103
 #, elixir-autogen, elixir-format
 msgid "Visiting:"
 msgstr ""
 
 #: lib/trackguests3_web/live/visitor_live/check_in.html.heex:162
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:68
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:86
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Visitor"
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:204
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:348
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Thank you! You have been checked out successfully from %{room_name}."
 msgstr ""
 
-#: lib/trackguests3_web/live/visitor_live/check_out.ex:207
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:351
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Thank you! You have been checked out successfully from Room ID %{room_id}."
 msgstr ""
@@ -502,7 +503,7 @@ msgstr "Nessuna struttura"
 
 #: lib/trackguests3_web/live/property_live/dashboard.ex:36
 #: lib/trackguests3_web/live/property_live/select.ex:27
-#: lib/trackguests3_web/live/user_live/settings.ex:615
+#: lib/trackguests3_web/live/user_live/settings.ex:609
 #, elixir-autogen, elixir-format
 msgid "Only an administrator can assign you to an existing property."
 msgstr "Solo un amministratore può assegnarti a una struttura esistente."
@@ -536,3 +537,104 @@ msgstr "Accesso personale"
 #, elixir-autogen, elixir-format
 msgid "Visitors sign in and out here. Staff log in to manage rooms and guest history."
 msgstr "I visitatori registrano qui l'arrivo e la partenza. Il personale accede per gestire camere e storico ospiti."
+
+#: lib/trackguests3_web/controllers/error_html.ex:27
+#, elixir-autogen, elixir-format
+msgid "Access denied"
+msgstr "Accesso negato"
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:131
+#, elixir-autogen, elixir-format
+msgid "Check out %{name}?"
+msgstr "Registrare l'uscita di %{name}?"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:407
+#, elixir-autogen, elixir-format
+msgid "Dark"
+msgstr "Scuro"
+
+#: lib/trackguests3_web/controllers/error_html.ex:79
+#, elixir-autogen, elixir-format
+msgid "Error %{status}"
+msgstr "Errore %{status}"
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:57
+#, elixir-autogen, elixir-format
+msgid "Find a visitor by name"
+msgstr "Cerca un visitatore per nome"
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:63
+#, elixir-autogen, elixir-format
+msgid "Find a visitor by name…"
+msgstr "Cerca un visitatore per nome…"
+
+#: lib/trackguests3_web/controllers/error_html.ex:84
+#, elixir-autogen, elixir-format
+msgid "Go to home page"
+msgstr "Vai alla home page"
+
+#: lib/trackguests3_web/controllers/error_html.ex:85
+#, elixir-autogen, elixir-format
+msgid "Guest check-in"
+msgstr "Check-in ospiti"
+
+#: lib/trackguests3_web/components/layouts.ex:63
+#, elixir-autogen, elixir-format
+msgid "History"
+msgstr "Cronologia"
+
+#: lib/trackguests3_web/live/user_live/settings.ex:406
+#, elixir-autogen, elixir-format
+msgid "Light"
+msgstr "Chiaro"
+
+#: lib/trackguests3_web/components/layouts.ex:69
+#: lib/trackguests3_web/components/layouts/root.html.heex:181
+#, elixir-autogen, elixir-format
+msgid "My Property"
+msgstr "La mia struttura"
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:71
+#, elixir-autogen, elixir-format
+msgid "No visitors match “%{query}”."
+msgstr "Nessun visitatore corrisponde a “%{query}”."
+
+#: lib/trackguests3_web/controllers/error_html.ex:22
+#, elixir-autogen, elixir-format
+msgid "Page not found"
+msgstr "Pagina non trovata"
+
+#: lib/trackguests3_web/controllers/error_html.ex:31
+#, elixir-autogen, elixir-format
+msgid "Something went wrong"
+msgstr "Qualcosa è andato storto"
+
+#: lib/trackguests3_web/live/visitor_live/check_out.ex:217
+#, elixir-autogen, elixir-format
+msgid "That visitor is not checked in here."
+msgstr "Questo visitatore non risulta registrato qui."
+
+#: lib/trackguests3_web/controllers/error_html.ex:23
+#, elixir-autogen, elixir-format
+msgid "The page you're looking for doesn't exist or may have moved."
+msgstr "La pagina che cerchi non esiste o potrebbe essere stata spostata."
+
+#: lib/trackguests3_web/controllers/error_html.ex:67
+#, elixir-autogen, elixir-format
+msgid "TrackGuests Home"
+msgstr "Home di TrackGuests"
+
+#: lib/trackguests3_web/controllers/error_html.ex:37
+#, elixir-autogen, elixir-format
+msgid "We couldn't complete that request. Please go back and try again."
+msgstr "Non è stato possibile completare la richiesta. Torna indietro e riprova."
+
+#: lib/trackguests3_web/controllers/error_html.ex:32
+#, elixir-autogen, elixir-format
+msgid "We hit an unexpected problem on our side. Please try again in a moment."
+msgstr "Si è verificato un problema imprevisto. Riprova tra un momento."
+
+#: lib/trackguests3_web/controllers/error_html.ex:27
+#, elixir-autogen, elixir-format
+msgid "You don't have permission to view this page."
+msgstr "Non hai il permesso di visualizzare questa pagina."
