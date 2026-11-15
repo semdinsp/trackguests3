@@ -78,6 +78,16 @@ defmodule Trackguests3.Accounts do
   def residence_filter(_), do: :none
 
   @doc """
+  Returns whether the user may create a new residence (property).
+
+  Admins always can; other users only while they have no property, since
+  the new property is then assigned to them.
+  """
+  def can_create_residence?(%User{admin: true}), do: true
+  def can_create_residence?(%User{property_id: nil}), do: true
+  def can_create_residence?(_), do: false
+
+  @doc """
   Returns whether the user may access the given residence (property).
   """
   def can_access_residence?(user, residence_id) do

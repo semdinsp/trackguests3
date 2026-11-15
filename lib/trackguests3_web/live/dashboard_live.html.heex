@@ -78,7 +78,11 @@
       <div class="card-luxury">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-platinum">Properties Overview</h3>
-          <a href="/residences/new" class="btn-secondary-luxury text-sm">
+          <a
+            :if={Accounts.can_create_residence?(@current_scope.user)}
+            href="/residences/new"
+            class="btn-secondary-luxury text-sm"
+          >
             Add Property
           </a>
         </div>
@@ -164,7 +168,11 @@
     <div class="card-luxury">
       <h3 class="text-xl font-semibold text-platinum mb-6">Quick Actions</h3>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <a href="/residences/new" class="btn-luxury text-center">
+        <a
+          :if={Accounts.can_create_residence?(@current_scope.user)}
+          href="/residences/new"
+          class="btn-luxury text-center"
+        >
           <svg class="w-5 h-5 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
           </svg>
