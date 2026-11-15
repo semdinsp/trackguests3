@@ -67,6 +67,28 @@ defmodule Trackguests3.Accounts do
   def admin?(_), do: false
 
   @doc """
+  Returns which residences (properties) the user may see.
+
+    * `:all` - admins see every residence
+    * `{:only, residence_id}` - a user assigned to a property sees only that one
+    * `:none` - anonymous users and users without a property see nothing
+  """
+  def residence_filter(%User{admin: true}), do: :all
+  def residence_filter(%User{property_id: id}) when not is_nil(id), do: {:only, id}
+  def residence_filter(_), do: :none
+
+  @doc """
+  Returns whether the user may access the given residence (property).
+  """
+  def can_access_residence?(user, residence_id) do
+    case residence_filter(user) do
+      :all -> true
+      {:only, id} -> not is_nil(residence_id) and to_string(id) == to_string(residence_id)
+      :none -> false
+    end
+  end
+
+  @doc """
   Gets all admin users.
   """
   def list_admin_users do

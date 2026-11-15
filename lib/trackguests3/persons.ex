@@ -9,7 +9,8 @@ defmodule Trackguests3.Persons do
   alias Trackguests3.Persons.Person
 
   @doc """
-  Returns the list of persons.
+  Returns the list of persons, optionally limited by a residence filter from
+  `Trackguests3.Accounts.residence_filter/1` (default: all).
 
   ## Examples
 
@@ -17,9 +18,19 @@ defmodule Trackguests3.Persons do
       [%Person{}, ...]
 
   """
-  def list_persons do
-    Repo.all(Person)
+  def list_persons(filter \\ :all)
+
+  def list_persons(:all), do: Repo.all(Person)
+
+  def list_persons({:only, residence_id}) do
+    from(p in Person,
+      join: r in assoc(p, :room),
+      where: r.residence_id == ^residence_id
+    )
+    |> Repo.all()
   end
+
+  def list_persons(:none), do: []
 
   @doc """
   Returns the list of currently checked-in persons.
