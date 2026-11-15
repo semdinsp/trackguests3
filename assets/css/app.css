@@ -154,6 +154,8 @@
 /* Select specific styling for better visibility */
 select.input-luxury {
   @apply appearance-none bg-gray-50 text-gray-900 font-medium;
+  /* daisyUI .select fixes height at 2.5rem, which clips text under our padding */
+  height: auto;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
   background-position: right 1rem center;
   background-repeat: no-repeat;
