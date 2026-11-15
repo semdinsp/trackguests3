@@ -30,7 +30,7 @@ defmodule Trackguests3Web.HistoryLiveTest do
   }
 
   describe "Index" do
-    setup [:create_user, :create_residence, :create_room, :create_person]
+    setup [:create_user, :create_residence, :assign_user_property, :create_room, :create_person]
 
     test "lists all history records", %{conn: conn, user: user} do
       conn = log_in_user(conn, user)
@@ -422,6 +422,11 @@ defmodule Trackguests3Web.HistoryLiveTest do
   defp create_residence(_) do
     residence = residence_fixture()
     %{residence: residence}
+  end
+
+  defp assign_user_property(%{user: user, residence: residence}) do
+    {:ok, user} = Trackguests3.Accounts.update_user_property(user, %{property_id: residence.id})
+    %{user: user}
   end
 
   defp create_room(%{residence: residence}) do
