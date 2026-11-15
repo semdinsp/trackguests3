@@ -81,6 +81,7 @@ defmodule Trackguests3Web.PropertyLive.Rooms do
   @impl true
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash} current_scope={@current_scope}>
     <div class="space-y-6">
       <div class="flex justify-between items-center">
         <div>
@@ -161,6 +162,7 @@ defmodule Trackguests3Web.PropertyLive.Rooms do
         </.link>
       </div>
     </div>
+    </Layouts.app>
     """
   end
 end
