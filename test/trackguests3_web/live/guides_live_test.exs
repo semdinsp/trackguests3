@@ -159,8 +159,8 @@ defmodule Trackguests3Web.GuidesLiveTest do
       assert html =~ "Guest Check-Out"
       assert html =~ "Features"
       assert html =~ "Admin Guide"
-      # Check that SVG icons are present (note: HTML renders as viewbox, not viewBox)
-      assert html =~ "viewbox=\"0 0 24 24\""
+      # Check that SVG icons are present (note: HTML renders as viewBox, not viewBox)
+      assert html =~ "viewBox=\"0 0 24 24\""
     end
 
     test "includes navigation links in footer", %{conn: conn} do
@@ -390,7 +390,7 @@ defmodule Trackguests3Web.GuidesLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/guides")
 
       # Check for basic accessibility elements
-      assert html =~ "viewbox"  # SVG elements have viewbox (lowercase in HTML)
+      assert html =~ "viewBox"  # SVG elements have viewBox (lowercase in HTML)
       assert html =~ "<button"  # Interactive elements are present
       assert html =~ "phx-click"  # Interactive functionality
     end

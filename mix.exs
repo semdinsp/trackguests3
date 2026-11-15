@@ -5,7 +5,7 @@ defmodule Trackguests3.MixProject do
     [
       app: :trackguests3,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -34,18 +34,18 @@ defmodule Trackguests3.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
-      {:phoenix, "~> 1.8.0"},
-      {:phoenix_ecto, "~> 4.6"},
-      {:ecto_sql, "~> 3.12"},
-      {:ecto_sqlite3, ">= 0.0.0",  only: [:dev,:test]},
-      {:postgrex, ">= 0.0.0", only: :prod},
-      {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.0.0"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.8.5"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:phoenix, "~> 1.8.16"},
+      {:phoenix_ecto, "~> 4.7"},
+      {:ecto_sql, "~> 3.14"},
+      {:ecto_sqlite3, "~> 0.26", only: [:dev, :test]},
+      {:postgrex, "~> 0.22", only: :prod},
+      {:phoenix_html, "~> 4.4"},
+      {:phoenix_live_reload, "~> 1.7", only: :dev},
+      {:phoenix_live_view, "~> 1.2"},
+      {:lazy_html, ">= 0.1.0", only: :test},
+      {:phoenix_live_dashboard, "~> 0.9"},
+      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.5", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
@@ -53,27 +53,26 @@ defmodule Trackguests3.MixProject do
        app: false,
        compile: false,
        depth: 1},
-      {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"},
-      {:telemetry_metrics, "~> 1.0"},
+      {:swoosh, "~> 1.29"},
+      {:finch, "~> 0.24"},
+      {:telemetry_metrics, "~> 1.2"},
       {:telemetry_poller, "~> 1.1"},
-      {:gettext, "~> 0.26"},
+      {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"},
+      {:dns_cluster, "~> 0.3"},
+      {:bandit, "~> 1.14"},
       # scott mailer
-      {:ex_aws, "~> 2.1"},
-      {:ex_aws_s3, "~> 2.0"},
+      {:ex_aws, "~> 2.5"},
+      {:ex_aws_s3, "~> 2.5"},
       {:hackney, "~> 1.18"},
-      {:poison, "~> 3.0"},
       # stripe support
       # end exasw3
       {:sweet_xml, "~> 0.7"},
       # scott start mailer swoosh gmail
-      {:mail, ">= 0.3.1"},
-      {:gen_smtp, "~> 1.1.1"},
+      {:mail, "~> 0.5"},
+      {:gen_smtp, "~> 1.3"},
       # Google OAuth
-      {:elixir_auth_google, "~> 1.6"},
+      {:elixir_auth_google, "~> 1.6"}
     ]
   end
 
