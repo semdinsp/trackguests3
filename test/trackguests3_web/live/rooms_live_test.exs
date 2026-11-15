@@ -205,4 +205,74 @@ defmodule Trackguests3Web.RoomsLiveTest do
       assert html =~ "some updated title"
     end
   end
+
+  describe "Cross-property protection" do
+    setup do
+      own = residence_fixture(%{title: "Own Property"})
+      other = residence_fixture(%{title: "Other Property"})
+      own_room = rooms_fixture(%{title: "Own Room", residence_id: own.id})
+      other_room = rooms_fixture(%{title: "Other Room", residence_id: other.id})
+      {:ok, user} = Trackguests3.Accounts.update_user_property(user_fixture(), %{property_id: own.id})
+
+      %{conn: log_in_user(build_conn(), user), own: own, other: other, own_room: own_room, other_room: other_room}
+    end
+
+    test "cannot view or edit another property's room", %{conn: conn, other_room: other_room} do
+      assert {:error, {:live_redirect, %{to: "/rooms"}}} = live(conn, ~p"/rooms/#{other_room}")
+      assert {:error, {:live_redirect, %{to: "/rooms"}}} = live(conn, ~p"/rooms/#{other_room}/edit")
+    end
+
+    test "cannot list or add rooms for another property", %{conn: conn, other: other} do
+      assert {:error, {:live_redirect, %{to: "/rooms"}}} = live(conn, ~p"/residences/#{other}/rooms")
+      assert {:error, {:live_redirect, %{to: "/rooms"}}} = live(conn, ~p"/residences/#{other}/rooms/new")
+    end
+
+    test "residence dropdown only offers the user's property", %{conn: conn, own: own, other: other} do
+      {:ok, _live, html} = live(conn, ~p"/rooms/new")
+
+      assert html =~ own.title
+      refute html =~ other.title
+    end
+
+    test "tampered save cannot move a room into another property",
+         %{conn: conn, own_room: own_room, other: other} do
+      {:ok, edit_live, _html} = live(conn, ~p"/rooms/#{own_room}/edit")
+
+      render_submit(edit_live, "save", %{"rooms" => %{"residence_id" => other.id, "title" => "Moved"}})
+
+      room = Trackguests3.Accomodation.get_rooms!(own_room.id)
+      assert room.residence_id == own_room.residence_id
+      assert room.title == own_room.title
+    end
+
+    test "cannot delete another property's room", %{conn: conn, other_room: other_room} do
+      {:ok, index_live, _html} = live(conn, ~p"/rooms")
+
+      render_click(index_live, "delete", %{"id" => other_room.id})
+
+      assert Trackguests3.Accomodation.get_rooms!(other_room.id)
+    end
+
+    test "history only shows guests from the user's property",
+         %{conn: conn, own_room: own_room, other_room: other_room} do
+      now = DateTime.utc_now()
+
+      {:ok, _} =
+        Trackguests3.Persons.create_person(%{
+          name: "Own Guest", email: "own@example.com", visitor_type: "visitor",
+          status: "checked_in", room_id: own_room.id, check_in_time: now, fob: "F1"
+        })
+
+      {:ok, _} =
+        Trackguests3.Persons.create_person(%{
+          name: "Other Guest", email: "other@example.com", visitor_type: "visitor",
+          status: "checked_in", room_id: other_room.id, check_in_time: now, fob: "F2"
+        })
+
+      {:ok, _live, html} = live(conn, ~p"/history")
+
+      assert html =~ "Own Guest"
+      refute html =~ "Other Guest"
+    end
+  end
 end

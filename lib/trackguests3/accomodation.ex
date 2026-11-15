@@ -17,8 +17,10 @@ defmodule Trackguests3.Accomodation do
       [%Residence{}, ...]
 
   """
-  def list_residences do
-    Repo.all(Residence)
+  def list_residences(filter \\ :all) do
+    from(r in Residence, as: :residence)
+    |> filter_residences(filter, :residence, :id)
+    |> Repo.all()
   end
 
   @doc """
@@ -126,8 +128,9 @@ defmodule Trackguests3.Accomodation do
       [%Rooms{residence: %Residence{}}, ...]
 
   """
-  def list_rooms_with_residences do
-    Rooms
+  def list_rooms_with_residences(filter \\ :all) do
+    from(rm in Rooms, as: :room)
+    |> filter_residences(filter, :room, :residence_id)
     |> Repo.all()
     |> Repo.preload(:residence)
   end
@@ -251,54 +254,78 @@ defmodule Trackguests3.Accomodation do
   # Dashboard Statistics Functions
 
   @doc """
-  Gets comprehensive dashboard statistics.
-
   Returns a map with key metrics for the dashboard.
+
+  `filter` comes from `Trackguests3.Accounts.residence_filter/1` and limits
+  the metrics to the residences the user may see (default: all).
   """
-  def get_dashboard_stats do
+  def get_dashboard_stats(filter \\ :all) do
     %{
-      total_residences: count_residences(),
-      total_rooms: count_rooms(),
-      current_guests: count_current_guests(),
-      occupancy_rate: calculate_occupancy_rate(),
-      recent_activity: get_recent_activity()
+      total_residences: count_residences(filter),
+      total_rooms: count_rooms(filter),
+      current_guests: count_current_guests(filter),
+      occupancy_rate: calculate_occupancy_rate(filter),
+      recent_activity: get_recent_activity(filter)
     }
   end
 
+  # Restricts a query to the residences allowed by `filter`. `field` is the
+  # residence-id field on the binding at `position`.
+  defp filter_residences(query, :all, _position, _field), do: query
+
+  defp filter_residences(query, {:only, residence_id}, position, field) do
+    where(query, [{^position, x}], field(x, ^field) == ^residence_id)
+  end
+
+  defp filter_residences(query, :none, _position, _field), do: where(query, false)
+
   @doc """
-  Returns the total count of residences.
+  Returns the count of residences visible under `filter` (default: all).
   """
-  def count_residences do
-    Repo.aggregate(Residence, :count, :id)
+  def count_residences(filter \\ :all) do
+    from(r in Residence, as: :residence)
+    |> filter_residences(filter, :residence, :id)
+    |> Repo.aggregate(:count, :id)
   end
 
   @doc """
-  Returns the total count of rooms across all residences.
+  Returns the count of rooms visible under `filter` (default: all).
   """
-  def count_rooms do
-    Repo.aggregate(Rooms, :count, :id)
+  def count_rooms(filter \\ :all) do
+    from(rm in Rooms, as: :room)
+    |> filter_residences(filter, :room, :residence_id)
+    |> Repo.aggregate(:count, :id)
   end
 
   @doc """
-  Returns the count of currently checked-in guests.
-  For now returns 0 since persons/guests aren't fully implemented yet.
+  Returns the count of currently checked-in guests visible under `filter`
+  (default: all).
   """
-  def count_current_guests do
+  def count_current_guests(filter \\ :all) do
     alias Trackguests3.Persons
 
-    from(p in Persons.Person, where: p.status == "checked_in")
-    |> Repo.aggregate(:count, :id)
+    query = from(p in Persons.Person, where: p.status == "checked_in")
 
-    # Fallback to 0 if no persons table exists
+    query =
+      case filter do
+        :all ->
+          query
+
+        _ ->
+          from(p in query, join: rm in assoc(p, :room), as: :room)
+          |> filter_residences(filter, :room, :residence_id)
+      end
+
+    Repo.aggregate(query, :count, :id)
   end
 
   @doc """
-  Calculates the current occupancy rate as a percentage.
-  Returns 0.0 if no rooms exist.
+  Calculates the current occupancy rate as a percentage for the residences
+  visible under `filter`. Returns 0.0 if no rooms exist.
   """
-  def calculate_occupancy_rate do
-    total_rooms = count_rooms()
-    current_guests = count_current_guests()
+  def calculate_occupancy_rate(filter \\ :all) do
+    total_rooms = count_rooms(filter)
+    current_guests = count_current_guests(filter)
 
     if total_rooms > 0 do
       (current_guests / total_rooms * 100)
@@ -309,12 +336,13 @@ defmodule Trackguests3.Accomodation do
   end
 
   @doc """
-  Gets recent activity for the dashboard.
-  Returns a list of recent actions like new residences, rooms created, etc.
+  Gets recent activity (new residences and rooms) for the dashboard, limited
+  to the residences visible under `filter` (default: all).
   """
-  def get_recent_activity do
+  def get_recent_activity(filter \\ :all) do
     recent_residences =
       from(r in Residence,
+        as: :residence,
         order_by: [desc: r.inserted_at],
         limit: 3,
         select: %{
@@ -324,10 +352,12 @@ defmodule Trackguests3.Accomodation do
           id: r.id
         }
       )
+      |> filter_residences(filter, :residence, :id)
       |> Repo.all()
 
     recent_rooms =
       from(rm in Rooms,
+        as: :room,
         join: res in Residence,
         on: rm.residence_id == res.id,
         order_by: [desc: rm.inserted_at],
@@ -339,6 +369,7 @@ defmodule Trackguests3.Accomodation do
           id: rm.id
         }
       )
+      |> filter_residences(filter, :room, :residence_id)
       |> Repo.all()
 
     (recent_residences ++ recent_rooms)
@@ -347,10 +378,12 @@ defmodule Trackguests3.Accomodation do
   end
 
   @doc """
-  Gets residences with room counts for dashboard display.
+  Gets residences with room counts for dashboard display, limited to the
+  residences visible under `filter` (default: all).
   """
-  def list_residences_with_stats do
+  def list_residences_with_stats(filter \\ :all) do
     from(r in Residence,
+      as: :residence,
       left_join: rm in Rooms,
       on: rm.residence_id == r.id,
       group_by: r.id,
@@ -364,6 +397,7 @@ defmodule Trackguests3.Accomodation do
       },
       order_by: [desc: r.inserted_at]
     )
+    |> filter_residences(filter, :residence, :id)
     |> Repo.all()
   end
 

@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.HistoryLive.Index do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Persons
   alias Trackguests3.Accomodation
 
@@ -16,7 +17,7 @@ defmodule Trackguests3Web.HistoryLive.Index do
      |> assign(:end_date, end_date)
      |> assign(:history_data, [])
      |> assign(:loading, false)
-     |> assign(:current_scope, socket.assigns[:current_scope])
+     |> assign(:residence_filter, Accounts.residence_filter(socket.assigns.current_scope.user))
      |> assign(:page_title, "Guest History")
      |> assign(:kpi_metrics, %{})
      |> load_history_data()
@@ -72,17 +73,17 @@ defmodule Trackguests3Web.HistoryLive.Index do
     start_datetime = DateTime.new!(start_date, ~T[00:00:00])
     end_datetime = DateTime.new!(Date.add(end_date, 1), ~T[00:00:00])
     
-    history_data = get_history_data(start_datetime, end_datetime)
+    history_data = get_history_data(start_datetime, end_datetime, socket.assigns.residence_filter)
     
     socket
     |> assign(:history_data, history_data)
     |> assign(:loading, false)
   end
 
-  defp get_history_data(start_datetime, end_datetime) do
+  defp get_history_data(start_datetime, end_datetime, residence_filter) do
     try do
-      # Get all persons (guests) within the date range
-      persons = Persons.list_persons()
+      # Get persons (guests) the user may see, then narrow to the date range
+      persons = Persons.list_persons(residence_filter)
       
       persons
       |> Enum.filter(fn person ->
@@ -161,14 +162,16 @@ defmodule Trackguests3Web.HistoryLive.Index do
   defp load_kpi_metrics(socket) do
     try do
       # Get current checked-in guests count
-      checked_in_count = Persons.list_persons()
+      residence_filter = socket.assigns.residence_filter
+
+      checked_in_count = Persons.list_persons(residence_filter)
                         |> Enum.count(fn person -> person.status == "checked_in" end)
 
       # Get total room count
-      total_rooms = Accomodation.count_rooms()
+      total_rooms = Accomodation.count_rooms(residence_filter)
 
       # Get total properties count
-      total_properties = Accomodation.count_residences()
+      total_properties = Accomodation.count_residences(residence_filter)
 
       # Calculate unique visitors for current date range
       unique_visitors = socket.assigns.history_data

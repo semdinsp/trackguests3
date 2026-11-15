@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.ResidencesLive.Index do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Accomodation
 
   @impl true
@@ -103,17 +104,25 @@ defmodule Trackguests3Web.ResidencesLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    residences = Accomodation.list_residences_with_stats()
+    filter = Accounts.residence_filter(socket.assigns.current_scope.user)
+    residences = Accomodation.list_residences_with_stats(filter)
 
     {:ok,
      socket
-     |> assign(:current_scope, %{})
      |> assign(:residences, residences)
      |> assign(:page_title, "Properties")}
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
+    if Accounts.can_access_residence?(socket.assigns.current_scope.user, id) do
+      delete_residence(socket, id)
+    else
+      {:noreply, put_flash(socket, :error, gettext("You do not have access to that property."))}
+    end
+  end
+
+  defp delete_residence(socket, id) do
     residence = Accomodation.get_residence!(id)
     {:ok, _} = Accomodation.delete_residence(residence)
 

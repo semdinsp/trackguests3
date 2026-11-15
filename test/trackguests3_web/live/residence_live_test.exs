@@ -3,6 +3,7 @@ defmodule Trackguests3Web.ResidenceLiveTest do
 
   import Phoenix.LiveViewTest
   import Trackguests3.AccomodationFixtures
+  import Trackguests3.AccountsFixtures
 
   @create_attrs %{address: "some address", title: "some title", logo: "some logo", floor_count: 42}
   @update_attrs %{address: "some updated address", title: "some updated title", logo: "some updated logo", floor_count: 43}
@@ -13,8 +14,13 @@ defmodule Trackguests3Web.ResidenceLiveTest do
     %{residence: residence}
   end
 
+  defp log_in_admin(%{conn: conn}) do
+    {:ok, admin} = Trackguests3.Accounts.update_user_admin(user_fixture(), %{admin: true})
+    %{conn: log_in_user(conn, admin), admin: admin}
+  end
+
   describe "Index" do
-    setup [:create_residence]
+    setup [:create_residence, :log_in_admin]
 
     test "lists all residences", %{conn: conn, residence: residence} do
       {:ok, _index_live, html} = live(conn, ~p"/residences")
@@ -86,7 +92,7 @@ defmodule Trackguests3Web.ResidenceLiveTest do
   end
 
   describe "Show" do
-    setup [:create_residence]
+    setup [:create_residence, :log_in_admin]
 
     test "displays residence", %{conn: conn, residence: residence} do
       {:ok, _show_live, html} = live(conn, ~p"/residences/#{residence}")
@@ -120,6 +126,51 @@ defmodule Trackguests3Web.ResidenceLiveTest do
       html = render(show_live)
       assert html =~ "Residence updated successfully"
       assert html =~ "some updated title"
+    end
+  end
+
+  describe "Property-based access control" do
+    test "anonymous users are redirected to log in", %{conn: conn} do
+      residence = residence_fixture()
+
+      for path <- [~p"/residences", ~p"/residences/#{residence}", ~p"/residences/#{residence}/edit",
+                   ~p"/rooms", ~p"/history", ~p"/property"] do
+        assert {:error, {:redirect, %{to: "/users/log-in"}}} = live(conn, path)
+      end
+    end
+
+    test "users only see their own property in the listing", %{conn: conn} do
+      own = residence_fixture(%{title: "Own Property"})
+      other = residence_fixture(%{title: "Other Property"})
+      {:ok, user} = Trackguests3.Accounts.update_user_property(user_fixture(), %{property_id: own.id})
+
+      {:ok, _live, html} = live(log_in_user(conn, user), ~p"/residences")
+
+      assert html =~ own.title
+      refute html =~ other.title
+    end
+
+    test "users cannot view, edit or delete another property", %{conn: conn} do
+      own = residence_fixture()
+      other = residence_fixture()
+      {:ok, user} = Trackguests3.Accounts.update_user_property(user_fixture(), %{property_id: own.id})
+      conn = log_in_user(conn, user)
+
+      assert {:error, {:live_redirect, %{to: "/"}}} = live(conn, ~p"/residences/#{other}")
+      assert {:error, {:live_redirect, %{to: "/"}}} = live(conn, ~p"/residences/#{other}/edit")
+
+      {:ok, index_live, _html} = live(conn, ~p"/residences")
+      render_click(index_live, "delete", %{"id" => other.id})
+      assert Trackguests3.Accomodation.get_residence!(other.id)
+    end
+
+    test "home dashboard does not list properties to anonymous visitors", %{conn: conn} do
+      residence = residence_fixture(%{title: "Secret Tower", address: "1 Hidden Lane"})
+
+      {:ok, _live, html} = live(conn, ~p"/")
+
+      refute html =~ residence.title
+      refute html =~ residence.address
     end
   end
 end

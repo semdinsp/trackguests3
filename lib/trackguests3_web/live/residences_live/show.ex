@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.ResidencesLive.Show do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Accomodation
   alias Trackguests3.Persons
 
@@ -234,6 +235,17 @@ defmodule Trackguests3Web.ResidencesLive.Show do
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
+    if Accounts.can_access_residence?(socket.assigns.current_scope.user, id) do
+      mount_residence(socket, id)
+    else
+      {:ok,
+       socket
+       |> put_flash(:error, gettext("You do not have access to that property."))
+       |> push_navigate(to: ~p"/")}
+    end
+  end
+
+  defp mount_residence(socket, id) do
     residence = Accomodation.get_residence!(id)
 
     rooms =
@@ -247,7 +259,6 @@ defmodule Trackguests3Web.ResidencesLive.Show do
 
     {:ok,
      socket
-     |> assign(:current_scope, %{})
      |> assign(:residence, residence)
      |> assign(:rooms, rooms)
      |> assign(:current_visitors, current_visitors)
@@ -256,6 +267,15 @@ defmodule Trackguests3Web.ResidencesLive.Show do
 
   @impl true
   def handle_event("check_out", %{"id" => visitor_id}, socket) do
+    # Only guests currently checked in to this residence may be checked out here
+    if Enum.any?(socket.assigns.current_visitors, &(to_string(&1.id) == visitor_id)) do
+      check_out_visitor(socket, visitor_id)
+    else
+      {:noreply, put_flash(socket, :error, gettext("Guest not found at this property."))}
+    end
+  end
+
+  defp check_out_visitor(socket, visitor_id) do
     case Persons.check_out_visitor(visitor_id) do
       {:ok, _visitor} ->
         # Update the current visitors list

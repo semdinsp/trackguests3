@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.RoomsLive.Form do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Accomodation
   alias Trackguests3.Accomodation.Rooms
 
@@ -118,33 +119,61 @@ defmodule Trackguests3Web.RoomsLive.Form do
 
   @impl true
   def mount(params, _session, socket) do
+    user = socket.assigns.current_scope.user
     residence_id = params["residence_id"]
+
+    if residence_id && !Accounts.can_access_residence?(user, residence_id) do
+      {:ok, deny_access(socket)}
+    else
+      mount_form(socket, params, user, residence_id)
+    end
+  end
+
+  defp mount_form(socket, params, user, residence_id) do
     residence = if residence_id, do: Accomodation.get_residence!(residence_id), else: nil
 
     {:ok,
      socket
-     |> assign(:current_scope, %{})
      |> assign(:residence, residence)
-     |> assign(:residence_options, get_residence_options())
+     |> assign(:residence_options, get_residence_options(user))
      |> assign(:return_to, return_to(params["return_to"]))
      |> apply_action(socket.assigns.live_action, params)}
   end
 
-  defp get_residence_options do
-    Accomodation.list_residences()
+  defp deny_access(socket) do
+    socket
+    |> put_flash(:error, gettext("You do not have access to that property."))
+    |> push_navigate(to: ~p"/rooms")
+  end
+
+  # Only offer the residences this user is allowed to add rooms to
+  defp get_residence_options(user) do
+    user
+    |> Accounts.residence_filter()
+    |> Accomodation.list_residences()
     |> Enum.map(&{&1.title, &1.id})
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     rooms = Accomodation.get_rooms!(id)
 
+    if Accounts.can_access_residence?(socket.assigns.current_scope.user, rooms.residence_id) do
+      assign_edit(socket, rooms)
+    else
+      deny_access(socket)
+    end
+  end
+
+  defp apply_action(socket, :new, _params), do: assign_new(socket)
+
+  defp assign_edit(socket, rooms) do
     socket
     |> assign(:page_title, "Edit Room")
     |> assign(:rooms, rooms)
     |> assign(:form, to_form(Accomodation.change_rooms(rooms)))
   end
 
-  defp apply_action(socket, :new, _params) do
+  defp assign_new(socket) do
     rooms = %Rooms{}
 
     # If we have a residence context, pre-populate the residence_id
@@ -168,7 +197,14 @@ defmodule Trackguests3Web.RoomsLive.Form do
   end
 
   def handle_event("save", %{"rooms" => rooms_params}, socket) do
-    save_rooms(socket, socket.assigns.live_action, rooms_params)
+    # The submitted residence_id is client-controlled; re-check it on save
+    target_residence_id = rooms_params["residence_id"] || socket.assigns.rooms.residence_id
+
+    if Accounts.can_access_residence?(socket.assigns.current_scope.user, target_residence_id) do
+      save_rooms(socket, socket.assigns.live_action, rooms_params)
+    else
+      {:noreply, put_flash(socket, :error, gettext("You do not have access to that property."))}
+    end
   end
 
   def handle_event("cancel", _params, socket) do

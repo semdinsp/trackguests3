@@ -1,6 +1,7 @@
 defmodule Trackguests3Web.ResidencesLive.Form do
   use Trackguests3Web, :live_view
 
+  alias Trackguests3.Accounts
   alias Trackguests3.Accomodation
   alias Trackguests3.Accomodation.Residence
 
@@ -39,6 +40,30 @@ defmodule Trackguests3Web.ResidencesLive.Form do
   defp return_to(_), do: "index"
 
   defp apply_action(socket, :edit, %{"id" => id}) do
+    if Accounts.can_access_residence?(socket.assigns.current_scope.user, id) do
+      assign_edit(socket, id)
+    else
+      socket
+      |> put_flash(:error, gettext("You do not have access to that property."))
+      |> push_navigate(to: ~p"/")
+    end
+  end
+
+  defp apply_action(socket, :new, _params) do
+    user = socket.assigns.current_scope.user
+
+    # Non-admins may only create a property when they don't have one yet;
+    # the new property is then assigned to them (see save_residence/3).
+    if Accounts.admin?(user) or is_nil(user.property_id) do
+      assign_new(socket)
+    else
+      socket
+      |> put_flash(:error, gettext("You already have a property. Edit it from My Property."))
+      |> push_navigate(to: ~p"/property")
+    end
+  end
+
+  defp assign_edit(socket, id) do
     residence = Accomodation.get_residence!(id)
 
     socket
@@ -47,7 +72,7 @@ defmodule Trackguests3Web.ResidencesLive.Form do
     |> assign(:form, to_form(Accomodation.change_residence(residence)))
   end
 
-  defp apply_action(socket, :new, _params) do
+  defp assign_new(socket) do
     residence = %Residence{}
 
     socket
@@ -82,6 +107,12 @@ defmodule Trackguests3Web.ResidencesLive.Form do
   defp save_residence(socket, :new, residence_params) do
     case Accomodation.create_residence(residence_params) do
       {:ok, residence} ->
+        user = socket.assigns.current_scope.user
+
+        unless Accounts.admin?(user) do
+          {:ok, _user} = Accounts.update_user_property(user, %{property_id: residence.id})
+        end
+
         {:noreply,
          socket
          |> put_flash(:info, "Residence created successfully")

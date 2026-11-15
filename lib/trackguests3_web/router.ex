@@ -22,37 +22,10 @@ defmodule Trackguests3Web.Router do
 
     live_session :with_current_scope,
       on_mount: [{Trackguests3Web.UserAuth, :mount_current_scope}] do
-      # Main routes that work with or without auth but need current_scope
-      live("/residences", ResidencesLive.Index, :index)
-      live("/residences/new", ResidencesLive.Form, :new)
-      live("/residences/:id", ResidencesLive.Show, :show)
-      live("/residences/:id/edit", ResidencesLive.Form, :edit)
-
-      live("/rooms", RoomsLive.Index, :index)
-
-      # Residence-specific room routes
-      live("/residences/:residence_id/rooms", RoomsLive.Index, :residence_rooms)
-      live("/residences/:residence_id/rooms/new", RoomsLive.Form, :new)
-      live("/rooms/new", RoomsLive.Form, :new)
-      live("/rooms/:id", RoomsLive.Show, :show)
-      live("/rooms/:id/edit", RoomsLive.Form, :edit)
-
-      # Property management routes
-      live("/property", PropertyLive.Dashboard, :index)
-      live("/property/new", PropertyLive.Form, :new)
-      live("/property/edit", PropertyLive.Form, :edit)
-      live("/property/select", PropertyLive.Select, :index)
-      live("/property/rooms", PropertyLive.Rooms, :index)
-      live("/property/rooms/new", PropertyLive.Rooms, :new)
-      live("/property/rooms/:id/edit", PropertyLive.Rooms, :edit)
-
-      # History routes
-      live("/history", HistoryLive.Index, :index)
-      
       # Visitor check-in route (public - no auth needed but can access current_scope)
       live("/visitor/check-in", VisitorLive.CheckIn, :index)
     end
-    
+
     # Public guides page
     live("/guides", GuidesLive, :index)
     
@@ -85,6 +58,32 @@ defmodule Trackguests3Web.Router do
       
       # Visitor check-out requires authentication to enforce property restrictions
       live("/visitor/check-out", VisitorLive.CheckOut, :index)
+
+      # Residence and room management. Non-admin users are limited to their
+      # assigned property inside each LiveView.
+      live("/residences", ResidencesLive.Index, :index)
+      live("/residences/new", ResidencesLive.Form, :new)
+      live("/residences/:id", ResidencesLive.Show, :show)
+      live("/residences/:id/edit", ResidencesLive.Form, :edit)
+
+      live("/rooms", RoomsLive.Index, :index)
+      live("/residences/:residence_id/rooms", RoomsLive.Index, :residence_rooms)
+      live("/residences/:residence_id/rooms/new", RoomsLive.Form, :new)
+      live("/rooms/new", RoomsLive.Form, :new)
+      live("/rooms/:id", RoomsLive.Show, :show)
+      live("/rooms/:id/edit", RoomsLive.Form, :edit)
+
+      # Property management for the current user's own property
+      live("/property", PropertyLive.Dashboard, :index)
+      live("/property/new", PropertyLive.Form, :new)
+      live("/property/edit", PropertyLive.Form, :edit)
+      live("/property/select", PropertyLive.Select, :index)
+      live("/property/rooms", PropertyLive.Rooms, :index)
+      live("/property/rooms/new", PropertyLive.Rooms, :new)
+      live("/property/rooms/:id/edit", PropertyLive.Rooms, :edit)
+
+      # Guest history, limited to the user's property (admins see all)
+      live("/history", HistoryLive.Index, :index)
     end
 
     # CSV export route requires authentication to enforce property restrictions
