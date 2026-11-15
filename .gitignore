@@ -1,4 +1,3 @@
-_build/tailwind-linux-x64
-# Large binary files
-_build/esbuild-*
-_build/tailwind-*
+# Mix build artifacts and fetched dependencies (recreated by `mix deps.get` / `mix compile`)
+/_build/
+/deps/
