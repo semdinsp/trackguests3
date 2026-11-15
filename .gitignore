@@ -8,3 +8,10 @@
 # Local SQLite databases (dev and test), including WAL sidecar files
 /trackguests3_dev.db*
 /trackguests3_test*
+
+# Built static assets (recreated by the dev watchers / `mix assets.deploy`)
+/priv/static/assets/
+/priv/static/cache_manifest.json
+# phx.digest output: fingerprinted (name-<32 hex>.ext) and gzipped copies
+/priv/static/**/*-????????????????????????????????.*
+/priv/static/**/*.gz
