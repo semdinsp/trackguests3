@@ -95,7 +95,7 @@ defmodule Trackguests3Web.Layouts do
                 <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
                   <span class="text-white font-bold text-sm">A</span>
                 </div>
-                <h1 class="text-xl font-semibold text-gray-900">Admin Panel</h1>
+                <h1 class="text-lg sm:text-xl font-semibold text-gray-900 whitespace-nowrap">Admin Panel</h1>
               </div>
               <nav class="hidden md:flex space-x-1">
                 <.link href="/admin" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100">
@@ -121,18 +121,26 @@ defmodule Trackguests3Web.Layouts do
                 </.link>
               </nav>
             </div>
-            <div class="flex items-center space-x-4">
-              <.link href="/" class="text-sm text-gray-500 hover:text-gray-700">
+            <div class="flex items-center gap-4">
+              <.link href="/" class="text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap">
                 ← Back to Site
               </.link>
               <%= if @current_scope && Map.get(@current_scope, :user) do %>
-                <span class="text-sm text-gray-600"><%= Map.get(@current_scope, :user) |> Map.get(:email) %></span>
-                <.link href="/users/log-out" method="delete" class="text-sm text-gray-500 hover:text-gray-700">
+                <span class="hidden md:inline text-sm text-gray-600"><%= Map.get(@current_scope, :user) |> Map.get(:email) %></span>
+                <.link href="/users/log-out" method="delete" class="text-sm text-gray-500 hover:text-gray-700 whitespace-nowrap">
                   Log out
                 </.link>
               <% end %>
             </div>
           </div>
+          <nav class="md:hidden flex gap-1 overflow-x-auto pb-3 -mx-3" aria-label="Admin sections">
+            <.link :for={{label, href} <- [{"Dashboard", "/admin"}, {"Users", "/admin/users"}, {"Residences", "/admin/residences"}, {"Rooms", "/admin/rooms"}, {"Persons", "/admin/persons"}, {"User Guides", "/guides"}]}
+              href={href}
+              class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 whitespace-nowrap"
+            >
+              {label}
+            </.link>
+          </nav>
         </div>
       </header>
 
