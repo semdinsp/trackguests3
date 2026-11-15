@@ -52,7 +52,7 @@ msgstr ""
 msgid "Changing..."
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:290
+#: lib/trackguests3_web/live/user_live/settings.ex:295
 #, elixir-autogen, elixir-format
 msgid "Choose a property to manage..."
 msgstr ""
@@ -67,12 +67,12 @@ msgstr ""
 msgid "Choose your preferred theme"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:307
+#: lib/trackguests3_web/live/user_live/settings.ex:312
 #, elixir-autogen, elixir-format
 msgid "Clear Selection"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:359
+#: lib/trackguests3_web/live/user_live/settings.ex:364
 #, elixir-autogen, elixir-format
 msgid "Confirm New Password"
 msgstr ""
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:640
+#: lib/trackguests3_web/live/user_live/settings.ex:635
 #, elixir-autogen, elixir-format
 msgid "Failed to clear property selection"
 msgstr ""
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Language Preferences"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:558
+#: lib/trackguests3_web/live/user_live/settings.ex:565
 #, elixir-autogen, elixir-format
 msgid "Language updated successfully!"
 msgstr ""
@@ -114,17 +114,17 @@ msgstr ""
 msgid "Manage your account preferences and security settings"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:351
+#: lib/trackguests3_web/live/user_live/settings.ex:356
 #, elixir-autogen, elixir-format
 msgid "New Password"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:313
+#: lib/trackguests3_web/live/user_live/settings.ex:318
 #, elixir-autogen, elixir-format
 msgid "Note:"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:323
+#: lib/trackguests3_web/live/user_live/settings.ex:328
 #, elixir-autogen, elixir-format
 msgid "Password & Security"
 msgstr ""
@@ -134,12 +134,12 @@ msgstr ""
 msgid "Property Management"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:632
+#: lib/trackguests3_web/live/user_live/settings.ex:627
 #, elixir-autogen, elixir-format
 msgid "Property selection cleared successfully!"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:613
+#: lib/trackguests3_web/live/user_live/settings.ex:648
 #, elixir-autogen, elixir-format
 msgid "Property selection updated successfully!"
 msgstr ""
@@ -149,7 +149,7 @@ msgstr ""
 msgid "Save Language"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:299
+#: lib/trackguests3_web/live/user_live/settings.ex:304
 #, elixir-autogen, elixir-format
 msgid "Save Property Selection"
 msgstr ""
@@ -162,8 +162,8 @@ msgstr ""
 #: lib/trackguests3_web/live/user_live/settings.ex:95
 #: lib/trackguests3_web/live/user_live/settings.ex:167
 #: lib/trackguests3_web/live/user_live/settings.ex:246
-#: lib/trackguests3_web/live/user_live/settings.ex:295
-#: lib/trackguests3_web/live/user_live/settings.ex:363
+#: lib/trackguests3_web/live/user_live/settings.ex:300
+#: lib/trackguests3_web/live/user_live/settings.ex:368
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -173,7 +173,7 @@ msgstr ""
 msgid "Select Language"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:288
+#: lib/trackguests3_web/live/user_live/settings.ex:293
 #: lib/trackguests3_web/live/visitor_live/check_in.html.heex:75
 #, elixir-autogen, elixir-format
 msgid "Select Property"
@@ -189,7 +189,7 @@ msgstr ""
 msgid "Select your managed property for check-ins"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:313
+#: lib/trackguests3_web/live/user_live/settings.ex:318
 #, elixir-autogen, elixir-format
 msgid "Selecting a property will make it your default for guest check-ins and property management features."
 msgstr ""
@@ -204,12 +204,12 @@ msgstr ""
 msgid "Theme Preferences"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:532
+#: lib/trackguests3_web/live/user_live/settings.ex:539
 #, elixir-autogen, elixir-format
 msgid "Theme updated successfully!"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:367
+#: lib/trackguests3_web/live/user_live/settings.ex:372
 #, elixir-autogen, elixir-format
 msgid "Update Password"
 msgstr ""
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Update your email address"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:324
+#: lib/trackguests3_web/live/user_live/settings.ex:329
 #, elixir-autogen, elixir-format
 msgid "Update your password to keep your account secure"
 msgstr ""
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Guest Language Selection"
 msgstr ""
 
-#: lib/trackguests3_web/live/user_live/settings.ex:584
+#: lib/trackguests3_web/live/user_live/settings.ex:591
 #, elixir-autogen, elixir-format
 msgid "Guest language options updated successfully!"
 msgstr ""
@@ -477,4 +477,42 @@ msgstr ""
 #: lib/trackguests3_web/live/rooms_live/show.ex:52
 #, elixir-autogen, elixir-format
 msgid "You do not have access to that property."
+msgstr ""
+
+#: lib/trackguests3_web/live/property_live/select.ex:58
+#, elixir-autogen, elixir-format
+msgid "Access to a property is granted by an administrator"
+msgstr ""
+
+#: lib/trackguests3_web/live/property_live/select.ex:61
+#: lib/trackguests3_web/live/user_live/settings.ex:286
+#, elixir-autogen, elixir-format
+msgid "Ask an administrator to assign you to your property."
+msgstr ""
+
+#: lib/trackguests3_web/live/property_live/select.ex:68
+#, elixir-autogen, elixir-format
+msgid "Create New Property"
+msgstr ""
+
+#: lib/trackguests3_web/live/admin_live/user_form_component.ex:31
+#, elixir-autogen, elixir-format
+msgid "No property"
+msgstr ""
+
+#: lib/trackguests3_web/live/property_live/dashboard.ex:36
+#: lib/trackguests3_web/live/property_live/select.ex:27
+#: lib/trackguests3_web/live/user_live/settings.ex:615
+#, elixir-autogen, elixir-format
+msgid "Only an administrator can assign you to an existing property."
+msgstr ""
+
+#: lib/trackguests3_web/live/property_live/select.ex:63
+#, elixir-autogen, elixir-format
+msgid "Or create a new property of your own."
+msgstr ""
+
+#: lib/trackguests3_web/live/admin_live/user_form_component.ex:29
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Property"
 msgstr ""
