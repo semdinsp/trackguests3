@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
+    <script>
+      // Apply the saved theme before first paint so dark mode doesn't flash light
+      try { document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "light") } catch (_) {}
+    </script>
     <.live_title default="TrackGuests - Luxury Guest Management" suffix=" · TrackGuests">
       {assigns[:page_title]}
     </.live_title>
