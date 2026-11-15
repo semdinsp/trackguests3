@@ -26,10 +26,6 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
               user = Accounts.get_user_with_property!(user_id)
               locales = user.locales_to_show_guests || ["en"]
               {user.property, locales}
-            user ->
-              user = Accounts.get_user_with_property!(user.id)
-              locales = user.locales_to_show_guests || ["en"]
-              {user.property, locales}
           end
       end
     rescue

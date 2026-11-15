@@ -159,9 +159,6 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
               user_id = Map.get(user, :id) || user.id
               user = Accounts.get_user_with_property!(user_id)
               user.locales_to_show_guests || ["en"]
-            user ->
-              user = Accounts.get_user_with_property!(user.id)
-              user.locales_to_show_guests || ["en"]
           end
       end
     rescue
@@ -270,9 +267,6 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
               user_id = Map.get(user, :id) || user.id
               user = Accounts.get_user_with_property!(user_id)
               if user.property, do: user.property.title, else: nil
-            user ->
-              user = Accounts.get_user_with_property!(user.id)
-              if user.property, do: user.property.title, else: nil
           end
       end
     rescue
@@ -300,15 +294,6 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
                 # User has no property, show all
                 Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
               end
-            user ->
-              user = Accounts.get_user_with_property!(user.id)
-              if user.property do
-                # Filter by user's property - function already executes query and preloads room
-                Persons.list_current_visitors_for_residence(user.property.id)
-              else
-                # User has no property, show all
-                Persons.list_checked_in_persons() |> Enum.map(&preload_room/1)
-              end
           end
       end
     rescue
@@ -328,9 +313,6 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
             user when is_map(user) ->
               user_id = Map.get(user, :id) || user.id
               user = Accounts.get_user_with_property!(user_id)
-              if user.property && user.property.timezone, do: user.property.timezone, else: "America/New_York"
-            user ->
-              user = Accounts.get_user_with_property!(user.id)
               if user.property && user.property.timezone, do: user.property.timezone, else: "America/New_York"
           end
       end
