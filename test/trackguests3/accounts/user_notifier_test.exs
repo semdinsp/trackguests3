@@ -168,4 +168,14 @@ defmodule Trackguests3.Accounts.UserNotifierTest do
       assert String.contains?(html, "text-decoration: none")
     end
   end
+
+  describe "mask_email/1" do
+    test "hides the local part but keeps the domain" do
+      assert UserNotifier.mask_email("jane.doe@example.com") == "j***@example.com"
+    end
+
+    test "handles values that are not email addresses" do
+      assert UserNotifier.mask_email("not-an-email") == "***"
+    end
+  end
 end
