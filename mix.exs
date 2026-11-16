@@ -54,6 +54,7 @@ defmodule Trackguests3.MixProject do
        compile: false,
        depth: 1},
       {:swoosh, "~> 1.29"},
+      {:eqrcode, "~> 0.2.1"},
       {:finch, "~> 0.24"},
       {:telemetry_metrics, "~> 1.2"},
       {:telemetry_poller, "~> 1.1"},

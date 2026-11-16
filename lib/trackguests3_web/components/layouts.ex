@@ -28,13 +28,18 @@ defmodule Trackguests3Web.Layouts do
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
   )
 
+  attr(:guest_mode, :boolean,
+    default: false,
+    doc: "phone self-service pages: hide the staff quick-action bar"
+  )
+
   slot(:inner_block, required: true)
 
   def app(assigns) do
     ~H"""
     <div class="min-h-screen gradient-bg-luxury" id="main-content">
       <!-- Secondary Navigation for Quick Actions -->
-      <div class="bg-white/50 backdrop-blur-sm border-b border-gray-200/30 py-3">
+      <div :if={!@guest_mode} id="quick-actions" class="bg-white/50 backdrop-blur-sm border-b border-gray-200/30 py-3">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
             <.link href="/visitor/check-in" class="btn-luxury inline-flex items-center whitespace-nowrap text-sm max-sm:w-auto! max-sm:px-3! max-sm:py-2!">

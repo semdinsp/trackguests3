@@ -5,6 +5,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
   alias Trackguests3.Persons.Person
   alias Trackguests3.Accomodation
   alias Trackguests3.Accounts
+  alias Trackguests3Web.SelfService
 
   @impl true
   def mount(params, session, socket) do
@@ -32,8 +33,12 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
       _ -> {nil, ["en", "es", "fr"]}
     end
     
-    # Use URL residence_id, user's property, or nil in that order of priority
+    self_service? = socket.assigns.live_action == :self_service
+
+    # Phone self-service is locked to the property in the QR code. Otherwise
+    # use URL residence_id, user's property, or nil in that order of priority
     residence = cond do
+      self_service? -> Accomodation.get_residence_by_self_service_code!(params["code"])
       residence_id -> Accomodation.get_residence!(residence_id)
       user_residence -> user_residence
       true -> nil
@@ -52,7 +57,9 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
      |> assign(:person, %Person{})
      |> assign(:form, to_form(Persons.change_person(%Person{})))
      |> assign(:room_options, get_room_options(residence))
-     |> assign(:residence_options, get_residence_options(user_residence))
+     |> assign(:residence_options, if(self_service?, do: [], else: get_residence_options(user_residence)))
+     |> assign(:self_service, self_service?)
+     |> assign(:qr_codes, qr_codes(residence, user_residence, socket.assigns[:current_scope], self_service?))
      |> assign(:room_search_results, [])
      |> assign(:selected_room_id, nil)
      |> assign(:selected_room_display, "")
@@ -76,7 +83,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
     # Use selected room ID from autocomplete or fallback to form room_id
     room_id = socket.assigns.selected_room_id || person_params["room_id"]
     
-    if room_id && room_id != "" do
+    if room_id && room_id != "" && room_in_residence?(room_id, socket.assigns.residence) do
       # Add check-in data to person params
       enhanced_params = Map.merge(person_params, %{
         "room_id" => room_id,
@@ -95,6 +102,15 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
             {:dashboard_update, %{}}
           )
 
+          if socket.assigns.self_service do
+            # Hand off to a controller so the visit can be saved in a cookie
+            # on this phone for self-service check-out.
+            {:noreply,
+             redirect(socket,
+               to:
+                 ~p"/p/#{socket.assigns.residence.self_service_code}/checked-in?#{[t: SelfService.sign_handoff(person.id)]}"
+             )}
+          else
           {:noreply,
            socket
            |> put_flash(:info, "#{person.name} successfully checked in!")
@@ -106,6 +122,7 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
            # Clear the browser's "user touched this field" state so the
            # emptied form doesn't show error borders for the next guest
            |> push_event("reset-form", %{id: "check-in-form"})}
+          end
 
         {:error, changeset} ->
           Logger.error("Guest check-in failed: #{inspect(changeset.errors)}")
@@ -118,6 +135,9 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
        |> put_flash(:error, "Please select a room before checking in.")}
     end
   end
+
+  def handle_event("select_residence", _params, %{assigns: %{self_service: true}} = socket),
+    do: {:noreply, socket}
 
   def handle_event("select_residence", %{"residence_id" => residence_id}, socket) do
     residence = if residence_id != "", do: Accomodation.get_residence!(residence_id), else: nil
@@ -161,16 +181,57 @@ defmodule Trackguests3Web.VisitorLive.CheckIn do
     
     # Store the selected locale in the session for persistence
     # Force a complete re-render by redirecting to the same page
-    residence_param = if socket.assigns.residence do
-      "?residence_id=#{socket.assigns.residence.id}&locale=#{locale}"
+    path =
+      if socket.assigns.self_service,
+        do: ~p"/p/#{socket.assigns.residence.self_service_code}/check-in?#{[locale: locale]}",
+        else: "/visitor/check-in#{residence_query(socket.assigns.residence, locale)}"
+
+    {:noreply,
+     socket
+     |> put_flash(:info, gettext("Language changed successfully!"))
+     |> push_navigate(to: path)}
+  end
+
+  defp residence_query(residence, locale) do
+    if residence do
+      "?residence_id=#{residence.id}&locale=#{locale}"
     else
       "?locale=#{locale}"
     end
     
-    {:noreply,
-     socket
-     |> put_flash(:info, gettext("Language changed successfully!"))
-     |> push_navigate(to: "/visitor/check-in#{residence_param}")}
+  end
+
+  # A room must belong to the property being checked into, so a phone (or a
+  # crafted request) can't check a guest into another property's room.
+  defp room_in_residence?(_room_id, nil), do: true
+
+  defp room_in_residence?(room_id, residence) do
+    case Ecto.UUID.cast(room_id) do
+      {:ok, id} ->
+        Enum.any?(Accomodation.list_rooms_for_residence(residence.id), &(&1.id == id))
+
+      :error ->
+        false
+    end
+  end
+
+  # QR codes are shown to staff who manage the property, on the lobby
+  # check-in page. Never in self-service mode or to anonymous visitors, since
+  # the codes let anyone check in to the property.
+  defp qr_codes(nil, _user_residence, _scope, _self_service?), do: nil
+  defp qr_codes(_residence, _user_residence, _scope, true), do: nil
+
+  defp qr_codes(residence, _user_residence, scope, false) do
+    user = scope && Map.get(scope, :user)
+
+    if user && Accounts.can_access_residence?(user, residence.id) do
+      residence = Accomodation.ensure_self_service_code(residence)
+
+      %{
+        check_in: SelfService.qr_svg(url(~p"/p/#{residence.self_service_code}/check-in"), 160),
+        check_out: SelfService.qr_svg(url(~p"/p/#{residence.self_service_code}/check-out"), 160)
+      }
+    end
   end
 
   defp get_room_options(nil) do

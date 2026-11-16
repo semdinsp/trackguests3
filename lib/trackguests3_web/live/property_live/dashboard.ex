@@ -64,12 +64,15 @@ defmodule Trackguests3Web.PropertyLive.Dashboard do
               <p class="text-gray-600"><%= @user.property.address %></p>
               <p class="text-sm text-gray-500"><%= @user.property.floor_count %> floors</p>
             </div>
-            <div class="flex space-x-2">
+            <div class="flex flex-wrap gap-2">
               <.link navigate={~p"/property/edit"} class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Edit Property
               </.link>
               <.link navigate={~p"/property/rooms"} class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Manage Rooms
+              </.link>
+              <.link navigate={~p"/property/qr-codes"} class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {gettext("Guest QR codes")}
               </.link>
             </div>
           </div>

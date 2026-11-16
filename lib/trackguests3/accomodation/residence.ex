@@ -10,6 +10,9 @@ defmodule Trackguests3.Accomodation.Residence do
     field(:floor_count, :integer)
     field(:logo, :binary)
     field(:timezone, :string, default: "America/New_York")
+    # Secret in the property's check-in/check-out QR codes. Not user editable;
+    # rotate it with Accomodation.rotate_self_service_code/1.
+    field(:self_service_code, :string)
 
     has_many :rooms, Trackguests3.Accomodation.Rooms
     has_many :users, Trackguests3.Accounts.User, foreign_key: :property_id
@@ -23,6 +26,26 @@ defmodule Trackguests3.Accomodation.Residence do
     |> cast(attrs, [:title, :address, :floor_count, :logo, :timezone])
     |> validate_required([:title, :address, :floor_count])
     |> validate_timezone()
+    |> put_self_service_code()
+  end
+
+  @doc "Generates a new random, URL-safe self-service code."
+  def generate_self_service_code,
+    do: :crypto.strong_rand_bytes(12) |> Base.url_encode64(padding: false)
+
+  defp put_self_service_code(changeset) do
+    if get_field(changeset, :self_service_code) do
+      changeset
+    else
+      put_change(changeset, :self_service_code, generate_self_service_code())
+    end
+  end
+
+  @doc false
+  def self_service_code_changeset(residence) do
+    residence
+    |> change(self_service_code: generate_self_service_code())
+    |> unique_constraint(:self_service_code)
   end
 
   defp validate_timezone(changeset) do
