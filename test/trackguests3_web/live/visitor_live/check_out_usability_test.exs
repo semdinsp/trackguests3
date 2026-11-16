@@ -7,7 +7,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOutUsabilityTest do
 
   alias Trackguests3.Persons
 
-  defp guest(room, name) do
+  defp guest(room, name, check_in_time \\ DateTime.utc_now()) do
     {:ok, person} =
       Persons.create_person(%{
         name: name,
@@ -16,7 +16,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOutUsabilityTest do
         status: "checked_in",
         fob: "F-1",
         room_id: room.id,
-        check_in_time: DateTime.utc_now()
+        check_in_time: check_in_time
       })
 
     person
@@ -59,5 +59,20 @@ defmodule Trackguests3Web.VisitorLive.CheckOutUsabilityTest do
 
     html = lv |> form("#visitor-filter", q: "nobody") |> render_change()
     assert html =~ "No visitors match"
+  end
+
+  test "shows the check-in date under the time", %{conn: conn, own_room: room} do
+    guest(room, "Ada Lovelace")
+    {:ok, lv, _html} = live(conn, ~p"/visitor/check-out")
+
+    assert has_element?(lv, ".check-in-date[data-overdue=false]")
+    refute render(lv) =~ "days ago"
+  end
+
+  test "flags guests checked in on an earlier day", %{conn: conn, own_room: room} do
+    guest(room, "Grace Hopper", DateTime.add(DateTime.utc_now(), -3 * 86_400, :second))
+    {:ok, lv, _html} = live(conn, ~p"/visitor/check-out")
+
+    assert has_element?(lv, ".check-in-date[data-overdue]", "3 days ago")
   end
 end

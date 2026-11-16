@@ -576,6 +576,28 @@ defmodule Trackguests3.Accomodation do
     Calendar.strftime(local_datetime, "%I:%M %p")
   end
 
+  @doc """
+  Formats the date of `datetime` in the property's timezone, e.g. "Wed, Nov 4".
+  """
+  def format_date_in_timezone(datetime, timezone) do
+    datetime |> to_property_local(timezone) |> Calendar.strftime("%a, %b %-d")
+  end
+
+  @doc """
+  Returns how many calendar days ago `datetime` was, in the property's
+  timezone (0 = today). Used to flag guests who should already have left.
+  """
+  def days_ago_in_timezone(datetime, timezone, now \\ DateTime.utc_now()) do
+    then_date = datetime |> to_property_local(timezone) |> DateTime.to_date()
+    today = now |> to_property_local(timezone) |> DateTime.to_date()
+    Date.diff(today, then_date)
+  end
+
+  defp to_property_local(datetime, timezone) when is_binary(timezone),
+    do: DateTime.add(datetime, get_timezone_offset_seconds(timezone), :second)
+
+  defp to_property_local(datetime, _timezone), do: to_property_local(datetime, "America/New_York")
+
   # Get the timezone offset in seconds from UTC for common timezones.
   # This uses daylight saving time offsets for applicable zones (March-November).
   defp get_timezone_offset_seconds(timezone) do
