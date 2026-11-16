@@ -1,4 +1,4 @@
-<Layouts.app flash={@flash} current_scope={@current_scope}>
+<Layouts.app flash={@flash} current_scope={@current_scope} guest_mode={@self_service}>
   <div class="space-y-8">
     <!-- Language Selector -->
     <div class="flex justify-end">
@@ -38,8 +38,15 @@
         </p>
       <% end %>
       
+      <!-- Phone self-service: only a link to this guest's own check-out -->
+      <div :if={@self_service} class="mt-6 flex justify-center">
+        <.link navigate={~p"/p/#{@residence.self_service_code}/check-out"} class="btn-luxury inline-flex items-center">
+          <%= gettext("Already checked in? Check out") %>
+        </.link>
+      </div>
+
       <!-- Quick Actions -->
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <div :if={!@self_service} class="mt-6 flex flex-wrap items-center justify-center gap-3">
         <.link href="/visitor/check-out" class="btn-luxury inline-flex items-center">
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -54,6 +61,29 @@
         </.link>
       </div>
     </div>
+
+    <!-- QR codes for guests' phones (staff view only) -->
+    <section :if={@qr_codes} id="self-service-qr" class="max-w-2xl mx-auto">
+      <div class="card-luxury">
+        <h2 class="text-lg font-semibold text-platinum text-center"><%= gettext("Use your phone") %></h2>
+        <p class="mt-1 text-sm text-gray-600 text-center">
+          <%= gettext("Scan with your phone camera to check in, and again to check out when you leave.") %>
+        </p>
+        <div class="mt-6 grid grid-cols-2 gap-4 sm:gap-8">
+          <figure class="flex flex-col items-center text-center">
+            <div class="qr-code w-full max-w-40 rounded-lg bg-white p-2 ring-1 ring-gray-200"><%= Phoenix.HTML.raw(@qr_codes.check_in) %></div>
+            <figcaption class="mt-2 font-semibold text-gray-900"><%= gettext("Scan to check in") %></figcaption>
+          </figure>
+          <figure class="flex flex-col items-center text-center">
+            <div class="qr-code w-full max-w-40 rounded-lg bg-white p-2 ring-1 ring-gray-200"><%= Phoenix.HTML.raw(@qr_codes.check_out) %></div>
+            <figcaption class="mt-2 font-semibold text-gray-900"><%= gettext("Scan to check out") %></figcaption>
+          </figure>
+        </div>
+        <p class="mt-4 text-xs text-gray-500 text-center">
+          <.link navigate={~p"/property/qr-codes"} class="underline"><%= gettext("Print or replace these codes") %></.link>
+        </p>
+      </div>
+    </section>
 
     <!-- Check-in Form -->
     <div class="max-w-2xl mx-auto">
@@ -262,6 +292,7 @@
           <!-- Submit Actions -->
           <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between pt-6 border-t border-gray-200 gap-3">
             <.link 
+              :if={!@self_service}
               href={if @residence, do: "/residences/#{@residence.id}", else: "/"} 
               class="btn-secondary-luxury text-center"
             >

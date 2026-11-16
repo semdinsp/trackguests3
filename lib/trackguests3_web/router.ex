@@ -26,6 +26,17 @@ defmodule Trackguests3Web.Router do
       live("/visitor/check-in", VisitorLive.CheckIn, :index)
     end
 
+    # Phone self-service via per-property QR codes (no login). The check-out
+    # page only shows visits saved in this phone's signed cookie.
+    live_session :self_service,
+      session: {Trackguests3Web.SelfService, :live_session, []},
+      on_mount: [{Trackguests3Web.UserAuth, :mount_current_scope}] do
+      live("/p/:code/check-in", VisitorLive.CheckIn, :self_service)
+      live("/p/:code/check-out", VisitorLive.SelfCheckOut, :index)
+    end
+
+    get("/p/:code/checked-in", SelfServiceController, :checked_in)
+
     # Public guides page
     live("/guides", GuidesLive, :index)
     
@@ -81,6 +92,7 @@ defmodule Trackguests3Web.Router do
       live("/property/rooms", PropertyLive.Rooms, :index)
       live("/property/rooms/new", PropertyLive.Rooms, :new)
       live("/property/rooms/:id/edit", PropertyLive.Rooms, :edit)
+      live("/property/qr-codes", PropertyLive.QrCodes, :index)
 
       # Guest history, limited to the user's property (admins see all)
       live("/history", HistoryLive.Index, :index)
