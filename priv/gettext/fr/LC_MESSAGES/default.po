@@ -84,7 +84,7 @@ msgstr "Propriété Actuelle"
 
 #: lib/trackguests3_web/live/user_live/settings.ex:181
 #: lib/trackguests3_web/live/user_live/settings.ex:194
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:129
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:159
 #, elixir-autogen, elixir-format
 msgid "Email Address"
 msgstr "Adresse Email"
@@ -175,7 +175,7 @@ msgid "Select Language"
 msgstr "Sélectionner la Langue"
 
 #: lib/trackguests3_web/live/user_live/settings.ex:293
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:75
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:105
 #, elixir-autogen, elixir-format
 msgid "Select Property"
 msgstr ""
@@ -300,7 +300,7 @@ msgstr "Départ"
 msgid "Checking in guests to your managed property"
 msgstr "Enregistrement des invités dans votre propriété gérée"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:120
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:150
 #, elixir-autogen, elixir-format
 msgid "Full Name"
 msgstr "Nom Complet"
@@ -310,12 +310,12 @@ msgstr "Nom Complet"
 msgid "Guest Check-In"
 msgstr "Enregistrement des Invités"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:114
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:144
 #, elixir-autogen, elixir-format
 msgid "Guest Information"
 msgstr "Informations de l'Invité"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.ex:172
+#: lib/trackguests3_web/live/visitor_live/check_in.ex:191
 #: lib/trackguests3_web/live/visitor_live/check_out.ex:247
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Language changed successfully!"
@@ -336,7 +336,7 @@ msgstr "Veuillez sélectionner une propriété et compléter les informations de
 msgid "Select your name to complete check-out:"
 msgstr "Sélectionnez votre nom pour compléter le départ:"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:47
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:54
 #, elixir-autogen, elixir-format
 msgid "Switch to Guest Check-Out"
 msgstr "Passer au Départ des Invités"
@@ -382,6 +382,7 @@ msgid "Your Property"
 msgstr "Votre Propriété"
 
 #: lib/trackguests3_web/live/visitor_live/check_out.ex:116
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:86
 #, elixir-autogen, elixir-format
 msgid "Checked in:"
 msgstr "Enregistré:"
@@ -413,11 +414,12 @@ msgstr "ID de Salle"
 
 #: lib/trackguests3_web/live/visitor_live/check_out.ex:101
 #: lib/trackguests3_web/live/visitor_live/check_out.ex:104
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:82
 #, elixir-autogen, elixir-format
 msgid "Visiting:"
 msgstr "En visite:"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:162
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:192
 #: lib/trackguests3_web/live/visitor_live/check_out.ex:87
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Visitor"
@@ -433,22 +435,22 @@ msgstr "Merci! Votre départ de %{room_name} a été enregistré avec succès."
 msgid "Thank you! You have been checked out successfully from Room ID %{room_id}."
 msgstr "Merci! Votre départ de la Salle ID %{room_id} a été enregistré avec succès."
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:164
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:194
 #, elixir-autogen, elixir-format
 msgid "Resident"
 msgstr "Résident"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:167
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:197
 #, elixir-autogen, elixir-format
 msgid "Select visitor type..."
 msgstr "Sélectionner le type de visiteur..."
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:163
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:193
 #, elixir-autogen, elixir-format
 msgid "Staff"
 msgstr "Personnel"
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:160
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:190
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Visitor Type"
 msgstr "Type de Visiteur"
@@ -458,7 +460,7 @@ msgstr "Type de Visiteur"
 msgid "Guest not found at this property."
 msgstr "Client introuvable dans cette propriété."
 
-#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:53
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:60
 #, elixir-autogen, elixir-format, fuzzy
 msgid "View History"
 msgstr "Voir l'Historique des Invités"
@@ -590,6 +592,7 @@ msgstr "Clair"
 
 #: lib/trackguests3_web/components/layouts.ex:69
 #: lib/trackguests3_web/components/layouts/root.html.heex:181
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:75
 #, elixir-autogen, elixir-format
 msgid "My Property"
 msgstr "Ma propriété"
@@ -662,3 +665,134 @@ msgid "1 day ago"
 msgid_plural "%{count} days ago"
 msgstr[0] "il y a 1 jour"
 msgstr[1] "il y a %{count} jours"
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:73
+#, elixir-autogen, elixir-format
+msgid "%{name} is checked out."
+msgstr "%{name} est parti(e)."
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:44
+#, elixir-autogen, elixir-format
+msgid "Already checked in? Check out"
+msgstr "Déjà enregistré ? Signaler votre départ"
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:110
+#, elixir-autogen, elixir-format
+msgid "Check in instead"
+msgstr "S'enregistrer"
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:97
+#, elixir-autogen, elixir-format
+msgid "Check out now"
+msgstr "Signaler mon départ"
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:94
+#, elixir-autogen, elixir-format
+msgid "Checking out..."
+msgstr "Départ en cours..."
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:21
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:66
+#, elixir-autogen, elixir-format
+msgid "Guest Check-Out"
+msgstr "Départ des invités"
+
+#: lib/trackguests3_web/live/property_live/dashboard.ex:75
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:27
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:67
+#, elixir-autogen, elixir-format
+msgid "Guest QR codes"
+msgstr "Codes QR invités"
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:69
+#, elixir-autogen, elixir-format
+msgid "Guests scan these with their phone camera to check in and out without logging in. Each guest only ever sees their own visit."
+msgstr "Les invités scannent ces codes avec l'appareil photo de leur téléphone pour s'enregistrer et partir sans se connecter. Chaque invité ne voit que sa propre visite."
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:107
+#, elixir-autogen, elixir-format
+msgid "If you checked in at the front desk or on another device, please see the front desk to check out."
+msgstr "Si vous vous êtes enregistré à l'accueil ou sur un autre appareil, veuillez vous adresser à l'accueil pour partir."
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:42
+#, elixir-autogen, elixir-format
+msgid "New QR codes created. Print them again; the old ones no longer work."
+msgstr "Nouveaux codes QR créés. Imprimez-les à nouveau ; les anciens ne fonctionnent plus."
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:89
+#, elixir-autogen, elixir-format
+msgid "Print"
+msgstr "Imprimer"
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:83
+#, elixir-autogen, elixir-format
+msgid "Print or replace these codes"
+msgstr "Imprimer ou remplacer ces codes"
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:94
+#, elixir-autogen, elixir-format
+msgid "Replace both QR codes? Printed copies of the old codes will stop working."
+msgstr "Remplacer les deux codes QR ? Les copies imprimées des anciens codes ne fonctionneront plus."
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:97
+#, elixir-autogen, elixir-format
+msgid "Replace codes"
+msgstr "Remplacer les codes"
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:101
+#, elixir-autogen, elixir-format
+msgid "Replace the codes if a photo of them is shared outside the building."
+msgstr "Remplacez les codes si une photo de ceux-ci est partagée hors du bâtiment."
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:54
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:75
+#, elixir-autogen, elixir-format
+msgid "Scan to check in"
+msgstr "Scannez pour vous enregistrer"
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:55
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:79
+#, elixir-autogen, elixir-format
+msgid "Scan to check out"
+msgstr "Scannez pour partir"
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Scan with your phone camera to check in, and again to check out when you leave."
+msgstr "Scannez avec l'appareil photo de votre téléphone pour vous enregistrer, puis à nouveau pour partir."
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:75
+#, elixir-autogen, elixir-format
+msgid "Thank you for visiting!"
+msgstr "Merci de votre visite !"
+
+#: lib/trackguests3_web/controllers/self_service_controller.ex:27
+#, elixir-autogen, elixir-format
+msgid "That link has expired. Please see the front desk."
+msgstr "Ce lien a expiré. Veuillez vous adresser à l'accueil."
+
+#: lib/trackguests3_web/live/visitor_live/check_in.html.heex:68
+#, elixir-autogen, elixir-format
+msgid "Use your phone"
+msgstr "Utilisez votre téléphone"
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:44
+#, elixir-autogen, elixir-format
+msgid "We couldn't check you out. Please see the front desk."
+msgstr "Nous n'avons pas pu enregistrer votre départ. Veuillez vous adresser à l'accueil."
+
+#: lib/trackguests3_web/live/visitor_live/self_check_out.ex:104
+#, elixir-autogen, elixir-format
+msgid "We couldn't find your visit on this phone."
+msgstr "Nous n'avons pas trouvé votre visite sur ce téléphone."
+
+#: lib/trackguests3_web/live/property_live/qr_codes.ex:74
+#, elixir-autogen, elixir-format
+msgid "You need a property before you can create QR codes."
+msgstr "Vous devez avoir une propriété avant de créer des codes QR."
+
+#: lib/trackguests3_web/controllers/self_service_controller.ex:22
+#, elixir-autogen, elixir-format
+msgid "You're checked in. Scan the check-out code when you leave."
+
+msgstr "Vous êtes enregistré. Scannez le code de départ en partant."
