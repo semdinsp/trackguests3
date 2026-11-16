@@ -455,3 +455,13 @@ button:focus {
 [data-theme="dark"] .border-gray-100,
 [data-theme="dark"] .border-gray-200,
 [data-theme="dark"] .border-gray-200\/30 { @apply border-gray-700; }
+
+/* Self-service QR codes scale to their container */
+.qr-code svg { display: block; width: 100%; height: auto; }
+
+/* Printing the QR code page: only the codes */
+@media print {
+  body:has(#qr-print) header,
+  body:has(#qr-print) nav,
+  body:has(#qr-print) footer { display: none !important; }
+}
