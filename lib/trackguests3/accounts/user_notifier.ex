@@ -1,5 +1,6 @@
 defmodule Trackguests3.Accounts.UserNotifier do
   import Swoosh.Email
+  require Logger
 
   alias Trackguests3.Mailer
   alias Trackguests3.Accounts.User
@@ -14,8 +15,31 @@ defmodule Trackguests3.Accounts.UserNotifier do
       |> html_body(html_body)
       |> text_body(text_body)
 
-    with {:ok, _metadata} <- Mailer.deliver(email) do
-      {:ok, email}
+    case Mailer.deliver(email) do
+      {:ok, _metadata} ->
+        Logger.info("Email sent: #{inspect(subject)} to #{mask_email(recipient)}")
+        {:ok, email}
+
+      {:error, reason} = error ->
+        Logger.error(
+          "Email delivery failed: #{inspect(subject)} to #{mask_email(recipient)}: #{inspect(reason)}"
+        )
+
+        error
+    end
+  end
+
+  @doc """
+  Masks the local part of an email address for logging, keeping the domain
+  so delivery problems can be diagnosed without writing addresses to logs.
+
+      iex> mask_email("jane.doe@example.com")
+      "j***@example.com"
+  """
+  def mask_email(email) when is_binary(email) do
+    case String.split(email, "@", parts: 2) do
+      [local, domain] -> "#{String.first(local)}***@#{domain}"
+      _ -> "***"
     end
   end
 

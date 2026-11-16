@@ -10,7 +10,14 @@ defmodule Trackguests3Web.UserLive.LoginTest do
 
       assert html =~ "Log in"
       assert html =~ "Register"
-      assert html =~ "Log in with email"
+      assert html =~ "Email me a login link"
+      assert html =~ "Log in with password"
+    end
+
+    test "password field is required so an empty password can't be submitted", %{conn: conn} do
+      {:ok, lv, _html} = live(conn, ~p"/users/log-in")
+
+      assert has_element?(lv, "#login_form_password input[type=password][required]")
     end
   end
 
@@ -102,7 +109,7 @@ defmodule Trackguests3Web.UserLive.LoginTest do
 
       assert html =~ "You need to reauthenticate"
       refute html =~ "Register"
-      assert html =~ "Log in with email"
+      assert html =~ "Email me a login link"
 
       assert html =~
                ~s(<input type="email" name="user[email]" id="login_form_magic_email" value="#{user.email}")
