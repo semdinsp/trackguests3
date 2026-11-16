@@ -58,6 +58,43 @@ defmodule Trackguests3.Persons do
   end
 
   @doc """
+  Returns the checked-in visits among `person_ids` that belong to the given
+  residence. Used by self-service check-out, where `person_ids` come from the
+  guest's own signed cookie, so a phone only ever sees its own visits.
+  """
+  def list_self_service_visits(person_ids, residence_id) when is_list(person_ids) do
+    ids = Enum.filter(person_ids, &valid_uuid?/1)
+
+    from(p in Person,
+      join: r in assoc(p, :room),
+      where: p.id in ^ids and p.status == "checked_in" and r.residence_id == ^residence_id,
+      order_by: [desc: p.check_in_time],
+      preload: [:room]
+    )
+    |> Repo.all()
+  end
+
+  def list_self_service_visits(_, _), do: []
+
+  @doc """
+  Checks out a visit on behalf of the guest's phone. Only succeeds when the
+  visit is in `person_ids` (the phone's own visits), is checked in, and
+  belongs to the residence whose QR code was scanned.
+  """
+  def self_check_out(person_id, person_ids, residence_id) do
+    if person_id in List.wrap(person_ids) do
+      case list_self_service_visits([person_id], residence_id) do
+        [person] -> check_out_person(person)
+        [] -> {:error, :not_found}
+      end
+    else
+      {:error, :not_found}
+    end
+  end
+
+  defp valid_uuid?(id), do: is_binary(id) and match?({:ok, _}, Ecto.UUID.cast(id))
+
+  @doc """
   Returns the list of persons for a specific room.
   """
   def list_persons_by_room(room_id) do

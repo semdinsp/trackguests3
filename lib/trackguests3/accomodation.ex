@@ -40,6 +40,34 @@ defmodule Trackguests3.Accomodation do
   def get_residence!(id), do: Repo.get!(Residence, id)
 
   @doc """
+  Gets the residence for a self-service (QR code) code.
+
+  Raises `Ecto.NoResultsError` (a 404) when no property has that code.
+  """
+  def get_residence_by_self_service_code!(code) when is_binary(code) and code != "" do
+    Repo.get_by!(Residence, self_service_code: code)
+  end
+
+  def get_residence_by_self_service_code!(_), do: raise(Ecto.NoResultsError, queryable: Residence)
+
+  @doc """
+  Gives the residence a new self-service code. Old QR codes stop working.
+  """
+  def rotate_self_service_code(%Residence{} = residence) do
+    residence |> Residence.self_service_code_changeset() |> Repo.update()
+  end
+
+  @doc """
+  Returns the residence with a self-service code, generating one if missing.
+  """
+  def ensure_self_service_code(%Residence{self_service_code: nil} = residence) do
+    {:ok, residence} = rotate_self_service_code(residence)
+    residence
+  end
+
+  def ensure_self_service_code(%Residence{} = residence), do: residence
+
+  @doc """
   Creates a residence.
 
   ## Examples
