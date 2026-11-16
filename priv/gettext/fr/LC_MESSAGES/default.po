@@ -638,3 +638,20 @@ msgstr "Nous avons rencontré un problème inattendu. Veuillez réessayer dans u
 #, elixir-autogen, elixir-format
 msgid "You don't have permission to view this page."
 msgstr "Vous n'avez pas l'autorisation de voir cette page."
+
+#: lib/trackguests3_web/live/user_live/login.ex:39
+#: lib/trackguests3_web/live/user_live/login.ex:60
+#, elixir-autogen, elixir-format
+msgid "Email me a login link"
+msgstr "M'envoyer un lien de connexion"
+
+#: lib/trackguests3_web/live/user_live/login.ex:68
+#: lib/trackguests3_web/live/user_live/login.ex:133
+#, elixir-autogen, elixir-format
+msgid "Log in with password"
+msgstr "Se connecter avec un mot de passe"
+
+#: lib/trackguests3_web/live/user_live/login.ex:41
+#, elixir-autogen, elixir-format
+msgid "We'll send a one-time link to your inbox. No password needed."
+msgstr "Nous vous enverrons un lien à usage unique par e-mail. Aucun mot de passe nécessaire."

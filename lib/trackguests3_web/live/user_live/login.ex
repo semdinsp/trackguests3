@@ -1,7 +1,10 @@
 defmodule Trackguests3Web.UserLive.Login do
   use Trackguests3Web, :live_view
 
+  require Logger
+
   alias Trackguests3.Accounts
+  alias Trackguests3.Accounts.UserNotifier
 
   def render(assigns) do
     ~H"""
@@ -33,6 +36,10 @@ defmodule Trackguests3Web.UserLive.Login do
         </div>
 
         <div class="card-luxury">
+          <h2 class="text-lg font-semibold text-platinum">{gettext("Email me a login link")}</h2>
+          <p class="mt-1 mb-4 text-sm text-gray-600">
+            {gettext("We'll send a one-time link to your inbox. No password needed.")}
+          </p>
           <.form
             :let={f}
             for={@form}
@@ -50,7 +57,7 @@ defmodule Trackguests3Web.UserLive.Login do
               phx-mounted={JS.focus()}
             />
             <.button class="w-full" variant="primary">
-              Log in with email <span aria-hidden="true">→</span>
+              {gettext("Email me a login link")} <span aria-hidden="true">→</span>
             </.button>
           </.form>
         </div>
@@ -58,6 +65,7 @@ defmodule Trackguests3Web.UserLive.Login do
         <div class="divider">or</div>
 
         <div class="card-luxury">
+          <h2 class="mb-4 text-lg font-semibold text-platinum">{gettext("Log in with password")}</h2>
           <.form
             :let={f}
             for={@form}
@@ -81,6 +89,7 @@ defmodule Trackguests3Web.UserLive.Login do
                 label="Password"
                 autocomplete="current-password"
                 id="password-input"
+                required
               />
               <button
                 type="button"
@@ -121,7 +130,7 @@ defmodule Trackguests3Web.UserLive.Login do
               label="Keep me logged in"
             />
             <.button class="w-full" variant="primary">
-              Log in <span aria-hidden="true">→</span>
+              {gettext("Log in with password")} <span aria-hidden="true">→</span>
             </.button>
           </.form>
         </div>
@@ -163,11 +172,12 @@ defmodule Trackguests3Web.UserLive.Login do
   end
 
   def handle_event("submit_magic", %{"user" => %{"email" => email}}, socket) do
-    if user = Accounts.get_user_by_email(email) do
-      Accounts.deliver_login_instructions(
-        user,
-        &url(~p"/users/log-in/#{&1}")
-      )
+    case Accounts.get_user_by_email(email) do
+      nil ->
+        Logger.info("Login link requested for unregistered address #{UserNotifier.mask_email(email)}")
+
+      user ->
+        Accounts.deliver_login_instructions(user, &url(~p"/users/log-in/#{&1}"))
     end
 
     info =
