@@ -3,6 +3,7 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
 
   alias Trackguests3.Persons
   alias Trackguests3.Accounts
+  alias Trackguests3.Accomodation
 
   @impl true
   def render(assigns) do
@@ -107,11 +108,14 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
                           <% end %>
                         </span>
                       </div>
-                      <div class="flex items-center text-sm text-gray-500">
-                        <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div class="flex items-start text-sm text-gray-500">
+                        <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span><%= gettext("Checked in:") %> <%= format_time_in_property_timezone(person.check_in_time, @property_timezone) %></span>
+                        <span>
+                          <%= gettext("Checked in:") %> <%= format_time_in_property_timezone(person.check_in_time, @property_timezone) %>
+                          <.check_in_date :if={person.check_in_time} datetime={person.check_in_time} timezone={@property_timezone} />
+                        </span>
                       </div>
                       <%= if person.purpose_of_visit do %>
                         <div class="flex items-center text-sm text-gray-500">
@@ -324,8 +328,32 @@ defmodule Trackguests3Web.VisitorLive.CheckOut do
     end
   end
 
+  attr :datetime, DateTime, required: true
+  attr :timezone, :string, default: nil
+
+  # Small date line under the check-in time. Guests checked in on an earlier
+  # day are highlighted so overdue check-outs stand out.
+  defp check_in_date(assigns) do
+    days = Accomodation.days_ago_in_timezone(assigns.datetime, assigns.timezone)
+    assigns = assign(assigns, :days, days)
+
+    ~H"""
+    <span
+      data-overdue={to_string(@days > 0)}
+      class={[
+        "check-in-date block text-xs",
+        if(@days > 0, do: "font-semibold text-amber-600", else: "text-gray-400")
+      ]}
+    >
+      {Accomodation.format_date_in_timezone(@datetime, @timezone)}
+      <span :if={@days > 0}>
+        · {ngettext("1 day ago", "%{count} days ago", @days)}
+      </span>
+    </span>
+    """
+  end
+
   defp format_time_in_property_timezone(datetime, timezone) do
-    alias Trackguests3.Accomodation
     Accomodation.format_datetime_in_timezone(datetime, timezone)
   end
 

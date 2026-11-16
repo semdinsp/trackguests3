@@ -451,6 +451,7 @@ button:focus {
 [data-theme="dark"] .text-gray-700 { @apply text-gray-300; }
 [data-theme="dark"] .text-gray-600,
 [data-theme="dark"] .text-gray-500 { @apply text-gray-400; }
+[data-theme="dark"] .text-amber-600 { @apply text-amber-400; }
 [data-theme="dark"] .border-gray-100,
 [data-theme="dark"] .border-gray-200,
 [data-theme="dark"] .border-gray-200\/30 { @apply border-gray-700; }

@@ -185,6 +185,19 @@ defmodule Trackguests3.AccomodationTest do
       assert {"Eastern Time (EST/EDT)", "America/New_York"} in timezones
     end
 
+    test "format_date_in_timezone/2 uses the property's local date" do
+      # 02:00 UTC on Nov 5 is still Nov 4 in New York
+      assert Accomodation.format_date_in_timezone(~U[2026-11-05 02:00:00Z], "America/New_York") ==
+               "Wed, Nov 4"
+    end
+
+    test "days_ago_in_timezone/3 counts calendar days in the property's timezone" do
+      now = ~U[2026-11-05 15:00:00Z]
+      assert Accomodation.days_ago_in_timezone(~U[2026-11-05 13:00:00Z], "America/New_York", now) == 0
+      assert Accomodation.days_ago_in_timezone(~U[2026-11-05 02:00:00Z], "America/New_York", now) == 1
+      assert Accomodation.days_ago_in_timezone(~U[2026-11-02 15:00:00Z], nil, now) == 3
+    end
+
     test "format_datetime_in_timezone/2 with valid timezone" do
       # Create a test datetime using DateTime.utc_now for test simplicity
       datetime = DateTime.utc_now()
